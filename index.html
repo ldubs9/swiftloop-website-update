@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftLoop — Web Design × AI Automation Studio</title>
+  <meta name="description" content="SwiftLoop is a web-design and AI workflow automation studio. We craft award-calibre websites and wire them to intelligent systems that run themselves." />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <!-- preloader -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <div class="preloader-logo">Swift<em>Loop</em><em>.</em></div>
+      <div class="preloader-bar"><i id="preloaderFill"></i></div>
+      <div class="preloader-count mono"><span id="preloaderCount">00</span>%</div>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- nav -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav-logo" aria-label="SwiftLoop — home">Swift<em>Loop</em><em>.</em></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#work">Work</a>
+      <a href="portfolio.html">Portfolio</a>
+    </nav>
+    <a href="https://wa.me/971509725199?text=Hi%20SwiftLoop%2C%20I%27d%20like%20to%20start%20a%20project." target="_blank" rel="noopener" class="btn btn--small nav-cta">Start a project</a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- mobile menu -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu-links" aria-label="Mobile">
+      <a href="#services"><i>01</i>Services</a>
+      <a href="#process"><i>02</i>Process</a>
+      <a href="#work"><i>03</i>Work</a>
+      <a href="portfolio.html"><i>04</i>Portfolio</a>
+      <a href="#contact"><i>05</i>Contact</a>
+    </nav>
+    <div class="menu-foot mono">
+      <a href="https://wa.me/971509725199" target="_blank" rel="noopener">WA +971 50 972 5199</a>
+      <a href="mailto:info@swiftloop.tech">info@swiftloop.tech</a>
+    </div>
+  </div>
+
+  <main id="top">
+
+    <!-- hero -->
+    <section class="hero">
+      <canvas id="scene" aria-hidden="true"></canvas>
+
+      <div class="hero-meta mono" aria-hidden="true">
+        <span>EST <b>2021</b></span>
+        <span>LAT <b>25.20°N</b></span>
+        <span>LON <b>55.27°E</b></span>
+        <span>STATUS <b class="accent">● OPEN</b></span>
+      </div>
+
+      <div class="hero-inner">
+        <p class="hero-eyebrow mono">Web design × AI workflow automation</p>
+        <h1 class="hero-title" id="heroTitle">
+          <span class="line-mask"><span>Design in</span></span>
+          <span class="line-mask"><span><span class="accent">motion.</span></span></span>
+          <span class="line-mask"><span class="outline">Systems</span></span>
+          <span class="line-mask"><span><span class="outline">on</span> loop.</span></span>
+        </h1>
+        <div class="hero-foot">
+          <p class="hero-sub gs-reveal">SwiftLoop builds <strong>award-calibre websites</strong> and wires them to <strong>AI workflows that never sleep</strong> — so your brand performs while you don't have to.</p>
+          <div class="hero-actions gs-reveal">
+            <a class="btn" href="https://wa.me/971509725199?text=Hi%20SwiftLoop%2C%20I%27d%20like%20to%20start%20a%20project." target="_blank" rel="noopener">Start a project <span class="arrow">→</span></a>
+            <a class="btn btn--ghost" href="portfolio.html">View portfolio</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-hint mono" aria-hidden="true"><span>Scroll</span><i></i></div>
+    </section>
+
+    <!-- marquee -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Webflow-grade craft</span><em>◦</em>
+        <span>GPT-powered ops</span><em>◦</em>
+        <span>Conversion-first design</span><em>◦</em>
+        <span>Zero-touch workflows</span><em>◦</em>
+        <span>Motion &amp; 3D</span><em>◦</em>
+        <span>Ship in weeks, not quarters</span><em>◦</em>
+      </div>
+      <div class="marquee-track">
+        <span>Webflow-grade craft</span><em>◦</em>
+        <span>GPT-powered ops</span><em>◦</em>
+        <span>Conversion-first design</span><em>◦</em>
+        <span>Zero-touch workflows</span><em>◦</em>
+        <span>Motion &amp; 3D</span><em>◦</em>
+        <span>Ship in weeks, not quarters</span><em>◦</em>
+      </div>
+    </div>
+
+    <!-- services -->
+    <section class="section" id="services">
+      <div class="section-head">
+        <h2 class="section-title">What we<br />build &amp; automate</h2>
+        <span class="section-kicker mono">Services / 01—04</span>
+      </div>
+
+      <div class="service-row gs-reveal">
+        <div class="service-link">
+          <span class="service-num mono">01</span>
+          <h3 class="service-name">Web Design &amp; Development</h3>
+          <div class="service-tags"><span>Next.js</span><span>WebGL</span><span>CMS</span></div>
+          <p class="service-desc">Custom-built marketing sites, e-commerce and product UI — engineered for speed, designed to be remembered.</p>
+        </div>
+      </div>
+      <div class="service-row gs-reveal">
+        <div class="service-link">
+          <span class="service-num mono">02</span>
+          <h3 class="service-name">AI Workflow Automation</h3>
+          <div class="service-tags"><span>LLM Ops</span><span>Zapier++</span><span>APIs</span></div>
+          <p class="service-desc">We map your repetitive ops — leads, invoices, reports, follow-ups — and replace them with pipelines that run on their own.</p>
+        </div>
+      </div>
+      <div class="service-row gs-reveal">
+        <div class="service-link">
+          <span class="service-num mono">03</span>
+          <h3 class="service-name">AI Agents &amp; Assistants</h3>
+          <div class="service-tags"><span>RAG</span><span>Chat</span><span>Voice</span></div>
+          <p class="service-desc">Customer-facing agents trained on your knowledge base — qualifying leads, answering support, booking calls 24/7.</p>
+        </div>
+      </div>
+      <div class="service-row gs-reveal">
+        <div class="service-link">
+          <span class="service-num mono">04</span>
+          <h3 class="service-name">Brand, Motion &amp; 3D</h3>
+          <div class="service-tags"><span>Identity</span><span>GSAP</span><span>Three.js</span></div>
+          <p class="service-desc">Identity systems and interactive 3D experiences that give your product a presence people can feel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- process -->
+    <section class="section process" id="process">
+      <div class="section-head">
+        <h2 class="section-title">The loop</h2>
+        <span class="section-kicker mono">Process / how we work</span>
+      </div>
+
+      <div class="process-track">
+        <article class="process-step gs-reveal">
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="22" cy="22" r="14"/><circle cx="22" cy="22" r="3" fill="currentColor" stroke="none"/><path d="M22 8V2M22 42v-6M8 22H2m40 0h-6"/></svg>
+          <div>
+            <span class="mono">Phase 01</span>
+            <h3>Map</h3>
+            <p>We audit your funnel and your ops. Every click, every manual task, every leak — charted before a pixel is drawn.</p>
+          </div>
+        </article>
+        <article class="process-step gs-reveal">
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="6" width="14" height="14"/><rect x="24" y="24" width="14" height="14"/><path d="M20 13h12v11M13 20v12h11"/></svg>
+          <div>
+            <span class="mono">Phase 02</span>
+            <h3>Design</h3>
+            <p>Interface, motion and message — prototyped in the browser, tested against real users, refined until it converts.</p>
+          </div>
+        </article>
+        <article class="process-step gs-reveal">
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 22a12 12 0 0 1 21-8M34 22a12 12 0 0 1-21 8"/><path d="M31 7v7h-7M13 37v-7h7"/></svg>
+          <div>
+            <span class="mono">Phase 03</span>
+            <h3>Automate</h3>
+            <p>AI agents and integrations go live behind the site — routing leads, syncing data, drafting replies. Hands off.</p>
+          </div>
+        </article>
+        <article class="process-step gs-reveal">
+          <svg class="step-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 6a16 16 0 1 1-11.3 4.7"/><path d="M10 4v8h8"/><circle cx="22" cy="22" r="3" fill="currentColor" stroke="none"/></svg>
+          <div>
+            <span class="mono">Phase 04</span>
+            <h3>Iterate</h3>
+            <p>Dashboards report what works. We tune the design and the prompts monthly — the loop closes, then runs again.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="process-loopline mono gs-reveal">
+        <span>↻ Repeat</span><i></i><span>The system compounds</span>
+      </div>
+    </section>
+
+    <!-- work -->
+    <section class="section" id="work">
+      <div class="section-head">
+        <h2 class="section-title">Selected<br />work</h2>
+        <span class="section-kicker mono">Featured / live client work</span>
+      </div>
+
+      <div class="work-grid">
+        <a class="work-card gs-reveal" href="portfolio.html#falcon">
+          <div class="work-media">
+            <img src="img/portfolio/falcon.png" alt="Falcon Timepieces screenshot" />
+          </div>
+          <div class="work-info">
+            <h3>Falcon Timepieces</h3>
+            <span class="mono">E-commerce × AI inventory — Dubai</span>
+          </div>
+        </a>
+
+        <a class="work-card gs-reveal" href="portfolio.html#mainspring">
+          <div class="work-media">
+            <img src="img/portfolio/mainspring.png" alt="Mainspring screenshot" />
+          </div>
+          <div class="work-info">
+            <h3>Mainspring</h3>
+            <span class="mono">E-commerce × AI inventory — Dubai</span>
+          </div>
+        </a>
+
+        <a class="work-card gs-reveal" href="portfolio.html#esmeywr">
+          <div class="work-media">
+            <img src="img/portfolio/esmeywr.png" alt="ESM EYWR screenshot" />
+          </div>
+          <div class="work-info">
+            <h3>ESM EYWR</h3>
+            <span class="mono">E-commerce × AI inventory — MTL / DXB</span>
+          </div>
+        </a>
+
+        <a class="work-card gs-reveal" href="portfolio.html#brrnbarre">
+          <div class="work-media">
+            <img src="img/portfolio/brrnbarre.png" alt="BRRN BARRE screenshot" />
+          </div>
+          <div class="work-info">
+            <h3>BRRN BARRE</h3>
+            <span class="mono">Website × booking — Dubai</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="work-more gs-reveal">
+        <a class="btn btn--ghost" href="portfolio.html">All projects <span class="arrow">→</span></a>
+      </div>
+    </section>
+
+    <!-- metrics -->
+    <section class="metrics" aria-label="Studio metrics">
+      <div class="metric gs-reveal"><b data-count="47">0</b><span class="mono">Projects shipped</span></div>
+      <div class="metric gs-reveal"><b data-count="12400" data-suffix="+">0</b><span class="mono">Hours automated / yr</span></div>
+      <div class="metric gs-reveal"><b data-count="3.4" data-decimals="1" data-suffix="×">0</b><span class="mono">Avg. conversion lift</span></div>
+      <div class="metric gs-reveal"><b data-count="98" data-suffix="%">0</b><span class="mono">Clients who stay looped</span></div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section cta" id="contact">
+      <h2 class="cta-title">
+        <span class="line-mask"><span>Start your</span></span>
+        <span class="line-mask"><span class="outline">loop.</span></span>
+      </h2>
+      <p class="gs-reveal">Tell us what eats your team's week. We'll show you the site — and the system — that gives it back.</p>
+      <div class="cta-actions gs-reveal">
+        <a class="btn" href="https://wa.me/971509725199?text=Hi%20SwiftLoop%2C%20I%27d%20like%20to%20start%20a%20project." target="_blank" rel="noopener">Chat on WhatsApp <span class="arrow">→</span></a>
+        <a class="btn btn--ghost" href="mailto:info@swiftloop.tech">info@swiftloop.tech</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="nav-logo">Swift<em>Loop</em><em>.</em></span>
+        <p>A web-design and AI-automation studio. Designed by hand, run by machine.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="mono">Studio</h4>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="portfolio.html">Portfolio</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="mono">Social</h4>
+        <a href="#" rel="noopener">X / Twitter</a>
+        <a href="#" rel="noopener">LinkedIn</a>
+        <a href="#" rel="noopener">Dribbble</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="mono">Contact</h4>
+        <a href="https://wa.me/971509725199" target="_blank" rel="noopener">WhatsApp +971 50 972 5199</a>
+        <a href="mailto:info@swiftloop.tech">info@swiftloop.tech</a>
+      </div>
+    </div>
+    <div class="footer-base mono">
+      <span>© 2026 SwiftLoop Studio</span>
+      <span>Dubai / Remote — GMT+4</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+  <script type="module" src="js/scene.js"></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
