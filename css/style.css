@@ -122,6 +122,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   justify-content: center;
 }
 
+/* same-session revisits (html.sl-revisit set inline in <head>) skip the preloader */
+.sl-revisit .preloader { display: none; }
+
 .preloader-inner { text-align: center; }
 
 .preloader-logo {
@@ -440,7 +443,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .scroll-hint {
   position: absolute;
-  bottom: clamp(2rem, 6vh, 4rem);
+  /* raised slightly so it sits centred against the hero CTA buttons */
+  bottom: calc(clamp(2rem, 6vh, 4rem) + 0.5rem);
   right: var(--gutter);
   z-index: 2;
   display: flex;

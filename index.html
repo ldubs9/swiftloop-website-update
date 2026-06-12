@@ -12,6 +12,15 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <script>
+    /* show the preloader only on the first page load of the session */
+    (function () {
+      try {
+        if (sessionStorage.getItem("sl-visited")) document.documentElement.classList.add("sl-revisit");
+        sessionStorage.setItem("sl-visited", "1");
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 
@@ -32,7 +41,6 @@
     <nav class="nav-links" aria-label="Primary">
       <a href="#services">Services</a>
       <a href="#process">Process</a>
-      <a href="#work">Work</a>
       <a href="portfolio.html">Portfolio</a>
     </nav>
     <a href="https://wa.me/971509725199?text=Hi%20SwiftLoop%2C%20I%27d%20like%20to%20start%20a%20project." target="_blank" rel="noopener" class="btn btn--small nav-cta">Start a project</a>
@@ -46,9 +54,8 @@
     <nav class="menu-links" aria-label="Mobile">
       <a href="#services"><i>01</i>Services</a>
       <a href="#process"><i>02</i>Process</a>
-      <a href="#work"><i>03</i>Work</a>
-      <a href="portfolio.html"><i>04</i>Portfolio</a>
-      <a href="#contact"><i>05</i>Contact</a>
+      <a href="portfolio.html"><i>03</i>Portfolio</a>
+      <a href="#contact"><i>04</i>Contact</a>
     </nav>
     <div class="menu-foot mono">
       <a href="https://wa.me/971509725199" target="_blank" rel="noopener">WA +971 50 972 5199</a>

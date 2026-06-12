@@ -45,6 +45,12 @@
   /* ---------- preloader + hero intro ---------- */
   var preloader = document.getElementById("preloader");
 
+  // revisit within the same session (flag set inline in <head>): skip the preloader
+  if (preloader && document.documentElement.classList.contains("sl-revisit")) {
+    preloader.remove();
+    preloader = null;
+  }
+
   function heroIntro() {
     if (!hasGSAP || reduceMotion) return;
     var lines = document.querySelectorAll(".hero .line-mask > span, .folio-hero .line-mask > span");
@@ -94,7 +100,7 @@
       finish();
     }
   } else {
-    // portfolio page has no preloader — run intro once fonts settle
+    // no preloader (portfolio page, or skipped on revisit) — run intro once fonts settle
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(heroIntro);
     } else {
