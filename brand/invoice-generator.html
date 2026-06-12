@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftLoop — Invoice Generator</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #0a0a0c;
+      --ink-2: #101014;
+      --ink-3: #17171d;
+      --line: rgba(236, 232, 223, 0.12);
+      --bone: #ece8df;
+      --bone-dim: #97948b;
+      --accent: #ff4d1f;
+      --paper: #f4f1ea;
+      --paper-line: rgba(10, 10, 12, 0.14);
+      --paper-line-soft: rgba(10, 10, 12, 0.08);
+      --paper-dim: #6d6a63;
+      --font-display: "Clash Display", "Arial Black", sans-serif;
+      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--ink);
+      color: var(--bone);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: var(--accent); color: var(--ink); }
+    .mono { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    /* ====================== APP LAYOUT ====================== */
+    .app { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+    .panel {
+      border-right: 1px solid var(--line);
+      padding: 1.6rem 1.4rem 3rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--ink-2);
+    }
+    .panel-logo { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; letter-spacing: -0.02em; }
+    .panel-logo em { font-style: normal; color: var(--accent); }
+    .panel-sub { color: var(--bone-dim); margin-top: 0.2rem; margin-bottom: 1.6rem; }
+    .panel h3.mono { color: var(--accent); margin: 1.8rem 0 0.8rem; }
+    .panel label.mono { display: block; color: var(--bone-dim); margin: 0.9rem 0 0.35rem; }
+    .panel select, .panel input[type="text"] {
+      width: 100%;
+      background: var(--ink-3);
+      border: 1px solid var(--line);
+      color: var(--bone);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 4px;
+      outline: none;
+    }
+    .panel select:focus, .panel input:focus { border-color: var(--accent); }
+
+    .pbtn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--bone);
+      margin-top: 0.6rem;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+    .pbtn:hover { border-color: var(--accent); color: var(--accent); }
+    .pbtn--primary { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+    .pbtn--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--ink); }
+
+    .seg { display: flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
+    .seg button {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--bone-dim);
+      background: none;
+      border: 0;
+      padding: 0.6rem 0.2rem;
+      cursor: pointer;
+    }
+    .seg button.is-on { background: var(--bone); color: var(--ink); }
+
+    .saved-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.55rem 0.7rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .saved-item .meta { flex: 1; min-width: 0; cursor: pointer; }
+    .saved-item .meta b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .saved-item .meta span { color: var(--bone-dim); font-size: 0.7rem; font-family: var(--font-mono); }
+    .saved-item:hover { border-color: var(--accent); }
+    .saved-item button { background: none; border: 0; color: var(--bone-dim); cursor: pointer; font-size: 0.9rem; }
+    .saved-item button:hover { color: var(--accent); }
+    .saved-empty { color: var(--bone-dim); font-size: 0.8rem; margin-top: 0.5rem; }
+
+    .toast {
+      position: fixed;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translate(-50%, 80px);
+      background: var(--bone);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.3rem;
+      border-radius: 99px;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 50;
+    }
+    .toast.is-on { transform: translate(-50%, 0); }
+
+    /* ====================== STAGE / DOCUMENT ====================== */
+    .stage { padding: 2.5rem 2rem 5rem; display: flex; justify-content: center; align-items: flex-start; }
+
+    .doc {
+      width: 210mm;
+      min-height: 297mm;
+      background: var(--paper);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    /* header band */
+    .doc-head {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 11mm 12mm 9mm;
+    }
+    .doc-head-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .doc-wordmark { display: flex; align-items: center; gap: 0.6rem; }
+    .doc-wordmark svg { width: 26px; height: 26px; }
+    .doc-wordmark span { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; letter-spacing: -0.02em; }
+    .doc-wordmark em { font-style: normal; color: var(--accent); }
+    .doc-type {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 2.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1;
+    }
+    .doc-type small { display: block; font-family: var(--font-mono); font-weight: 500; font-size: 0.6rem; letter-spacing: 0.16em; color: var(--bone-dim); margin-top: 0.45rem; white-space: nowrap; }
+    .doc-meta { display: flex; gap: 2.2rem; margin-top: 7mm; flex-wrap: wrap; }
+    .doc-meta .cell label { display: block; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone-dim); margin-bottom: 0.25rem; }
+    .doc-meta .cell input, .doc-meta .cell select {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px dashed transparent;
+      color: var(--bone);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      outline: none;
+      width: auto;
+      min-width: 9ch;
+    }
+    .doc-meta .cell select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+    .doc-meta .cell input:hover, .doc-meta .cell input:focus,
+    .doc-meta .cell select:hover, .doc-meta .cell select:focus { border-bottom-color: var(--accent); }
+
+    /* body */
+    .doc-body { flex: 1; padding: 9mm 12mm; }
+
+    .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin-bottom: 8mm; }
+    .party h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--paper-line); padding-bottom: 1.6mm; margin-bottom: 2.5mm; }
+    .party input, .party textarea {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: 0;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      color: var(--ink);
+      line-height: 1.5;
+      resize: none;
+      overflow: hidden;
+      border-bottom: 1px dashed transparent;
+    }
+    .party input:hover, .party input:focus, .party textarea:hover, .party textarea:focus { border-bottom-color: var(--accent); }
+    .party input.p-name { font-weight: 700; font-size: 0.95rem; }
+    .party input.p-dim, .party textarea.p-dim { color: var(--paper-dim); }
+
+    /* items table */
+    table.items { width: 100%; border-collapse: collapse; }
+    table.items th {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      text-align: left;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--paper-line);
+      padding: 2.2mm 1.5mm;
+    }
+    table.items td { border-bottom: 1px solid var(--paper-line-soft); padding: 2.4mm 1.5mm; vertical-align: top; font-size: 0.84rem; }
+    table.items th.r, table.items td.r { text-align: right; }
+    .items input, .items select, .items textarea {
+      background: transparent;
+      border: 0;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      color: var(--ink);
+      width: 100%;
+      resize: none;
+      overflow: hidden;
+      border-bottom: 1px dashed transparent;
+    }
+    .items input:hover, .items input:focus, .items select:hover, .items select:focus,
+    .items textarea:hover, .items textarea:focus { border-bottom-color: var(--accent); }
+    .items .i-desc-main { font-weight: 500; }
+    .items .i-desc-sub { color: var(--paper-dim); font-size: 0.74rem; line-height: 1.45; }
+    .items select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+    .items td.r input, .items td.r select { text-align: right; font-variant-numeric: tabular-nums; }
+    .items .i-amount { font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .row-x {
+      background: none; border: 0; color: var(--paper-dim); cursor: pointer; font-size: 0.85rem; padding: 0 1mm; line-height: 1;
+    }
+    .row-x:hover { color: var(--accent); }
+    .add-row {
+      margin-top: 3mm;
+      background: none;
+      border: 1px dashed var(--paper-line);
+      border-radius: 99px;
+      color: var(--paper-dim);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 1.8mm 5mm;
+      cursor: pointer;
+    }
+    .add-row:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* totals */
+    .totals-wrap { display: flex; justify-content: space-between; gap: 10mm; margin-top: 7mm; }
+    .pay-note { flex: 1; max-width: 78mm; }
+    .pay-note h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 2mm; }
+    .pay-note textarea, .pay-note input {
+      width: 100%; background: transparent; border: 0; outline: none; resize: none; overflow: hidden;
+      font-size: 0.76rem; line-height: 1.55; color: var(--paper-dim); font-family: var(--font-body);
+      border-bottom: 1px dashed transparent;
+    }
+    .pay-note textarea:hover, .pay-note textarea:focus { border-bottom-color: var(--accent); }
+
+    .totals { width: 70mm; }
+    .totals .trow { display: flex; justify-content: space-between; align-items: center; padding: 1.8mm 0; border-bottom: 1px solid var(--paper-line-soft); font-size: 0.84rem; }
+    .totals .trow .lbl { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-dim); }
+    .totals .trow .val { font-variant-numeric: tabular-nums; }
+    .totals .trow input { width: 18mm; text-align: right; background: transparent; border: 0; border-bottom: 1px dashed var(--paper-line); outline: none; font-size: 0.84rem; font-family: var(--font-body); color: var(--ink); }
+    .totals .grand {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 3.5mm 3.5mm;
+      margin-top: 2.5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .totals .grand .lbl { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone-dim); }
+    .totals .grand .val { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; letter-spacing: -0.01em; }
+    .totals .grand .val em { font-style: normal; color: var(--accent); font-size: 0.75rem; margin-right: 0.35rem; font-family: var(--font-mono); letter-spacing: 0.1em; }
+    .amount-words { margin-top: 2mm; font-size: 0.68rem; color: var(--paper-dim); text-align: right; font-style: italic; }
+
+    /* terms */
+    .terms { margin-top: 8mm; border-top: 1px solid var(--ink); padding-top: 4mm; }
+    .terms h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5mm; }
+    .terms ol { list-style: none; counter-reset: t; columns: 2; column-gap: 10mm; }
+    .terms li { counter-increment: t; display: block; break-inside: avoid; margin-bottom: 2.4mm; padding-left: 7mm; position: relative; }
+    .terms li::before {
+      content: counter(t, decimal-leading-zero);
+      position: absolute; left: 0; top: 0.25mm;
+      font-family: var(--font-mono); font-size: 0.58rem; color: var(--accent); letter-spacing: 0.05em;
+    }
+    .terms li div[contenteditable] { font-size: 0.7rem; line-height: 1.5; color: var(--paper-dim); outline: none; border-bottom: 1px dashed transparent; }
+    .terms li div[contenteditable]:hover, .terms li div[contenteditable]:focus { border-bottom-color: var(--accent); }
+    .terms li div b { color: var(--ink); font-weight: 600; }
+    .term-x { position: absolute; right: -4.5mm; top: 0; background: none; border: 0; color: var(--paper-dim); cursor: pointer; font-size: 0.7rem; opacity: 0; }
+    .terms li:hover .term-x { opacity: 1; }
+    .term-x:hover { color: var(--accent); }
+
+    /* footer band */
+    .doc-foot {
+      background: var(--ink);
+      color: var(--bone-dim);
+      padding: 5mm 12mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4mm;
+      font-family: var(--font-mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .doc-foot .ring { width: 12px; height: 12px; flex-shrink: 0; }
+    .doc-foot b { color: var(--bone); font-weight: 500; }
+
+    .screen-only {} /* marker class */
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .panel { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .stage { padding: 1.5rem 0.5rem 4rem; overflow-x: auto; justify-content: flex-start; }
+    }
+
+    /* ====================== PRINT ====================== */
+    /* buffer zone at the top of overflow pages only — page 1 keeps the
+       full-bleed header band, so this never acts as a design margin */
+    @page { size: A4; margin: 12mm 0 0 0; }
+    @page :first { margin: 0; }
+    @media print {
+      body { background: var(--paper); }
+      .panel, .toast, .screen-only { display: none !important; }
+      .app { display: block; }
+      .stage { padding: 0; display: block; }
+      .doc { width: 210mm; min-height: 297mm; box-shadow: none; }
+      .doc-head, .doc-foot, .totals .grand { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .row-x, .add-row, .term-x { display: none !important; }
+      input, select, textarea { border-bottom-color: transparent !important; }
+      select { appearance: none; -webkit-appearance: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ====================== CONTROL PANEL ====================== -->
+  <aside class="panel">
+    <div class="panel-logo">Swift<em>Loop</em><em>.</em></div>
+    <p class="panel-sub mono">Billing console — UAE</p>
+
+    <h3 class="mono">Document type</h3>
+    <div class="seg" id="docTypeSeg">
+      <button data-type="QUOTE" class="is-on">Quote</button>
+      <button data-type="INVOICE">Invoice</button>
+      <button data-type="TAX INVOICE">Tax Inv.</button>
+    </div>
+
+    <h3 class="mono">Quick settings</h3>
+    <label class="mono" for="setDue">Payment due</label>
+    <select id="setDue">
+      <option value="0">Due on receipt</option>
+      <option value="7" selected>Net 7 days</option>
+      <option value="14">Net 14 days</option>
+      <option value="30">Net 30 days</option>
+    </select>
+
+    <label class="mono" for="setSplit">Payment structure</label>
+    <select id="setSplit">
+      <option value="50">50% deposit / 50% on delivery</option>
+      <option value="100">100% on signing</option>
+      <option value="403020">40% / 40% / 20% milestones</option>
+      <option value="retainer">Monthly retainer — billed in advance</option>
+    </select>
+
+    <label class="mono" for="setVat">VAT (5% UAE)</label>
+    <select id="setVat">
+      <option value="0" selected>Not VAT registered — no VAT</option>
+      <option value="1">Apply 5% VAT (TRN required)</option>
+    </select>
+
+    <label class="mono" for="setValidity">Quote validity</label>
+    <select id="setValidity">
+      <option value="7">7 days</option>
+      <option value="14" selected>14 days</option>
+      <option value="30">30 days</option>
+    </select>
+
+    <h3 class="mono">Add service preset</h3>
+    <select id="presetSelect">
+      <option value="">— Choose a service —</option>
+      <optgroup label="Builds (always pair with a retainer)">
+        <option value="build-site">Website Design &amp; Build — AED 5,500</option>
+        <option value="build-ecom">E-commerce Build — AED 7,000</option>
+        <option value="build-landing">Landing Page Sprint — AED 4,000</option>
+      </optgroup>
+      <optgroup label="Loop Retainers (default attach)">
+        <option value="ret-care">Loop Care — AED 750 / mo</option>
+        <option value="ret-growth">Loop Growth — AED 1,500 / mo</option>
+        <option value="ret-scale">Loop Scale — AED 2,500 / mo</option>
+      </optgroup>
+      <optgroup label="AI &amp; Automation">
+        <option value="ai-workflow">AI Workflow Automation — AED 4,500</option>
+        <option value="ai-agent">AI Agent / Assistant — AED 6,000</option>
+      </optgroup>
+      <optgroup label="Brand &amp; Motion">
+        <option value="brand-id">Brand &amp; Identity System — AED 3,500</option>
+        <option value="motion-3d">Motion &amp; 3D Package — AED 2,500</option>
+      </optgroup>
+      <optgroup label="Other">
+        <option value="custom">Custom line item</option>
+      </optgroup>
+    </select>
+    <button class="pbtn" id="addPresetBtn">+ Add to document</button>
+
+    <h3 class="mono">Saved quotes</h3>
+    <input type="text" id="saveName" placeholder="Label (defaults to client + №)" />
+    <button class="pbtn" id="saveBtn">Save current quote</button>
+    <div id="savedList"></div>
+
+    <h3 class="mono">Export</h3>
+    <button class="pbtn pbtn--primary" id="printBtn">Save as PDF / Print</button>
+    <button class="pbtn" id="resetBtn">New blank document</button>
+  </aside>
+
+  <!-- ====================== DOCUMENT ====================== -->
+  <main class="stage">
+    <article class="doc" id="doc">
+
+      <!-- header -->
+      <header class="doc-head">
+        <div class="doc-head-top">
+          <div class="doc-wordmark">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/></svg>
+            <span>Swift<em>Loop</em><em>.</em></span>
+          </div>
+          <div class="doc-type">
+            <span id="docTypeLabel">Quote</span>
+            <small id="docTypeSub">Commercial proposal — Dubai, UAE</small>
+          </div>
+        </div>
+        <div class="doc-meta">
+          <div class="cell"><label>Document №</label><input id="fNumber" data-f="number" /></div>
+          <div class="cell"><label>Date of issue</label><input id="fDate" data-f="date" /></div>
+          <div class="cell" id="dueCell"><label id="dueLabel">Valid until</label><input id="fDue" data-f="due" /></div>
+          <div class="cell"><label>Currency</label><input data-f="currency" value="AED — UAE Dirham" id="fCurrency" /></div>
+          <div class="cell" id="trnCell" style="display:none;"><label>Supplier TRN</label><input data-f="trn" id="fTrn" placeholder="100XXXXXXXXXXXX" /></div>
+        </div>
+      </header>
+
+      <!-- body -->
+      <div class="doc-body">
+
+        <div class="parties">
+          <div class="party">
+            <h4>From</h4>
+            <input class="p-name" data-f="fromName" value="SwiftLoop Studio" />
+            <input data-f="fromContact" value="Luca Wiegand — Founder" />
+            <textarea class="p-dim" data-f="fromAddr" rows="2">Dubai, United Arab Emirates</textarea>
+            <input class="p-dim" data-f="fromEmail" value="info@swiftloop.tech" />
+            <input class="p-dim" data-f="fromPhone" value="+971 50 972 5199" />
+            <input class="p-dim" data-f="fromWeb" value="swiftloop.tech" />
+          </div>
+          <div class="party">
+            <h4>Bill to</h4>
+            <input class="p-name" data-f="toName" placeholder="Client / Company name" />
+            <input data-f="toContact" placeholder="Contact person" />
+            <textarea class="p-dim" data-f="toAddr" rows="2" placeholder="Address, Emirate, UAE"></textarea>
+            <input class="p-dim" data-f="toEmail" placeholder="Email" />
+            <input class="p-dim" data-f="toTrn" placeholder="Client TRN (if VAT registered)" />
+          </div>
+        </div>
+
+        <!-- items -->
+        <table class="items">
+          <thead>
+            <tr>
+              <th style="width:44%;">Description</th>
+              <th style="width:17%;">Qty / Duration</th>
+              <th class="r" style="width:16%;">Unit price (AED)</th>
+              <th class="r" style="width:15%;">Amount (AED)</th>
+              <th class="screen-only" style="width:4%;"></th>
+            </tr>
+          </thead>
+          <tbody id="itemRows"></tbody>
+        </table>
+        <button class="add-row screen-only" id="addRowBtn">+ Add line item</button>
+
+        <!-- totals -->
+        <div class="totals-wrap">
+          <div class="pay-note">
+            <h4>Payment details</h4>
+            <textarea data-f="payDetails" rows="5">Bank transfer (AED):
+Account name: Luca Wiegand — SwiftLoop
+Bank: —  ·  IBAN: AE — — — —
+Reference: document № above.
+Also accepted: payment link on request.</textarea>
+            <h4 style="margin-top:4mm;">Schedule</h4>
+            <textarea data-f="paySchedule" rows="2" id="payScheduleBox">50% deposit on signing · 50% on delivery, prior to launch.</textarea>
+          </div>
+          <div class="totals">
+            <div class="trow"><span class="lbl">Subtotal</span><span class="val" id="tSubtotal">0.00</span></div>
+            <div class="trow"><span class="lbl">Discount (AED)</span><input type="text" inputmode="decimal" data-f="discount" id="fDiscount" value="0" /></div>
+            <div class="trow" id="vatRow" style="display:none;"><span class="lbl">VAT 5%</span><span class="val" id="tVat">0.00</span></div>
+            <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em>AED</em><span id="tGrand">0.00</span></span></div>
+            <div class="amount-words" id="amountWords"></div>
+          </div>
+        </div>
+
+        <!-- terms -->
+        <div class="terms">
+          <h4 id="termsTitle">Terms &amp; conditions — United Arab Emirates</h4>
+          <ol id="termsList"></ol>
+        </div>
+      </div>
+
+      <!-- footer -->
+      <footer class="doc-foot">
+        <svg class="ring" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/></svg>
+        <span><b>SwiftLoop Studio</b> — Web design × AI automation · Designed by hand, run by machine</span>
+        <span>info@swiftloop.tech · +971 50 972 5199 · Dubai / GMT+4</span>
+      </footer>
+
+    </article>
+  </main>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------------- data */
+
+  var PRESETS = {
+    "build-site":   { d: "Website Design & Development", s: "Custom design, responsive build, CMS, motion, SEO foundations, launch & handover. Two structured revision rounds included.", qty: 1, unit: "project", rate: 5500 },
+    "build-ecom":   { d: "E-commerce Design & Build", s: "Storefront design, product architecture, payment gateway, AI inventory hooks, launch & training.", qty: 1, unit: "project", rate: 7000 },
+    "build-landing":{ d: "Landing Page Sprint", s: "Single conversion-focused page — copy structure, design, build and analytics. Delivered in 10 working days.", qty: 1, unit: "project", rate: 4000 },
+    "ret-care":     { d: "Loop Care — Monthly Retainer", s: "Hosting management, security & uptime monitoring, content edits (2 hrs/mo), monthly performance report. Default companion to every build.", qty: 6, unit: "months", rate: 750 },
+    "ret-growth":   { d: "Loop Growth — Monthly Retainer", s: "Everything in Loop Care plus conversion iterations, A/B tweaks, prompt & automation tuning (5 hrs/mo).", qty: 6, unit: "months", rate: 1500 },
+    "ret-scale":    { d: "Loop Scale — Monthly Retainer", s: "Everything in Loop Growth plus ongoing feature development, AI agent management and priority support (10 hrs/mo).", qty: 6, unit: "months", rate: 2500 },
+    "ai-workflow":  { d: "AI Workflow Automation", s: "Mapping of one core process (leads, invoicing, follow-ups), pipeline build, integrations and documentation.", qty: 1, unit: "project", rate: 4500 },
+    "ai-agent":     { d: "AI Agent / Assistant", s: "Customer-facing agent trained on your knowledge base — lead qualification, support, bookings. Includes guardrails & dashboard.", qty: 1, unit: "project", rate: 6000 },
+    "brand-id":     { d: "Brand & Identity System", s: "Logo system, palette, typography, usage guidelines and asset pack.", qty: 1, unit: "project", rate: 3500 },
+    "motion-3d":    { d: "Motion & 3D Package", s: "Interactive 3D scene or motion system for an existing site — concept, build, performance pass.", qty: 1, unit: "project", rate: 2500 },
+    "custom":       { d: "Custom line item", s: "", qty: 1, unit: "project", rate: 0 }
+  };
+
+  var RATE_OPTIONS = [750, 1000, 1500, 2000, 2500, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8500, 10000];
+  var QTY_OPTIONS = [
+    { v: 1, l: "1 × project" }, { v: 1, l: "1 month" }, { v: 3, l: "3 months" },
+    { v: 6, l: "6 months" }, { v: 12, l: "12 months" }
+  ];
+
+  var SPLIT_TEXT = {
+    "50": "50% deposit on signing · 50% on delivery, prior to launch.",
+    "100": "100% payable on signing, prior to project kick-off.",
+    "403020": "40% on signing · 40% on design approval · 20% on delivery, prior to launch.",
+    "retainer": "Retainer billed monthly in advance, first month on signing."
+  };
+
+  var DEFAULT_TERMS = [
+    "<b>Acceptance.</b> Written approval of this document (including by email or WhatsApp) constitutes a binding agreement under Federal Decree-Law No. 50 of 2022 (UAE Commercial Transactions Law). Work begins on receipt of the deposit.",
+    "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
+    "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.",
+    "<b>VAT.</b> Where applicable, VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. If no TRN is stated, SwiftLoop is not VAT-registered and no VAT applies.",
+    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop. SwiftLoop retains the right to showcase the work in its portfolio and to place a small <b>“Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
+    "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
+    "<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Governing law.</b> This agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai; the Dubai Courts have exclusive jurisdiction. This document is computer-generated and valid without signature or stamp."
+  ];
+
+  var LS_KEY = "swiftloop-quotes-v1";
+
+  /* ---------------------------------------------------------- utils */
+
+  function $(s, c) { return (c || document).querySelector(s); }
+  function $all(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+
+  function fmt(n) {
+    return (isFinite(n) ? n : 0).toLocaleString("en-AE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function num(v) {
+    var n = parseFloat(String(v).replace(/[^0-9.\-]/g, ""));
+    return isFinite(n) ? n : 0;
+  }
+  function fmtDate(d) {
+    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  var ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  var TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  function words999(n) {
+    var out = "";
+    if (n >= 100) { out += ONES[Math.floor(n / 100)] + " Hundred"; n %= 100; if (n) out += " "; }
+    if (n >= 20) { out += TENS[Math.floor(n / 10)]; n %= 10; if (n) out += "-" + ONES[n]; }
+    else if (n > 0) out += ONES[n];
+    return out;
+  }
+  function amountInWords(n) {
+    n = Math.round(n * 100) / 100;
+    var whole = Math.floor(n), fils = Math.round((n - whole) * 100);
+    if (whole === 0 && fils === 0) return "";
+    var parts = [], scales = [[1000000, "Million"], [1000, "Thousand"], [1, ""]];
+    var rem = whole;
+    scales.forEach(function (s) {
+      var q = Math.floor(rem / s[0]);
+      if (q) { parts.push(words999(q) + (s[1] ? " " + s[1] : "")); rem %= s[0]; }
+    });
+    var str = parts.join(" ") || "Zero";
+    var out = "AED " + str + (fils ? " and " + words999(fils) + " Fils" : "") + " only";
+    return out;
+  }
+
+  function toast(msg) {
+    var t = $("#toast");
+    t.textContent = msg;
+    t.classList.add("is-on");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("is-on"); }, 1800);
+  }
+
+  /* ---------------------------------------------------------- rows */
+
+  var rowsEl = $("#itemRows");
+
+  function rateOptionsHtml(selected) {
+    var html = "";
+    var found = false;
+    RATE_OPTIONS.forEach(function (r) {
+      if (r === selected) found = true;
+      html += '<option value="' + r + '"' + (r === selected ? " selected" : "") + ">" + r.toLocaleString("en-AE") + "</option>";
+    });
+    if (!found) html = '<option value="' + selected + '" selected>' + selected.toLocaleString("en-AE") + "</option>" + html;
+    html += '<option value="__custom">Custom…</option>';
+    return html;
+  }
+
+  function qtyOptionsHtml(qty, unit) {
+    var label = unit === "months" ? qty + (qty === 1 ? " month" : " months") : qty + " × " + (unit || "project");
+    var html = "", found = false;
+    QTY_OPTIONS.forEach(function (o) {
+      var sel = !found && o.v === qty && ((unit === "months") === / month/.test(o.l));
+      if (sel) found = true;
+      html += '<option value="' + o.v + '" data-unit="' + (/ month/.test(o.l) ? "months" : "project") + '"' + (sel ? " selected" : "") + ">" + o.l + "</option>";
+    });
+    if (!found) html = '<option value="' + qty + '" data-unit="' + (unit || "project") + '" selected>' + label + "</option>" + html;
+    html += '<option value="__custom">Custom…</option>';
+    return html;
+  }
+
+  function addRow(item) {
+    item = item || { d: "", s: "", qty: 1, unit: "project", rate: 0 };
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td>' +
+        '<input class="i-desc-main" placeholder="Service description" />' +
+        '<textarea class="i-desc-sub" rows="2" placeholder="Details (optional)"></textarea>' +
+      '</td>' +
+      '<td><select class="i-qty"></select></td>' +
+      '<td class="r"><select class="i-rate"></select></td>' +
+      '<td class="r"><span class="i-amount">0.00</span></td>' +
+      '<td class="screen-only"><button class="row-x" title="Remove line" type="button">✕</button></td>';
+    rowsEl.appendChild(tr);
+
+    $(".i-desc-main", tr).value = item.d;
+    var sub = $(".i-desc-sub", tr);
+    sub.value = item.s;
+    autosize(sub);
+    $(".i-qty", tr).innerHTML = qtyOptionsHtml(item.qty, item.unit);
+    $(".i-rate", tr).innerHTML = rateOptionsHtml(num(item.rate));
+
+    $(".i-qty", tr).addEventListener("change", function () { customCombo(this, "Quantity (number):"); recalc(); });
+    $(".i-rate", tr).addEventListener("change", function () { customCombo(this, "Unit price in AED:"); recalc(); });
+    $(".row-x", tr).addEventListener("click", function () { tr.remove(); recalc(); });
+    sub.addEventListener("input", function () { autosize(sub); });
+    recalc();
+    return tr;
+  }
+
+  function customCombo(sel, promptText) {
+    if (sel.value !== "__custom") return;
+    var v = prompt(promptText, "");
+    var n = num(v);
+    if (v === null || !isFinite(n) || n <= 0) { sel.selectedIndex = 0; return; }
+    var opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = sel.classList.contains("i-rate") ? n.toLocaleString("en-AE") : (n + " ×");
+    if (sel.classList.contains("i-qty")) opt.setAttribute("data-unit", "project");
+    sel.insertBefore(opt, sel.firstChild);
+    sel.value = String(n);
+  }
+
+  function autosize(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+
+  /* ---------------------------------------------------------- totals */
+
+  function recalc() {
+    var subtotal = 0;
+    $all("#itemRows tr").forEach(function (tr) {
+      var qty = num($(".i-qty", tr).value);
+      var rate = num($(".i-rate", tr).value);
+      var amt = qty * rate;
+      $(".i-amount", tr).textContent = fmt(amt);
+      subtotal += amt;
+    });
+    var discount = num($("#fDiscount").value);
+    var base = Math.max(0, subtotal - discount);
+    var vatOn = $("#setVat").value === "1";
+    var vat = vatOn ? base * 0.05 : 0;
+    var grand = base + vat;
+
+    $("#tSubtotal").textContent = fmt(subtotal);
+    $("#tVat").textContent = fmt(vat);
+    $("#vatRow").style.display = vatOn ? "" : "none";
+    $("#trnCell").style.display = vatOn ? "" : "none";
+    $("#tGrand").textContent = fmt(grand);
+    $("#amountWords").textContent = amountInWords(grand);
+  }
+
+  /* ---------------------------------------------------------- terms */
+
+  function renderTerms(terms) {
+    var ol = $("#termsList");
+    ol.innerHTML = "";
+    terms.forEach(function (t) {
+      var li = document.createElement("li");
+      li.innerHTML = '<div contenteditable="true"></div><button class="term-x screen-only" title="Remove clause" type="button">✕</button>';
+      $("div", li).innerHTML = t;
+      $(".term-x", li).addEventListener("click", function () { li.remove(); });
+      ol.appendChild(li);
+    });
+  }
+
+  /* ---------------------------------------------------------- doc type & dates */
+
+  var docType = "QUOTE";
+
+  function setDocType(t) {
+    docType = t;
+    $all("#docTypeSeg button").forEach(function (b) { b.classList.toggle("is-on", b.dataset.type === t); });
+    $("#docTypeLabel").textContent = t === "TAX INVOICE" ? "Tax Invoice" : (t.charAt(0) + t.slice(1).toLowerCase());
+    $("#docTypeSub").textContent =
+      t === "QUOTE" ? "Commercial proposal — Dubai, UAE" :
+      t === "INVOICE" ? "Commercial invoice — Dubai, UAE" :
+      "Per Federal Decree-Law No. 8 of 2017 — UAE VAT";
+    $("#dueLabel").textContent = t === "QUOTE" ? "Valid until" : "Payment due";
+    $("#grandLbl").textContent = t === "QUOTE" ? "Total quoted" : "Total due";
+    if (t === "TAX INVOICE") {
+      $("#setVat").value = "1";
+      $("#trnCell").style.display = "";
+    }
+    refreshNumber();
+    refreshDates();
+    recalc();
+  }
+
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+
+  function refreshNumber() {
+    var d = new Date();
+    var prefix = docType === "QUOTE" ? "SL-Q" : "SL-INV";
+    var cur = $("#fNumber").value;
+    // keep a user-edited suffix if same day & type, otherwise regenerate
+    var stamp = "" + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate());
+    if (!cur || cur.indexOf(stamp) === -1 || cur.indexOf(prefix) !== 0) {
+      $("#fNumber").value = prefix + "-" + stamp + "-01";
+    }
+  }
+
+  function refreshDates() {
+    var today = new Date();
+    $("#fDate").value = fmtDate(today);
+    var days = docType === "QUOTE" ? num($("#setValidity").value) : num($("#setDue").value);
+    var due = new Date(today.getTime() + days * 86400000);
+    $("#fDue").value = days === 0 ? "On receipt" : fmtDate(due);
+  }
+
+  /* ---------------------------------------------------------- save / load */
+
+  function getQuotes() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch (e) { return []; }
+  }
+  function setQuotes(q) { localStorage.setItem(LS_KEY, JSON.stringify(q)); }
+
+  function snapshot() {
+    var fields = {};
+    $all("[data-f]").forEach(function (el) { fields[el.dataset.f] = el.value; });
+    var items = $all("#itemRows tr").map(function (tr) {
+      var qtyEl = $(".i-qty", tr), sel = qtyEl.options[qtyEl.selectedIndex];
+      return {
+        d: $(".i-desc-main", tr).value,
+        s: $(".i-desc-sub", tr).value,
+        qty: num(qtyEl.value),
+        unit: sel ? (sel.getAttribute("data-unit") || "project") : "project",
+        rate: num($(".i-rate", tr).value)
+      };
+    });
+    var terms = $all("#termsList li div").map(function (d) { return d.innerHTML; });
+    return {
+      v: 1,
+      docType: docType,
+      settings: { due: $("#setDue").value, split: $("#setSplit").value, vat: $("#setVat").value, validity: $("#setValidity").value },
+      fields: fields,
+      items: items,
+      terms: terms,
+      savedAt: new Date().toISOString()
+    };
+  }
+
+  function restore(s) {
+    $("#setDue").value = s.settings.due;
+    $("#setSplit").value = s.settings.split;
+    $("#setVat").value = s.settings.vat;
+    $("#setValidity").value = s.settings.validity;
+    Object.keys(s.fields || {}).forEach(function (k) {
+      var el = $('[data-f="' + k + '"]');
+      if (el) el.value = s.fields[k];
+    });
+    rowsEl.innerHTML = "";
+    (s.items || []).forEach(addRow);
+    renderTerms(s.terms && s.terms.length ? s.terms : DEFAULT_TERMS);
+    setDocType(s.docType || "QUOTE");
+    // dates intentionally refresh to *today* on recall, per workflow
+    $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    recalc();
+  }
+
+  function renderSavedList() {
+    var list = $("#savedList");
+    var quotes = getQuotes();
+    list.innerHTML = "";
+    if (!quotes.length) {
+      list.innerHTML = '<p class="saved-empty">No saved quotes yet.</p>';
+      return;
+    }
+    quotes.slice().reverse().forEach(function (q) {
+      var div = document.createElement("div");
+      div.className = "saved-item";
+      var when = new Date(q.savedAt);
+      div.innerHTML =
+        '<div class="meta"><b></b><span>' + q.state.docType + " · " + fmtDate(when) + " · AED " + (q.total || "—") + '</span></div>' +
+        '<button title="Delete" type="button">✕</button>';
+      $("b", div).textContent = q.name;
+      $(".meta", div).addEventListener("click", function () {
+        restore(q.state);
+        toast("Loaded: " + q.name);
+      });
+      $("button", div).addEventListener("click", function () {
+        if (!confirm('Delete saved quote "' + q.name + '"?')) return;
+        setQuotes(getQuotes().filter(function (x) { return x.id !== q.id; }));
+        renderSavedList();
+      });
+      list.appendChild(div);
+    });
+  }
+
+  /* ---------------------------------------------------------- wiring */
+
+  $all("#docTypeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () { setDocType(b.dataset.type); });
+  });
+
+  $("#setDue").addEventListener("change", refreshDates);
+  $("#setValidity").addEventListener("change", refreshDates);
+  $("#setVat").addEventListener("change", recalc);
+  $("#setSplit").addEventListener("change", function () {
+    $("#payScheduleBox").value = SPLIT_TEXT[this.value];
+    autosize($("#payScheduleBox"));
+  });
+  $("#fDiscount").addEventListener("input", recalc);
+
+  $("#addPresetBtn").addEventListener("click", function () {
+    var key = $("#presetSelect").value;
+    if (!key) { toast("Choose a service first"); return; }
+    var p = PRESETS[key];
+    addRow({ d: p.d, s: p.s, qty: p.qty, unit: p.unit, rate: p.rate });
+    $all(".i-desc-sub").forEach(autosize);
+    toast("Added: " + p.d);
+  });
+
+  $("#addRowBtn").addEventListener("click", function () { addRow(); });
+
+  $("#saveBtn").addEventListener("click", function () {
+    var state = snapshot();
+    var name = $("#saveName").value.trim() ||
+      ((state.fields.toName || "Untitled client") + " — " + state.fields.number);
+    var quotes = getQuotes();
+    quotes.push({ id: Date.now(), name: name, total: $("#tGrand").textContent, state: state, savedAt: new Date().toISOString() });
+    setQuotes(quotes);
+    $("#saveName").value = "";
+    renderSavedList();
+    toast("Saved: " + name);
+  });
+
+  $("#printBtn").addEventListener("click", function () {
+    var prev = document.title;
+    document.title = $("#fNumber").value + " — SwiftLoop";
+    window.print();
+    document.title = prev;
+  });
+
+  $("#resetBtn").addEventListener("click", function () {
+    if (!confirm("Start a new blank document? Unsaved changes will be lost.")) return;
+    init(true);
+  });
+
+  /* ---------------------------------------------------------- init */
+
+  function init(blank) {
+    rowsEl.innerHTML = "";
+    if (!blank) {
+      // default proposal: build + retainer attached (retainer is the default, removal is a downgrade)
+      addRow(PRESETS["build-site"]);
+      addRow(PRESETS["ret-care"]);
+    } else {
+      $all('.party input[data-f^="to"], .party textarea[data-f^="to"]').forEach(function (el) { el.value = ""; });
+      $("#fDiscount").value = "0";
+      addRow();
+    }
+    renderTerms(DEFAULT_TERMS);
+    setDocType("QUOTE");
+    $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    recalc();
+  }
+
+  init(false);
+  renderSavedList();
+
+  // re-measure once webfonts are in, so autosized textareas stay tight
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

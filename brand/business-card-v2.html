@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftLoop — Business Card V2 · Luca Wiegand</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #0a0a0c;
+      --ink-2: #101014;
+      --line: rgba(236, 232, 223, 0.12);
+      --bone: #ece8df;
+      --bone-dim: #97948b;
+      --accent: #ff4d1f;
+      --font-display: "Clash Display", "Arial Black", sans-serif;
+      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+      --bleed: 0mm; /* toggled to 3mm via body.has-bleed */
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--ink);
+      color: var(--bone);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem 5rem;
+    }
+    body.has-bleed { --bleed: 3mm; }
+    ::selection { background: var(--accent); color: var(--ink); }
+    .mono { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .head { text-align: center; margin-bottom: 2.5rem; }
+    .head .logo { font-family: var(--font-display); font-weight: 600; font-size: 1.4rem; letter-spacing: -0.02em; }
+    .head .logo em { font-style: normal; color: var(--accent); }
+    .head p { color: var(--bone-dim); margin-top: 0.3rem; }
+
+    .controls { display: flex; gap: 0.8rem; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink); background: var(--bone);
+      border: 0; border-radius: 99px; padding: 0.8rem 1.5rem; cursor: pointer;
+    }
+    .btn:hover { background: var(--accent); }
+    .check { display: flex; align-items: center; gap: 0.5rem; color: var(--bone-dim); cursor: pointer; }
+    .check input { accent-color: var(--accent); }
+
+    .sheet { display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; }
+    .card-slot { text-align: center; }
+    .card-slot > .mono { color: var(--bone-dim); display: block; margin-bottom: 1rem; }
+
+    /* ---- the card: 85 × 55 mm + bleed ---- */
+    .card {
+      width: calc(85mm + var(--bleed) * 2);
+      height: calc(55mm + var(--bleed) * 2);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      border-radius: 1.5mm;
+      text-align: left;
+    }
+    body.has-bleed .card { border-radius: 0; }
+    .card-inner {
+      position: absolute;
+      inset: var(--bleed);
+      padding: 5mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    body.has-bleed .card-inner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border: 1px dashed rgba(255, 77, 31, 0.45);
+      pointer-events: none;
+    }
+
+    /* FRONT — ink, centered composition */
+    .card--front { background: var(--ink-2); color: var(--bone); }
+    .card--front .ring-bg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 44mm;
+      height: 44mm;
+      opacity: 0.16;
+    }
+    .card--front .card-inner { justify-content: flex-end; }
+    .front-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 100%;
+    }
+    .front-wordmark { font-family: var(--font-display); font-weight: 600; font-size: 16pt; letter-spacing: -0.02em; }
+    .front-wordmark em { font-style: normal; color: var(--accent); }
+    .front-tag { font-family: var(--font-mono); font-size: 4.4pt; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-dim); margin-top: 2mm; }
+    .front-foot {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    /* solid backing = quiet zone, and keeps the faded ring from bleeding through the code */
+    .front-foot .qr { width: 8mm; height: 8mm; color: var(--bone); background: var(--ink-2); padding: 1mm; box-sizing: content-box; }
+    .front-foot .url { font-family: var(--font-mono); font-size: 5pt; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone); }
+    .front-foot .url i { font-style: normal; color: var(--accent); }
+
+    /* BACK — bone */
+    .card--back { background: var(--bone); color: var(--ink); }
+    .back-name { font-family: var(--font-display); font-weight: 600; font-size: 14pt; letter-spacing: -0.02em; line-height: 1.05; }
+    .back-name i { font-style: normal; color: var(--accent); }
+    .back-role { font-family: var(--font-mono); font-size: 4.6pt; letter-spacing: 0.18em; text-transform: uppercase; color: #6d6a63; margin-top: 1.6mm; }
+    .back-contact { font-family: var(--font-mono); font-size: 5.2pt; letter-spacing: 0.1em; line-height: 2.1; color: #3a3833; }
+    .back-contact b { font-weight: 500; color: var(--ink); }
+    .back-contact .o { color: var(--accent); }
+    .back-foot { display: flex; justify-content: space-between; align-items: flex-end; }
+    .back-ring { width: 7mm; height: 7mm; }
+    .back-rule { height: 0.3mm; background: var(--accent); width: 12mm; margin-bottom: 2mm; }
+
+    .spec {
+      margin-top: 3.5rem;
+      max-width: 640px;
+      color: var(--bone-dim);
+      font-size: 0.85rem;
+      line-height: 1.7;
+      border-top: 1px solid var(--line);
+      padding-top: 1.4rem;
+    }
+    .spec b { color: var(--bone); font-weight: 500; }
+
+    /* ---- print: one card per page, exact size, no margins ---- */
+    @media print {
+      @page { size: calc(85mm + var(--bleed) * 2) calc(55mm + var(--bleed) * 2); margin: 0; }
+      body { padding: 0; background: none; display: block; }
+      .head, .controls, .card-slot > .mono, .spec { display: none !important; }
+      .sheet { display: block; }
+      .card {
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      body.has-bleed .card-inner::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="head">
+    <div class="logo">Swift<em>Loop</em><em>.</em></div>
+    <p class="mono">Business card V2 — centred — Luca Wiegand · 85 × 55 mm</p>
+  </div>
+
+  <div class="controls">
+    <button class="btn" onclick="document.title='SwiftLoop-Business-Card-V2-Luca-Wiegand';window.print()">Save as PDF / Print</button>
+    <label class="check mono"><input type="checkbox" id="bleedToggle" /> Include 3 mm bleed (for print shop)</label>
+  </div>
+
+  <div class="sheet">
+
+    <!-- FRONT — centred -->
+    <div class="card-slot">
+      <span class="mono">Front — ink, centred</span>
+      <div class="card card--front">
+        <svg class="ring-bg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
+        </svg>
+        <div class="card-inner">
+          <div class="front-center">
+            <div class="front-wordmark">Swift<em>Loop</em><em>.</em></div>
+            <div class="front-tag">Web design × AI workflow automation</div>
+          </div>
+          <div class="front-foot">
+            <svg class="qr" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-label="QR code — swiftloop.tech"><path d="M0 0h7v1H0zM9 0h1v1H9zM13 0h1v1H13zM18 0h7v1H18zM0 1h1v1H0zM6 1h1v1H6zM9 1h3v1H9zM13 1h3v1H13zM18 1h1v1H18zM24 1h1v1H24zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h1v1H8zM10 2h1v1H10zM15 2h1v1H15zM18 2h1v1H18zM20 2h3v1H20zM24 2h1v1H24zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h1v1H8zM11 3h6v1H11zM18 3h1v1H18zM20 3h3v1H20zM24 3h1v1H24zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h1v1H8zM10 4h2v1H10zM14 4h1v1H14zM16 4h1v1H16zM18 4h1v1H18zM20 4h3v1H20zM24 4h1v1H24zM0 5h1v1H0zM6 5h1v1H6zM8 5h1v1H8zM14 5h3v1H14zM18 5h1v1H18zM24 5h1v1H24zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14 6h1v1H14zM16 6h1v1H16zM18 6h7v1H18zM8 7h3v1H8zM16 7h1v1H16zM0 8h1v1H0zM2 8h5v1H2zM9 8h1v1H9zM12 8h3v1H12zM18 8h5v1H18zM0 9h3v1H0zM7 9h1v1H7zM10 9h2v1H10zM16 9h2v1H16zM19 9h1v1H19zM23 9h1v1H23zM0 10h1v1H0zM3 10h5v1H3zM10 10h1v1H10zM14 10h8v1H14zM23 10h2v1H23zM0 11h1v1H0zM2 11h4v1H2zM7 11h1v1H7zM10 11h2v1H10zM14 11h1v1H14zM16 11h2v1H16zM24 11h1v1H24zM2 12h1v1H2zM5 12h5v1H5zM11 12h1v1H11zM13 12h2v1H13zM17 12h4v1H17zM22 12h3v1H22zM0 13h2v1H0zM4 13h1v1H4zM7 13h2v1H7zM10 13h1v1H10zM12 13h1v1H12zM16 13h1v1H16zM19 13h1v1H19zM21 13h1v1H21zM23 13h1v1H23zM0 14h1v1H0zM2 14h1v1H2zM6 14h1v1H6zM10 14h1v1H10zM13 14h1v1H13zM15 14h1v1H15zM19 14h3v1H19zM23 14h2v1H23zM0 15h1v1H0zM5 15h1v1H5zM7 15h1v1H7zM12 15h1v1H12zM14 15h7v1H14zM24 15h1v1H24zM0 16h1v1H0zM3 16h1v1H3zM5 16h2v1H5zM8 16h3v1H8zM12 16h3v1H12zM16 16h5v1H16zM22 16h1v1H22zM8 17h3v1H8zM13 17h1v1H13zM15 17h2v1H15zM20 17h2v1H20zM0 18h7v1H0zM9 18h1v1H9zM11 18h2v1H11zM16 18h1v1H16zM18 18h1v1H18zM20 18h1v1H20zM22 18h3v1H22zM0 19h1v1H0zM6 19h1v1H6zM8 19h1v1H8zM10 19h2v1H10zM16 19h1v1H16zM20 19h2v1H20zM0 20h1v1H0zM2 20h3v1H2zM6 20h1v1H6zM8 20h4v1H8zM15 20h6v1H15zM22 20h3v1H22zM0 21h1v1H0zM2 21h3v1H2zM6 21h1v1H6zM8 21h2v1H8zM12 21h2v1H12zM15 21h1v1H15zM17 21h2v1H17zM20 21h5v1H20zM0 22h1v1H0zM2 22h3v1H2zM6 22h1v1H6zM8 22h3v1H8zM13 22h2v1H13zM21 22h2v1H21zM24 22h1v1H24zM0 23h1v1H0zM6 23h1v1H6zM9 23h1v1H9zM12 23h2v1H12zM16 23h6v1H16zM24 23h1v1H24zM0 24h7v1H0zM8 24h1v1H8zM12 24h1v1H12zM14 24h1v1H14zM19 24h6v1H19z" fill="currentColor"/></svg>
+            <span class="url">swiftloop<i>.tech</i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BACK — unchanged from V1 -->
+    <div class="card-slot">
+      <span class="mono">Back — bone</span>
+      <div class="card card--back">
+        <div class="card-inner">
+          <div>
+            <div class="back-name">Luca Wiegand<i>.</i></div>
+            <div class="back-role">Founder — SwiftLoop Studio</div>
+          </div>
+          <div class="back-contact">
+            <span class="o">WA</span> <b>+971 50 972 5199</b><br/>
+            <span class="o">@</span> <b>info@swiftloop.tech</b><br/>
+            <span class="o">↗</span> <b>swiftloop.tech</b>
+          </div>
+          <div class="back-foot">
+            <div>
+              <div class="back-rule"></div>
+              <div class="back-role" style="margin-top:0;">Designed by hand. Run by machine.</div>
+            </div>
+            <svg class="back-ring" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="spec">
+    <b>Print specification.</b> Trim size 85 × 55 mm, two-sided. Stock: 350–400 gsm soft-touch matte laminate; optional Signal Orange (#FF4D1F / PMS 1655 C) edge paint. The QR encodes <b>https://swiftloop.tech</b> and is embedded as vector — it stays sharp at any print size. Tick the bleed checkbox before exporting for a print shop; print at 100% scale with margins set to none.
+  </div>
+
+  <script>
+    document.getElementById("bleedToggle").addEventListener("change", function () {
+      document.body.classList.toggle("has-bleed", this.checked);
+    });
+  </script>
+
+</body>
+</html>

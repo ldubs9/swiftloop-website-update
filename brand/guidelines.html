@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftLoop — Brand Guidelines</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #0a0a0c;
+      --ink-2: #101014;
+      --ink-3: #17171d;
+      --line: rgba(236, 232, 223, 0.12);
+      --line-soft: rgba(236, 232, 223, 0.07);
+      --bone: #ece8df;
+      --bone-dim: #97948b;
+      --accent: #ff4d1f;
+      --accent-soft: rgba(255, 77, 31, 0.14);
+      --font-display: "Clash Display", "Arial Black", sans-serif;
+      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+      --gutter: clamp(1.25rem, 4vw, 4rem);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--ink);
+      color: var(--bone);
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: var(--accent); color: var(--ink); }
+    .mono {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .accent { color: var(--accent); }
+    .dim { color: var(--bone-dim); }
+
+    /* cover */
+    .cover {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--gutter);
+      border-bottom: 1px solid var(--line);
+    }
+    .cover-top { display: flex; justify-content: space-between; color: var(--bone-dim); }
+    .cover h1 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(3rem, 11vw, 9rem);
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+    .cover h1 .outline { color: transparent; -webkit-text-stroke: 1.5px var(--bone); }
+    .cover-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
+    .cover-foot p { color: var(--bone-dim); max-width: 44ch; }
+
+    /* sections */
+    .section { padding: clamp(4rem, 10vh, 7rem) var(--gutter); border-bottom: 1px solid var(--line); }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: clamp(2rem, 5vw, 3.5rem);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.8rem, 4.5vw, 3.4rem);
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+    }
+    .section-kicker { color: var(--bone-dim); }
+    .section-kicker::before { content: "◦ "; color: var(--accent); }
+    .lede { color: var(--bone-dim); max-width: 62ch; margin-bottom: 2.5rem; }
+    .lede strong { color: var(--bone); font-weight: 500; }
+
+    /* grids and tiles */
+    .grid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .tile { background: var(--ink-2); padding: clamp(1.4rem, 3vw, 2.2rem); }
+    .tile h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .tile p { color: var(--bone-dim); font-size: 0.95rem; }
+    .tile .mono { display: block; color: var(--accent); margin-bottom: 0.9rem; }
+
+    /* logo showcase */
+    .logo-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      padding: 2rem;
+    }
+    .logo-stage.on-bone { background: var(--bone); }
+    .logo-stage.on-accent { background: var(--accent); }
+    .wordmark {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 2.6rem;
+      letter-spacing: -0.02em;
+      color: var(--bone);
+    }
+    .wordmark em { font-style: normal; color: var(--accent); }
+    .wordmark.inverse { color: var(--ink); }
+    .wordmark.solid-bone em { color: var(--bone); }
+    .wordmark.solid-ink, .wordmark.solid-ink em { color: var(--ink); }
+    .tile-label {
+      border-top: 1px solid var(--line);
+      padding: 0.9rem clamp(1.4rem, 3vw, 2.2rem);
+      display: flex;
+      justify-content: space-between;
+      color: var(--bone-dim);
+      background: var(--ink-2);
+    }
+
+    .stacked-mark { text-align: center; }
+    .stacked-mark .wordmark { font-size: 1.6rem; display: block; margin-top: 1rem; }
+
+    /* color swatches */
+    .swatch { min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.4rem; }
+    .swatch .name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; }
+    .swatch .vals { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em; opacity: 0.75; margin-top: 0.4rem; line-height: 1.8; text-transform: uppercase; }
+
+    /* type specimens */
+    .specimen { border-top: 1px solid var(--line); padding: 2rem 0; display: grid; grid-template-columns: 220px 1fr; gap: 2rem; align-items: baseline; }
+    .specimen:last-child { border-bottom: 1px solid var(--line); }
+    .specimen .meta { color: var(--bone-dim); }
+    .specimen .meta b { display: block; color: var(--bone); font-weight: 500; font-family: var(--font-body); font-size: 0.95rem; text-transform: none; letter-spacing: 0; margin-bottom: 0.3rem; }
+    .spec-display { font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 6vw, 4.5rem); letter-spacing: -0.03em; line-height: 1; text-transform: uppercase; }
+    .spec-body { font-family: var(--font-body); font-size: 1.15rem; max-width: 56ch; }
+    .spec-mono { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone-dim); }
+
+    /* do / don't */
+    .rule { display: flex; gap: 0.8rem; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid var(--line-soft); color: var(--bone-dim); font-size: 0.97rem; }
+    .rule i { font-style: normal; font-family: var(--font-mono); font-size: 0.7rem; flex-shrink: 0; }
+    .rule.do i { color: var(--accent); }
+    .rule.dont i { color: #d6453a; }
+    .rule strong { color: var(--bone); font-weight: 500; }
+
+    table.spec-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    table.spec-table th, table.spec-table td { text-align: left; padding: 0.7rem 1rem 0.7rem 0; border-bottom: 1px solid var(--line-soft); }
+    table.spec-table th { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone-dim); font-weight: 500; }
+    table.spec-table td { color: var(--bone-dim); }
+    table.spec-table td:first-child { color: var(--bone); }
+
+    .voice-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 1rem; }
+    .voice-pair > div { background: var(--ink-2); padding: 1.6rem; }
+    .voice-pair .mono { display: block; margin-bottom: 0.8rem; }
+    .voice-pair p { font-size: 1rem; }
+
+    footer { padding: 2rem var(--gutter); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: var(--bone-dim); }
+
+    .clearspace-demo {
+      position: relative;
+      display: inline-block;
+      padding: 2.6rem;
+      border: 1px dashed rgba(255, 77, 31, 0.5);
+    }
+    .clearspace-demo::after {
+      content: "x = cap height of 'S'";
+      position: absolute;
+      bottom: -1.7rem;
+      left: 0;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bone-dim);
+    }
+
+    @media (max-width: 860px) {
+      .grid-2, .grid-3, .voice-pair { grid-template-columns: 1fr; }
+      .specimen { grid-template-columns: 1fr; gap: 0.8rem; }
+      .section-head { flex-direction: column; gap: 0.6rem; }
+    }
+    @media print {
+      body { background: #0a0a0c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      @page { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COVER -->
+  <header class="cover">
+    <div class="cover-top mono">
+      <span>SwiftLoop Studio — Brand Guidelines</span>
+      <span>V1.0 / 2026</span>
+    </div>
+    <h1>
+      Brand<br />
+      <span class="outline">Guide</span>lines<span class="accent">.</span>
+    </h1>
+    <div class="cover-foot">
+      <p>The complete identity system for SwiftLoop — a web-design and AI-automation studio in Dubai. This document governs every surface the brand touches: web, print, proposals, invoices and product UI.</p>
+      <span class="mono dim">Dubai / Remote — GMT+4</span>
+    </div>
+  </header>
+
+  <!-- 01 BRAND CORE -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Brand core</h2>
+      <span class="section-kicker mono">01 / Foundation</span>
+    </div>
+    <p class="lede"><strong>Kinetic precision.</strong> SwiftLoop sits at the intersection of hand-crafted design and machine-run systems. The identity expresses that duality everywhere: ink canvas, bone type, one signal-orange accent, and monospaced telemetry. Designed by hand, run by machine.</p>
+    <div class="grid grid-3">
+      <div class="tile">
+        <span class="mono">Positioning</span>
+        <h3>Award-calibre sites, self-running systems</h3>
+        <p>We build websites people remember and wire them to AI workflows that never sleep. Premium craft, attached to a retainer by default — the system compounds.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Personality</span>
+        <h3>Precise. Confident. Quietly technical.</h3>
+        <p>Never loud, never cheap. The brand speaks like an engineer who designs — short declarative lines, real numbers, no filler adjectives.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">The loop</span>
+        <h3>Map → Design → Automate → Iterate</h3>
+        <p>The four-phase process is a brand asset. The circle / ring motif in the logo mark is the loop made visible — closed, continuous, compounding.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 LOGO -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Logo system</h2>
+      <span class="section-kicker mono">02 / Identity marks</span>
+    </div>
+    <p class="lede">The identity has two components: the <strong>wordmark</strong> (primary) and the <strong>loop ring</strong> (symbol). The wordmark is a single Clash Display Semibold setting — "Swift" in bone, "Loop" and the terminal period in signal orange. The period is non-negotiable: it is the full stop of a confident sentence.</p>
+
+    <div class="grid grid-2">
+      <div>
+        <div class="logo-stage" style="background: var(--ink-2);">
+          <span class="wordmark">Swift<em>Loop</em><em>.</em></span>
+        </div>
+        <div class="tile-label mono"><span>Primary wordmark</span><span>On ink — default</span></div>
+      </div>
+      <div>
+        <div class="logo-stage on-bone">
+          <span class="wordmark inverse">Swift<em>Loop</em><em>.</em></span>
+        </div>
+        <div class="tile-label mono"><span>Inverse wordmark</span><span>On bone / light</span></div>
+      </div>
+      <div>
+        <div class="logo-stage" style="background: var(--ink-2);">
+          <span class="wordmark solid-bone">Swift<em>Loop</em><em>.</em></span>
+        </div>
+        <div class="tile-label mono"><span>Monochrome bone</span><span>1-colour print, engraving</span></div>
+      </div>
+      <div>
+        <div class="logo-stage on-accent">
+          <span class="wordmark solid-ink">Swift<em>Loop</em><em>.</em></span>
+        </div>
+        <div class="tile-label mono"><span>Monochrome ink</span><span>On accent fields only</span></div>
+      </div>
+      <div>
+        <div class="logo-stage" style="background: var(--ink-2);">
+          <svg width="96" height="96" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="SwiftLoop ring">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
+          </svg>
+        </div>
+        <div class="tile-label mono"><span>The loop ring</span><span>Favicon, avatar, stamp</span></div>
+      </div>
+      <div>
+        <div class="logo-stage" style="background: var(--ink-2);">
+          <div class="stacked-mark">
+            <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto;">
+              <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
+            </svg>
+            <span class="wordmark">Swift<em>Loop</em><em>.</em></span>
+          </div>
+        </div>
+        <div class="tile-label mono"><span>Stacked lockup</span><span>Square formats, covers</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem; display: flex; gap: 3rem; flex-wrap: wrap; align-items: flex-start;">
+      <div>
+        <span class="mono accent" style="display:block; margin-bottom: 1.4rem;">Clear space</span>
+        <div class="clearspace-demo">
+          <span class="wordmark" style="font-size: 1.8rem;">Swift<em>Loop</em><em>.</em></span>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 280px; margin-top: 0.2rem;">
+        <span class="mono accent" style="display:block; margin-bottom: 1rem;">Construction rules</span>
+        <div class="rule do"><i>● DO</i><span>Keep clear space of at least the cap-height of the "S" on all sides.</span></div>
+        <div class="rule do"><i>● DO</i><span>Minimum size — wordmark: <strong>90 px / 24 mm</strong> wide. Ring: <strong>16 px / 5 mm</strong>.</span></div>
+        <div class="rule do"><i>● DO</i><span>Ring stroke weight is <strong>14 % of the viewbox</strong> (14 units on a 100-unit grid). Never thin it.</span></div>
+        <div class="rule dont"><i>✕ DON'T</i><span>Recolour "Swift", change the orange, add gradients, shadows or outlines.</span></div>
+        <div class="rule dont"><i>✕ DON'T</i><span>Set the wordmark in any typeface other than Clash Display Semibold.</span></div>
+        <div class="rule dont"><i>✕ DON'T</i><span>Drop the terminal period, stretch, rotate, or place on busy photography without a scrim.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 COLOR -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Colour</h2>
+      <span class="section-kicker mono">03 / Palette</span>
+    </div>
+    <p class="lede">The palette is deliberately narrow: three inks, two bones, one signal. <strong>Signal Orange is the only saturated colour in the system</strong> — it marks action, motion and the loop itself. If everything is orange, nothing is. Target ratio on any layout: ~80 % ink, ~15 % bone, ~5 % orange.</p>
+    <div class="grid grid-3">
+      <div class="swatch" style="background:#0a0a0c;">
+        <span class="name">Ink</span>
+        <span class="vals">HEX #0A0A0C · RGB 10 10 12<br/>CMYK 17 17 0 95 · canvas / primary bg</span>
+      </div>
+      <div class="swatch" style="background:#101014;">
+        <span class="name">Ink 2</span>
+        <span class="vals">HEX #101014 · RGB 16 16 20<br/>CMYK 20 20 0 92 · raised surfaces</span>
+      </div>
+      <div class="swatch" style="background:#17171d;">
+        <span class="name">Ink 3</span>
+        <span class="vals">HEX #17171D · RGB 23 23 29<br/>CMYK 21 21 0 89 · hover states</span>
+      </div>
+      <div class="swatch" style="background:#ece8df; color:#0a0a0c;">
+        <span class="name">Bone</span>
+        <span class="vals" style="opacity:.65;">HEX #ECE8DF · RGB 236 232 223<br/>CMYK 0 2 6 7 · type / light surfaces</span>
+      </div>
+      <div class="swatch" style="background:#97948b; color:#0a0a0c;">
+        <span class="name">Bone Dim</span>
+        <span class="vals" style="opacity:.7;">HEX #97948B · RGB 151 148 139<br/>CMYK 0 2 8 41 · secondary type</span>
+      </div>
+      <div class="swatch" style="background:#ff4d1f; color:#0a0a0c;">
+        <span class="name">Signal Orange</span>
+        <span class="vals" style="opacity:.75;">HEX #FF4D1F · RGB 255 77 31<br/>CMYK 0 70 88 0 · PMS 1655 C · accent only</span>
+      </div>
+    </div>
+    <div style="margin-top: 2rem;">
+      <table class="spec-table">
+        <tr><th>Functional token</th><th>Value</th><th>Use</th></tr>
+        <tr><td>--line</td><td>rgba(236, 232, 223, 0.12)</td><td>Hairline rules, borders, dividers</td></tr>
+        <tr><td>--line-soft</td><td>rgba(236, 232, 223, 0.07)</td><td>Subtle borders on media and footers</td></tr>
+        <tr><td>--accent-soft</td><td>rgba(255, 77, 31, 0.14)</td><td>Orange glows, radial CTA washes</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 TYPOGRAPHY -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Typography</h2>
+      <span class="section-kicker mono">04 / Type system</span>
+    </div>
+    <p class="lede">Three voices, strictly cast. <strong>Clash Display</strong> shouts the headlines, <strong>Satoshi</strong> carries the argument, <strong>JetBrains Mono</strong> whispers the telemetry — labels, coordinates, metadata, numbers. Never let them swap roles.</p>
+
+    <div class="specimen">
+      <div class="meta mono"><b>Clash Display</b>Semibold 600 / Medium 500<br/>Display, H1–H3, wordmark<br/>Tracking −0.02 to −0.03 em<br/>Leading 0.96–1.05 · often UPPERCASE</div>
+      <div class="spec-display">Design in motion<span class="accent">.</span><br/><span style="color:transparent; -webkit-text-stroke: 1.5px var(--bone);">Systems on</span> loop<span class="accent">.</span></div>
+    </div>
+    <div class="specimen">
+      <div class="meta mono"><b>Satoshi</b>Regular 400 / Medium 500 / Bold 700<br/>Body copy, UI, paragraphs<br/>Size 17 px base · leading 1.6</div>
+      <div class="spec-body">SwiftLoop builds award-calibre websites and wires them to AI workflows that never sleep — so your brand performs while you don't have to. Emphasis is set in Medium 500, <span class="dim">secondary copy in Bone Dim.</span></div>
+    </div>
+    <div class="specimen">
+      <div class="meta mono"><b>JetBrains Mono</b>Regular 400 / Medium 500<br/>Labels, metadata, numerics<br/>11 px · tracking +0.14 em · UPPERCASE</div>
+      <div class="spec-mono">EST 2021 — LAT 25.20°N — LON 55.27°E — STATUS <span class="accent">● OPEN</span><br/>PHASE 01 / MAP — SERVICES / 01—04 — ◦ FEATURED / LIVE CLIENT WORK</div>
+    </div>
+
+    <div style="margin-top: 2.5rem;">
+      <span class="mono accent" style="display:block; margin-bottom: 1rem;">Signature typographic devices</span>
+      <div class="rule do"><i>● DO</i><span><strong>Outline type:</strong> transparent fill with a 1.5 px bone stroke — used for the second beat of a two-line headline.</span></div>
+      <div class="rule do"><i>● DO</i><span><strong>Orange full stops:</strong> headlines that make a claim end with a Signal Orange period.</span></div>
+      <div class="rule do"><i>● DO</i><span><strong>Mono kickers:</strong> sections are introduced with a "◦" prefix in orange and a mono label in Bone Dim.</span></div>
+      <div class="rule dont"><i>✕ DON'T</i><span>Use Clash Display below 18 px, use mono for body paragraphs, or set body copy in all-caps.</span></div>
+    </div>
+  </section>
+
+  <!-- 05 GRAPHIC LANGUAGE -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Graphic language</h2>
+      <span class="section-kicker mono">05 / Texture &amp; motion</span>
+    </div>
+    <div class="grid grid-3">
+      <div class="tile">
+        <span class="mono">Hairlines</span>
+        <h3>1 px rules everywhere</h3>
+        <p>Sections, tables and cards are separated by 1 px hairlines at 12 % bone — never solid boxes or drop shadows. The grid shows itself.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Grain</span>
+        <h3>5 % film grain</h3>
+        <p>A fractal-noise grain overlay at 5 % opacity sits on top of digital surfaces. It keeps the dark canvas analogue and alive.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Pills</span>
+        <h3>Fully-rounded chips</h3>
+        <p>Buttons and tags use 99 px radius pills with mono uppercase labels. Primary = bone fill; ghost = 1 px line; hover floods orange.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Telemetry</span>
+        <h3>Coordinates &amp; counters</h3>
+        <p>Real data as decoration: latitudes, timestamps, phase numbers, percentages. The brand proves it measures things.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Motion</span>
+        <h3>Masked reveals</h3>
+        <p>Type enters through line-masks; eases use cubic-bezier(0.22, 1, 0.36, 1). Motion is swift and decisive — no bounces, no floaty drift.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">The ring</span>
+        <h3>Circular geometry</h3>
+        <p>Circles recur: the ring mark, round close buttons, the "◦" separator, radial orange glows behind CTAs. Every circle is the loop.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 VOICE -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Voice &amp; tone</h2>
+      <span class="section-kicker mono">06 / Language</span>
+    </div>
+    <p class="lede">Write like the type is set: short, declarative, kinetic. Claims come with numbers. The em-dash and the period do the heavy lifting — exclamation marks never appear.</p>
+    <div class="voice-pair">
+      <div>
+        <span class="mono accent">● We say</span>
+        <p>"Ship in weeks, not quarters."<br/>"Designed by hand, run by machine."<br/>"Tell us what eats your team's week. We'll show you the system that gives it back."</p>
+      </div>
+      <div>
+        <span class="mono" style="color:#d6453a;">✕ We never say</span>
+        <p>"Affordable websites for every budget!"<br/>"We're passionate about leveraging cutting-edge synergies."<br/>"Cheap, fast and reliable!!!"</p>
+      </div>
+    </div>
+    <div style="margin-top: 2rem;">
+      <div class="rule do"><i>● DO</i><span>Lead with the outcome, attach the mechanism: <strong>"3.4× average conversion lift — measured, not promised."</strong></span></div>
+      <div class="rule do"><i>● DO</i><span>Premium posture in commercial documents: builds are quoted at <strong>AED 4,000–7,000+</strong>, always with a care retainer attached by default. Removing the retainer is presented as a downgrade, never a discount.</span></div>
+      <div class="rule do"><i>● DO</i><span>Referral language: every client is told plainly — <strong>one month of retainer free for any introduction that closes.</strong></span></div>
+      <div class="rule dont"><i>✕ DON'T</i><span>Use "cheap", "budget", "basic" or apologise for pricing. SwiftLoop serves luxury and premium clients; the language must match.</span></div>
+    </div>
+  </section>
+
+  <!-- 07 APPLICATIONS -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Applications</h2>
+      <span class="section-kicker mono">07 / In use</span>
+    </div>
+    <div class="grid grid-3">
+      <div class="tile">
+        <span class="mono">Web</span>
+        <h3>swiftloop.tech</h3>
+        <p>Ink canvas, WebGL hero, grain overlay, hairline sections. The site is the reference implementation of this document.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Documents</span>
+        <h3>Quotes &amp; invoices</h3>
+        <p>A4, ink header band with the wordmark, mono metadata row, hairline tables, orange totals. See the SwiftLoop invoice generator.</p>
+      </div>
+      <div class="tile">
+        <span class="mono">Print</span>
+        <h3>Business cards</h3>
+        <p>85 × 55 mm. Ink front with ring + wordmark; bone back with contact telemetry. Soft-touch matte stock, optional orange edge paint.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mono">
+    <span>© 2026 SwiftLoop Studio — Brand Guidelines V1.0</span>
+    <span>info@swiftloop.tech · WA +971 50 972 5199 · Dubai / GMT+4</span>
+  </footer>
+
+</body>
+</html>
