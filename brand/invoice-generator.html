@@ -364,7 +364,13 @@
   <!-- ====================== CONTROL PANEL ====================== -->
   <aside class="panel">
     <div class="panel-logo">Swift<em>Loop</em><em>.</em></div>
-    <p class="panel-sub mono">Billing console — UAE</p>
+    <p class="panel-sub mono" id="panelSub">Billing console — UAE</p>
+
+    <h3 class="mono">Market</h3>
+    <div class="seg" id="marketSeg">
+      <button data-market="UAE" class="is-on">UAE</button>
+      <button data-market="INTL">International</button>
+    </div>
 
     <h3 class="mono">Document type</h3>
     <div class="seg" id="docTypeSeg">
@@ -390,7 +396,26 @@
       <option value="retainer">Monthly retainer — billed in advance</option>
     </select>
 
-    <label class="mono" for="setVat">VAT (5% UAE)</label>
+    <label class="mono" for="setAccount">Payment account</label>
+    <select id="setAccount">
+      <option value="">— Select account —</option>
+      <option value="wio-aed">Wio Bank — AED (UAE)</option>
+      <option value="wio-usd">Wio Bank — USD (UAE)</option>
+      <option value="wise-eur">Wise — EUR (Belgium)</option>
+      <option value="crypto">Cryptocurrency (on request)</option>
+    </select>
+
+    <label class="mono" for="setCurrency">Currency</label>
+    <select id="setCurrency">
+      <option value="AED" selected>AED — UAE Dirham</option>
+      <option value="USD">USD — US Dollar</option>
+      <option value="EUR">EUR — Euro</option>
+      <option value="GBP">GBP — British Pound</option>
+      <option value="SAR">SAR — Saudi Riyal</option>
+      <option value="QAR">QAR — Qatari Riyal</option>
+    </select>
+
+    <label class="mono" id="vatLabel" for="setVat">VAT (5% UAE)</label>
     <select id="setVat">
       <option value="0" selected>Not VAT registered — no VAT</option>
       <option value="1">Apply 5% VAT (TRN required)</option>
@@ -494,8 +519,8 @@
             <tr>
               <th style="width:44%;">Description</th>
               <th style="width:17%;">Qty / Duration</th>
-              <th class="r" style="width:16%;">Unit price (AED)</th>
-              <th class="r" style="width:15%;">Amount (AED)</th>
+              <th class="r" style="width:16%;" id="thUnitPrice">Unit price (AED)</th>
+              <th class="r" style="width:15%;" id="thAmount">Amount (AED)</th>
               <th class="screen-only" style="width:4%;"></th>
             </tr>
           </thead>
@@ -507,7 +532,7 @@
         <div class="totals-wrap">
           <div class="pay-note">
             <h4>Payment details</h4>
-            <textarea data-f="payDetails" rows="5">Bank transfer (AED):
+            <textarea data-f="payDetails" id="payDetailsBox" rows="5">Bank transfer (AED):
 Account name: Luca Wiegand — SwiftLoop
 Bank: —  ·  IBAN: AE — — — —
 Reference: document № above.
@@ -517,9 +542,9 @@ Also accepted: payment link on request.</textarea>
           </div>
           <div class="totals">
             <div class="trow"><span class="lbl">Subtotal</span><span class="val" id="tSubtotal">0.00</span></div>
-            <div class="trow"><span class="lbl">Discount (AED)</span><input type="text" inputmode="decimal" data-f="discount" id="fDiscount" value="0" /></div>
+            <div class="trow"><span class="lbl" id="discountLbl">Discount (AED)</span><input type="text" inputmode="decimal" data-f="discount" id="fDiscount" value="0" /></div>
             <div class="trow" id="vatRow" style="display:none;"><span class="lbl">VAT 5%</span><span class="val" id="tVat">0.00</span></div>
-            <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em>AED</em><span id="tGrand">0.00</span></span></div>
+            <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em id="grandCurrencyCode">AED</em><span id="tGrand">0.00</span></span></div>
             <div class="amount-words" id="amountWords"></div>
           </div>
         </div>
@@ -564,11 +589,29 @@ Also accepted: payment link on request.</textarea>
     "custom":       { d: "Custom line item", s: "", qty: 1, unit: "project", rate: 0 }
   };
 
+  var CURRENCIES = {
+    "AED": { name: "UAE Dirham",    subunit: "Fils"     },
+    "USD": { name: "US Dollar",     subunit: "Cents"    },
+    "EUR": { name: "Euro",          subunit: "Cents"    },
+    "GBP": { name: "British Pound", subunit: "Pence"    },
+    "SAR": { name: "Saudi Riyal",   subunit: "Halalas"  },
+    "QAR": { name: "Qatari Riyal",  subunit: "Dirhams"  }
+  };
+
+  var currentCurrency = "AED";
+
   var RATE_OPTIONS = [750, 1000, 1500, 2000, 2500, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8500, 10000];
   var QTY_OPTIONS = [
     { v: 1, l: "1 × project" }, { v: 1, l: "1 month" }, { v: 3, l: "3 months" },
     { v: 6, l: "6 months" }, { v: 12, l: "12 months" }
   ];
+
+  var BANK_ACCOUNTS = {
+    "wio-aed":  "Bank transfer (AED):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE60 0860 0000 0627 3800 686\nBIC/SWIFT: WIOBAEADXXX\nReference: document № above.",
+    "wio-usd":  "Bank transfer (USD):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE19 0860 0000 0670 5822 546\nBIC/SWIFT: WIOBAEADXXX\nReference: document № above.",
+    "wise-eur": "Bank transfer (EUR):\nAccount name: Luca Alexander Wiegand\nBank: Wise · Rue du Trône 100, 3rd floor, Brussels, 1050, Belgium\nIBAN: BE40 9677 1411 4063\nBIC/SWIFT: TRWIBEB1XXX\nReference: document № above.",
+    "crypto":   "Cryptocurrency accepted on request.\nSupported: USDT, USDC, BTC, ETH (TRC-20, ERC-20, BEP-20).\nPlease contact us to confirm wallet address and network before sending.\nReference: document № above."
+  };
 
   var SPLIT_TEXT = {
     "50": "50% deposit on signing · 50% on delivery, prior to launch.",
@@ -591,6 +634,23 @@ Also accepted: payment link on request.</textarea>
     "<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
     "<b>Governing law.</b> This agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai; the Dubai Courts have exclusive jurisdiction. This document is computer-generated and valid without signature or stamp."
   ];
+
+  var DEFAULT_TERMS_INTL = [
+    "<b>Acceptance.</b> Written approval of this document (including by email or electronic means) constitutes a binding agreement. Work begins on receipt of the deposit.",
+    "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
+    "<b>Payment.</b> All amounts are in the currency stated on this document and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1.5% per month</b> (or the maximum rate permitted by applicable law, whichever is lower) on the outstanding balance, plus reasonable recovery costs.",
+    "<b>Taxes.</b> All prices are exclusive of applicable sales tax, VAT, GST, withholding tax, or similar levies. The client is responsible for any taxes imposed in their jurisdiction. Where SwiftLoop is required by law to collect such taxes, they will be added to the invoice and itemised separately.",
+    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop. SwiftLoop retains the right to showcase the work in its portfolio and to place a small <b>“Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
+    "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
+    "<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Governing law.</b> This agreement is governed by the laws of England and Wales; the courts of England and Wales have non-exclusive jurisdiction unless otherwise agreed in writing. This document is computer-generated and valid without signature or stamp."
+  ];
+
+  var currentMarket = "UAE";
 
   var LS_KEY = "swiftloop-quotes-v1";
 
@@ -620,9 +680,10 @@ Also accepted: payment link on request.</textarea>
     return out;
   }
   function amountInWords(n) {
+    var cur = CURRENCIES[currentCurrency] || CURRENCIES["AED"];
     n = Math.round(n * 100) / 100;
-    var whole = Math.floor(n), fils = Math.round((n - whole) * 100);
-    if (whole === 0 && fils === 0) return "";
+    var whole = Math.floor(n), cents = Math.round((n - whole) * 100);
+    if (whole === 0 && cents === 0) return "";
     var parts = [], scales = [[1000000, "Million"], [1000, "Thousand"], [1, ""]];
     var rem = whole;
     scales.forEach(function (s) {
@@ -630,8 +691,7 @@ Also accepted: payment link on request.</textarea>
       if (q) { parts.push(words999(q) + (s[1] ? " " + s[1] : "")); rem %= s[0]; }
     });
     var str = parts.join(" ") || "Zero";
-    var out = "AED " + str + (fils ? " and " + words999(fils) + " Fils" : "") + " only";
-    return out;
+    return currentCurrency + " " + str + (cents ? " and " + words999(cents) + " " + cur.subunit : "") + " only";
   }
 
   function toast(msg) {
@@ -765,10 +825,11 @@ Also accepted: payment link on request.</textarea>
     docType = t;
     $all("#docTypeSeg button").forEach(function (b) { b.classList.toggle("is-on", b.dataset.type === t); });
     $("#docTypeLabel").textContent = t === "TAX INVOICE" ? "Tax Invoice" : (t.charAt(0) + t.slice(1).toLowerCase());
+    var isUAE = currentMarket === "UAE";
     $("#docTypeSub").textContent =
-      t === "QUOTE" ? "Commercial proposal — Dubai, UAE" :
-      t === "INVOICE" ? "Commercial invoice — Dubai, UAE" :
-      "Per Federal Decree-Law No. 8 of 2017 — UAE VAT";
+      t === "QUOTE"   ? (isUAE ? "Commercial proposal — Dubai, UAE"              : "Commercial proposal — International") :
+      t === "INVOICE" ? (isUAE ? "Commercial invoice — Dubai, UAE"               : "Commercial invoice — International")  :
+                        (isUAE ? "Per Federal Decree-Law No. 8 of 2017 — UAE VAT": "Tax invoice — VAT / GST");
     $("#dueLabel").textContent = t === "QUOTE" ? "Valid until" : "Payment due";
     $("#grandLbl").textContent = t === "QUOTE" ? "Total quoted" : "Total due";
     if (t === "TAX INVOICE") {
@@ -825,7 +886,7 @@ Also accepted: payment link on request.</textarea>
     return {
       v: 1,
       docType: docType,
-      settings: { due: $("#setDue").value, split: $("#setSplit").value, vat: $("#setVat").value, validity: $("#setValidity").value },
+      settings: { due: $("#setDue").value, split: $("#setSplit").value, vat: $("#setVat").value, validity: $("#setValidity").value, currency: currentCurrency, market: currentMarket },
       fields: fields,
       items: items,
       terms: terms,
@@ -838,13 +899,18 @@ Also accepted: payment link on request.</textarea>
     $("#setSplit").value = s.settings.split;
     $("#setVat").value = s.settings.vat;
     $("#setValidity").value = s.settings.validity;
+    var cur = s.settings.currency || "AED";
+    $("#setCurrency").value = cur;
+    setCurrencyDisplay(cur);
+    setMarket(s.settings.market || "UAE");
     Object.keys(s.fields || {}).forEach(function (k) {
       var el = $('[data-f="' + k + '"]');
       if (el) el.value = s.fields[k];
     });
     rowsEl.innerHTML = "";
     (s.items || []).forEach(addRow);
-    renderTerms(s.terms && s.terms.length ? s.terms : DEFAULT_TERMS);
+    var defaultTerms = currentMarket === "UAE" ? DEFAULT_TERMS : DEFAULT_TERMS_INTL;
+    renderTerms(s.terms && s.terms.length ? s.terms : defaultTerms);
     setDocType(s.docType || "QUOTE");
     // dates intentionally refresh to *today* on recall, per workflow
     $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
@@ -880,11 +946,51 @@ Also accepted: payment link on request.</textarea>
     });
   }
 
+  /* ---------------------------------------------------------- market */
+
+  function setMarket(m) {
+    currentMarket = m;
+    $all("#marketSeg button").forEach(function (b) { b.classList.toggle("is-on", b.dataset.market === m); });
+    $("#panelSub").textContent = m === "UAE" ? "Billing console — UAE" : "Billing console — International";
+    $("#vatLabel").textContent = m === "UAE" ? "VAT (5% UAE)" : "Tax / VAT";
+    renderTerms(m === "UAE" ? DEFAULT_TERMS : DEFAULT_TERMS_INTL);
+    $("#termsTitle").textContent = m === "UAE"
+      ? "Terms & conditions — United Arab Emirates"
+      : "Terms & conditions — International";
+    setDocType(docType);
+  }
+
+  /* ---------------------------------------------------------- currency */
+
+  function setCurrencyDisplay(code) {
+    currentCurrency = code;
+    var cur = CURRENCIES[code] || CURRENCIES["AED"];
+    $("#fCurrency").value = code + " — " + cur.name;
+    $("#thUnitPrice").textContent = "Unit price (" + code + ")";
+    $("#thAmount").textContent = "Amount (" + code + ")";
+    $("#grandCurrencyCode").textContent = code;
+    $("#discountLbl").textContent = "Discount (" + code + ")";
+    recalc();
+  }
+
   /* ---------------------------------------------------------- wiring */
+
+  $all("#marketSeg button").forEach(function (b) {
+    b.addEventListener("click", function () { setMarket(b.dataset.market); });
+  });
 
   $all("#docTypeSeg button").forEach(function (b) {
     b.addEventListener("click", function () { setDocType(b.dataset.type); });
   });
+
+  $("#setAccount").addEventListener("change", function () {
+    var txt = BANK_ACCOUNTS[this.value];
+    if (!txt) return;
+    $("#payDetailsBox").value = txt;
+    autosize($("#payDetailsBox"));
+  });
+
+  $("#setCurrency").addEventListener("change", function () { setCurrencyDisplay(this.value); });
 
   $("#setDue").addEventListener("change", refreshDates);
   $("#setValidity").addEventListener("change", refreshDates);
@@ -943,12 +1049,13 @@ Also accepted: payment link on request.</textarea>
       $("#fDiscount").value = "0";
       addRow();
     }
-    renderTerms(DEFAULT_TERMS);
+    setMarket("UAE");
     setDocType("QUOTE");
     $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
     recalc();
   }
 
+  setCurrencyDisplay("AED");
   init(false);
   renderSavedList();
 

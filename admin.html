@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>SwiftLoop — Admin Console</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #0a0a0c;
+      --ink-2: #101014;
+      --ink-3: #17171d;
+      --line: rgba(236, 232, 223, 0.12);
+      --line-soft: rgba(236, 232, 223, 0.06);
+      --bone: #ece8df;
+      --bone-dim: #97948b;
+      --accent: #ff4d1f;
+      --green: #4ade80;
+      --font-display: "Clash Display", "Arial Black", sans-serif;
+      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--ink);
+      color: var(--bone);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      background-image:
+        linear-gradient(var(--line-soft) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+      background-size: 44px 44px;
+    }
+    ::selection { background: var(--accent); color: var(--ink); }
+    .mono { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.6rem 5rem; }
+
+    /* ---- top bar ---- */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 0.7rem; }
+    .brand svg { width: 30px; height: 30px; }
+    .brand .name { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; letter-spacing: -0.02em; }
+    .brand .name em { font-style: normal; color: var(--accent); }
+    .brand .tag { margin-left: 0.4rem; color: var(--accent); border: 1px solid var(--line); border-radius: 99px; padding: 0.25rem 0.6rem; }
+    .topbar-right { display: flex; align-items: center; gap: 1.1rem; }
+    .status { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--bone-dim); }
+    .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    .logout { color: var(--bone-dim); text-decoration: none; border-bottom: 1px dashed transparent; transition: color 0.2s, border-color 0.2s; }
+    .logout:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ---- boot log ---- */
+    .boot { margin: 2.2rem 0 0.4rem; color: var(--bone-dim); line-height: 1.9; }
+    .boot .ok { color: var(--green); }
+    .boot .cursor { display: inline-block; width: 0.55em; height: 1em; background: var(--accent); margin-left: 0.2em; vertical-align: -0.12em; animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .lead { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: -0.02em; line-height: 1.05; margin: 1.6rem 0 0.6rem; }
+    .lead em { font-style: normal; color: var(--accent); }
+    .lead-sub { color: var(--bone-dim); max-width: 52ch; line-height: 1.6; }
+
+    /* ---- module grid ---- */
+    .section-label { margin: 3rem 0 1rem; color: var(--accent); display: flex; align-items: center; gap: 0.8rem; }
+    .section-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .module {
+      position: relative;
+      display: flex; flex-direction: column;
+      border: 1px solid var(--line);
+      background: var(--ink-2);
+      border-radius: 10px;
+      padding: 1.3rem 1.3rem 1.2rem;
+      text-decoration: none;
+      color: var(--bone);
+      min-height: 168px;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s, background 0.25s;
+    }
+    .module::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(120% 100% at 100% 0%, rgba(255,77,31,0.10), transparent 55%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .module:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .module:hover::before { opacity: 1; }
+    .module .idx { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; }
+    .module .ico { font-size: 1.5rem; margin: 0.3rem 0 0.9rem; }
+    .module h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; letter-spacing: -0.01em; line-height: 1.1; }
+    .module p { color: var(--bone-dim); font-size: 0.84rem; line-height: 1.5; margin-top: 0.4rem; flex: 1; }
+    .module .go { margin-top: 1rem; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone-dim); transition: color 0.25s; }
+    .module:hover .go { color: var(--accent); }
+    .module .go .arr { transition: transform 0.25s; display: inline-block; }
+    .module:hover .go .arr { transform: translateX(4px); }
+
+    .module.locked { cursor: default; opacity: 0.55; border-style: dashed; }
+    .module.locked:hover { border-color: var(--line); transform: none; }
+    .module.locked:hover::before { opacity: 0; }
+    .module.locked .go { color: var(--bone-dim); }
+
+    /* ---- footer ---- */
+    .foot { margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.8rem; color: var(--bone-dim); }
+
+    @media (max-width: 560px) {
+      .brand .tag, .status span:not(.dot) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- top bar -->
+    <header class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/></svg>
+        <span class="name">Swift<em>Loop</em><em>.</em></span>
+        <span class="tag mono">Admin Console</span>
+      </div>
+      <div class="topbar-right mono">
+        <span class="status"><span class="dot"></span><span>Session active</span></span>
+        <a class="logout" href="/admin/logout">Log out</a>
+      </div>
+    </header>
+
+    <!-- boot log -->
+    <div class="boot mono">
+      <div><span class="ok">[ ok ]</span> auth handshake · token verified</div>
+      <div><span class="ok">[ ok ]</span> modules mounted · 4 online · 2 pending<span class="cursor"></span></div>
+    </div>
+
+    <h1 class="lead">Internal <em>toolkit</em>.</h1>
+    <p class="lead-sub">Private workspace for SwiftLoop's generators and brand utilities. Everything here is unlisted and lives behind this console only.</p>
+
+    <!-- modules -->
+    <div class="section-label mono">Modules</div>
+    <div class="grid">
+
+      <a class="module" href="/brand/invoice-generator.html">
+        <span class="idx">01</span>
+        <span class="ico">🧾</span>
+        <h3>Quote &amp; Invoice Generator</h3>
+        <p>Build quotes, invoices and tax invoices — UAE &amp; international, multi-currency, saved locally.</p>
+        <span class="go">Open module <span class="arr">→</span></span>
+      </a>
+
+      <a class="module" href="/brand/business-card.html">
+        <span class="idx">02</span>
+        <span class="ico">🪪</span>
+        <h3>Business Card</h3>
+        <p>Generate the standard SwiftLoop business card layout, print-ready.</p>
+        <span class="go">Open module <span class="arr">→</span></span>
+      </a>
+
+      <a class="module" href="/brand/business-card-v2.html">
+        <span class="idx">03</span>
+        <span class="ico">🪪</span>
+        <h3>Business Card · v2</h3>
+        <p>Alternate business card variant — refreshed layout and treatment.</p>
+        <span class="go">Open module <span class="arr">→</span></span>
+      </a>
+
+      <a class="module" href="/brand/guidelines.html">
+        <span class="idx">04</span>
+        <span class="ico">📐</span>
+        <h3>Brand Guidelines</h3>
+        <p>Logo system, palette, typography and usage rules for the SwiftLoop identity.</p>
+        <span class="go">Open module <span class="arr">→</span></span>
+      </a>
+
+      <div class="module locked">
+        <span class="idx">05</span>
+        <span class="ico">🧩</span>
+        <h3>TBD</h3>
+        <p>Reserved slot for an upcoming internal tool.</p>
+        <span class="go">Locked · coming soon</span>
+      </div>
+
+      <div class="module locked">
+        <span class="idx">06</span>
+        <span class="ico">🧩</span>
+        <h3>TBD</h3>
+        <p>Reserved slot for an upcoming internal tool.</p>
+        <span class="go">Locked · coming soon</span>
+      </div>
+
+    </div>
+
+    <!-- footer -->
+    <footer class="foot mono">
+      <span>SwiftLoop · internal — not for distribution</span>
+      <span>Dubai · GMT+4 · console v1.0</span>
+    </footer>
+
+  </div>
+</body>
+</html>

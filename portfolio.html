@@ -3,8 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio — SwiftLoop</title>
-  <meta name="description" content="Selected work by SwiftLoop — websites, AI agents and automation systems built for brands that move fast." />
+  <title>Portfolio — Web Design & E-commerce Projects, Dubai | SwiftLoop</title>
+  <meta name="description" content="Selected work by SwiftLoop, a Dubai web design studio — luxury and jewelry e-commerce, booking sites, AI agents and automation systems built for brands that move fast." />
+  <meta name="keywords" content="web design portfolio dubai, luxury website examples, jewelry website design, ecommerce website dubai, web development projects" />
+  <link rel="canonical" href="https://swiftloop.tech/portfolio.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+
+  <meta name="geo.region" content="AE-DU" />
+  <meta name="geo.placename" content="Dubai" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SwiftLoop" />
+  <meta property="og:title" content="Portfolio — Web Design & E-commerce Projects, Dubai | SwiftLoop" />
+  <meta property="og:description" content="Luxury and jewelry e-commerce, booking sites and AI automation built by SwiftLoop, a Dubai web design studio." />
+  <meta property="og:url" content="https://swiftloop.tech/portfolio.html" />
+  <meta property="og:image" content="https://swiftloop.tech/img/portfolio/velora.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Portfolio — SwiftLoop, Dubai" />
+  <meta name="twitter:description" content="Luxury & jewelry e-commerce, booking sites and AI automation built in Dubai." />
+  <meta name="twitter:image" content="https://swiftloop.tech/img/portfolio/velora.jpg" />
+
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +41,40 @@
         sessionStorage.setItem("sl-visited", "1");
       } catch (e) {}
     })();
+  </script>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://swiftloop.tech/" },
+          { "@type": "ListItem", "position": 2, "name": "Portfolio", "item": "https://swiftloop.tech/portfolio.html" }
+        ]
+      },
+      {
+        "@type": "CollectionPage",
+        "name": "SwiftLoop Portfolio",
+        "url": "https://swiftloop.tech/portfolio.html",
+        "isPartOf": { "@id": "https://swiftloop.tech/#website" },
+        "about": { "@id": "https://swiftloop.tech/#organization" },
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Velora Fine Jewelry — luxury jewelry e-commerce (EN/AR)", "image": "https://swiftloop.tech/img/portfolio/velora.jpg" },
+            { "@type": "ListItem", "position": 2, "name": "Falcon Timepieces — luxury watch e-commerce, Dubai", "image": "https://swiftloop.tech/img/portfolio/falcon.jpg" },
+            { "@type": "ListItem", "position": 3, "name": "Mainspring — e-commerce, Dubai", "image": "https://swiftloop.tech/img/portfolio/mainspring.jpg" },
+            { "@type": "ListItem", "position": 4, "name": "ESM EYWR — e-commerce, Montreal / Dubai", "image": "https://swiftloop.tech/img/portfolio/esmeywr.jpg" },
+            { "@type": "ListItem", "position": 5, "name": "BRRN BARRE — website and booking, Dubai", "image": "https://swiftloop.tech/img/portfolio/brrnbarre.jpg" },
+            { "@type": "ListItem", "position": 6, "name": "Creative Finishings — website, Dubai", "image": "https://swiftloop.tech/img/portfolio/creativefinishings.jpg" }
+          ]
+        }
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -80,7 +135,7 @@
 
       <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="falcon" id="falcon">
         <div class="work-media">
-          <img src="img/portfolio/falcon.png" alt="Falcon Timepieces screenshot" />
+          <img src="img/portfolio/falcon.jpg" alt="Falcon Timepieces — luxury watch e-commerce website, Dubai" width="800" height="600" loading="eager" fetchpriority="high" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Falcon Timepieces</h3>
@@ -90,7 +145,7 @@
 
       <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="mainspring" id="mainspring">
         <div class="work-media">
-          <img src="img/portfolio/mainspring.png" alt="Mainspring screenshot" />
+          <img src="img/portfolio/mainspring.jpg" alt="Mainspring — e-commerce website, Dubai" width="800" height="600" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Mainspring</h3>
@@ -100,7 +155,7 @@
 
       <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="esmeywr" id="esmeywr">
         <div class="work-media">
-          <img src="img/portfolio/esmeywr.png" alt="ESM EYWR screenshot" />
+          <img src="img/portfolio/esmeywr.jpg" alt="ESM EYWR — e-commerce website, Montreal and Dubai" width="800" height="600" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>ESM EYWR</h3>
@@ -110,7 +165,7 @@
 
       <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="velora" id="velora">
         <div class="work-media">
-          <img src="img/portfolio/velora.png" alt="Velora Fine Jewelry screenshot" />
+          <img src="img/portfolio/velora.jpg" alt="Velora Fine Jewelry — luxury jewelry e-commerce website, English and Arabic" width="800" height="600" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Velora Fine Jewelry</h3>
@@ -120,7 +175,7 @@
 
       <button class="folio-card gs-reveal" data-cats="web" data-project="brrnbarre" id="brrnbarre">
         <div class="work-media">
-          <img src="img/portfolio/brrnbarre.png" alt="BRRN BARRE screenshot" />
+          <img src="img/portfolio/brrnbarre.jpg" alt="BRRN BARRE — website and booking system, Dubai" width="800" height="600" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>BRRN BARRE</h3>
@@ -130,7 +185,7 @@
 
       <button class="folio-card gs-reveal" data-cats="web" data-project="creativefinishings" id="creativefinishings">
         <div class="work-media">
-          <img src="img/portfolio/creativefinishings.png" alt="Creative Finishings screenshot" />
+          <img src="img/portfolio/creativefinishings.jpg" alt="Creative Finishings — business website, Dubai" width="800" height="600" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Creative Finishings</h3>

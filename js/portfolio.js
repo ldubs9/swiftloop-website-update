@@ -155,7 +155,7 @@
     var media = document.getElementById("caseMedia");
     media.innerHTML = "";
     var img = document.createElement("img");
-    img.src = "img/portfolio/" + id + ".png";
+    img.src = "img/portfolio/" + id + ".jpg";
     img.alt = data.title + " portfolio showcase";
     media.appendChild(img);
 

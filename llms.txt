@@ -1,0 +1,39 @@
+# SwiftLoop
+
+> SwiftLoop is a web design, web development and AI workflow automation studio based in Dubai, UAE. We build award-calibre, conversion-focused websites — including luxury and jewelry e-commerce — and connect them to AI systems and automations that run the business behind the scenes.
+
+## What SwiftLoop does
+- **Web design & development (Dubai):** custom marketing sites, e-commerce, and product UI built with Next.js, WebGL and headless CMS, engineered for speed and Core Web Vitals.
+- **Luxury & jewelry website creation:** bilingual (English/Arabic) luxury e-commerce for jewelry, watches and premium brands, with AI-assisted inventory.
+- **AI workflow automation:** replacing repetitive operations (leads, invoices, reports, follow-ups) with self-running pipelines.
+- **AI agents & assistants:** RAG chat, support and voice agents trained on a client's knowledge base.
+- **Brand, motion & 3D:** identity systems and interactive Three.js / GSAP experiences.
+
+## Location & contact
+- Based in Dubai, United Arab Emirates. Serves Dubai, UAE and remote clients worldwide.
+- WhatsApp: +971 50 972 5199
+- Email: info@swiftloop.tech
+- Website: https://swiftloop.tech
+
+## Pricing (typical)
+- One-time website builds typically range AED 4,000–7,000 depending on scope.
+- Ongoing monthly retainers available for design + automation upkeep.
+- Referral offer: one month free for successful referrals.
+
+## How we work (the loop)
+1. **Map** — audit the funnel and operations.
+2. **Design** — prototype interface, motion and message in-browser; test with users.
+3. **Automate** — deploy AI agents and integrations behind the site.
+4. **Iterate** — report on results and tune design and prompts monthly.
+
+## Selected work
+- Velora Fine Jewelry — luxury jewelry e-commerce (EN/AR)
+- Falcon Timepieces — luxury watch e-commerce, Dubai
+- Mainspring — e-commerce, Dubai
+- ESM EYWR — e-commerce (Montreal / Dubai)
+- BRRN BARRE — website + booking, Dubai
+- Creative Finishings — website, Dubai
+
+## Key pages
+- Home: https://swiftloop.tech/
+- Portfolio: https://swiftloop.tech/portfolio.html
