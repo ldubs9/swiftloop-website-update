@@ -3,38 +3,620 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://swiftloop.tech/</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://swiftloop.tech/portfolio.html</loc>
-    <lastmod>2026-06-13</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-in-dubai-what-premium-costs</loc>
+    <lastmod>2025-05-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://swiftloop.tech/img/portfolio/velora.jpg</image:loc>
-      <image:title>Velora Fine Jewelry — luxury jewelry e-commerce website</image:title>
+      <image:loc>https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design in Dubai: What Premium Actually Costs in 2026</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/what-is-ai-workflow-automation</loc>
+    <lastmod>2025-05-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://swiftloop.tech/img/portfolio/falcon.jpg</image:loc>
-      <image:title>Falcon Timepieces — luxury e-commerce website, Dubai</image:title>
+      <image:loc>https://images.unsplash.com/photo-1518186285589-2f7649de83e0?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>What Is AI Workflow Automation — and What Can It Actually Do for You?</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/custom-website-vs-template</loc>
+    <lastmod>2025-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://swiftloop.tech/img/portfolio/mainspring.jpg</image:loc>
-      <image:title>Mainspring — e-commerce website, Dubai</image:title>
+      <image:loc>https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Custom Website vs Template: Which Is Right for Your Dubai Business?</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/custom-ai-chatbots-vs-off-the-shelf</loc>
+    <lastmod>2025-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://swiftloop.tech/img/portfolio/esmeywr.jpg</image:loc>
-      <image:title>ESM EYWR — e-commerce website</image:title>
+      <image:loc>https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Custom AI Chatbots vs Off-the-Shelf Bots: Which Do You Need?</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/how-long-to-build-a-custom-website-uae</loc>
+    <lastmod>2025-05-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://swiftloop.tech/img/portfolio/brrnbarre.jpg</image:loc>
-      <image:title>BRRN BARRE — website and booking system, Dubai</image:title>
+      <image:loc>https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>How Long Does It Take to Build a Custom Website in the UAE?</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/whatsapp-bots-for-uae-businesses</loc>
+    <lastmod>2025-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <image:image>
-      <image:loc>https://swiftloop.tech/img/portfolio/creativefinishings.jpg</image:loc>
-      <image:title>Creative Finishings — website, Dubai</image:title>
+      <image:loc>https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>WhatsApp Bots for UAE Businesses: A Practical Guide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/bilingual-arabic-english-websites-rtl</loc>
+    <lastmod>2025-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Bilingual Websites (English/Arabic): What RTL Design Really Involves</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/portfolio-websites-for-interior-designers</loc>
+    <lastmod>2025-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Portfolio Websites for Interior Designers</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/conversion-focused-design-what-moves-the-needle</loc>
+    <lastmod>2025-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Conversion-Focused Design: What Actually Moves the Needle</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/automating-lead-follow-up</loc>
+    <lastmod>2025-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Automating Lead Follow-Up So No Inquiry Goes Cold</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/headless-cms-explained-for-business-owners</loc>
+    <lastmod>2025-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Headless CMS Explained for Business Owners</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/websites-for-architecture-firms-uae</loc>
+    <lastmod>2025-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Websites for Architecture Firms in the UAE</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/how-much-should-uae-business-spend-on-website</loc>
+    <lastmod>2025-07-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>How Much Should a UAE Business Spend on a Website?</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/ai-agents-rag-explained-simply</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>AI Agents Trained on Your Knowledge Base (RAG, Explained Simply)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/shopify-webflow-or-custom</loc>
+    <lastmod>2025-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Shopify, Webflow, or Custom: Which Should You Build On?</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-for-fit-out-companies-dubai</loc>
+    <lastmod>2025-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Fit-Out Companies in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-accessibility-for-premium-brands</loc>
+    <lastmod>2025-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Accessibility and Why It Matters for Premium Brands</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/automating-invoices-reports-admin</loc>
+    <lastmod>2025-08-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Automating Invoices, Reports and Admin: Buy Back Your Week</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/cost-of-a-slow-or-outdated-website</loc>
+    <lastmod>2025-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>The Cost of a Slow or Outdated Website (in Lost Revenue)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-for-real-estate-companies-dubai</loc>
+    <lastmod>2025-09-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Real Estate Companies in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-for-jewelry-businesses-dubai</loc>
+    <lastmod>2025-09-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Jewelry Businesses in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/ramadan-eid-campaign-websites-uae</loc>
+    <lastmod>2025-09-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1532635241-17e820acc59f?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Ramadan &amp; Eid Campaign Websites in the UAE: Planning Seasonal Pages That Convert</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/voice-ai-agents-booking-support</loc>
+    <lastmod>2025-10-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Voice AI Agents for Booking and Support: Do They Actually Work?</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-for-beauty-wellness-studios-dubai</loc>
+    <lastmod>2025-10-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Beauty &amp; Wellness Studios in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/selling-luxury-online-beyond-pretty-photos</loc>
+    <lastmod>2025-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Selling Luxury Online: Why Your Site Needs More Than Pretty Photos</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-dubai-design-district-d3</loc>
+    <lastmod>2025-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Creative Brands in Dubai Design District (d3)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/custom-ai-systems-vs-saas-subscriptions</loc>
+    <lastmod>2025-10-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Custom AI Systems vs SaaS Subscriptions: When to Build Your Own</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/product-configurators-custom-web-apps</loc>
+    <lastmod>2025-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Product Configurators: Custom Web Apps That Let Customers Build Their Own</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-difc-financial-firms</loc>
+    <lastmod>2025-11-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Websites for DIFC Finance &amp; Professional Services Firms</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/watch-resale-websites-building-trust</loc>
+    <lastmod>2025-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Watch Resale Websites: Building Trust for Pre-Owned Timepieces</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/new-business-website-checklist-dubai</loc>
+    <lastmod>2025-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Launching a New Business in Dubai: Your Digital Presence Checklist</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/email-dm-automation-that-doesnt-feel-robotic</loc>
+    <lastmod>2025-12-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1596526131083-e8c633c948d2?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Email &amp; DM Automation That Doesn't Feel Robotic</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/booking-systems-for-studios-and-services</loc>
+    <lastmod>2025-12-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Booking Systems for Studios and Boutique Services</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-restaurants-cafes-dubai</loc>
+    <lastmod>2025-12-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Restaurants &amp; Cafés in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/how-to-photograph-jewelry-for-the-web</loc>
+    <lastmod>2025-12-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>How to Photograph and Present Jewelry for the Web</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/multi-location-websites-uae</loc>
+    <lastmod>2026-01-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1528702748617-c64d49f918af?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Multi-Location Websites for UAE Businesses (Dubai, Abu Dhabi, Sharjah)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/from-inquiry-to-invoice-automating-client-journey</loc>
+    <lastmod>2026-01-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>From Inquiry to Invoice: Automating the Client Journey</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/custom-crm-automations-for-small-teams</loc>
+    <lastmod>2026-01-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Custom CRM Automations for Small Teams</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-medical-dental-clinics-dubai</loc>
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Medical &amp; Dental Clinics in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/ecommerce-details-that-signal-premium</loc>
+    <lastmod>2026-01-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>E-commerce for Luxury Brands: The Details That Signal Premium</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-abu-dhabi-businesses</loc>
+    <lastmod>2026-02-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Abu Dhabi Businesses</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/vat-invoicing-automation-uae</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Automating VAT-Compliant Invoicing in the UAE</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/what-is-a-design-system</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>What Is a Design System — and Why Your Brand Needs One</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/ai-inventory-management-for-product-businesses</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>AI Inventory Management for Product Businesses</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/the-swiftloop-loop-process</loc>
+    <lastmod>2026-03-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1545235617-9465d2a55698?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>The Loop: How SwiftLoop Builds (Map, Design, Automate, Iterate)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/web-design-law-firms-uae</loc>
+    <lastmod>2026-03-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Web Design for Law Firms in the UAE</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/why-your-luxury-brand-needs-arabic-first</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Why Your Luxury Brand Needs an Arabic-First Option</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/seo-for-dubai-businesses-2026</loc>
+    <lastmod>2026-03-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1571677246347-5040e090ff14?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>SEO for Dubai Businesses in 2026: What Still Works</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/instagram-to-website-uae-smes</loc>
+    <lastmod>2026-04-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1611926653458-09294b3142bf?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>From Instagram-Only to a Real Website: A Guide for UAE SMEs</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/whatsapp-business-api-setup-uae</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Getting Verified on the WhatsApp Business API in the UAE</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/custom-branding-vs-generic-logos</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Custom Branding vs Generic Logos: What You're Really Buying</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/customizer-web-apps-for-furniture-interiors</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Customizer Web Apps for Furniture and Interiors</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/why-every-build-ships-with-a-retainer</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>What's a Retainer — and Why Every SwiftLoop Build Ships With One</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/luxury-car-dealership-rental-websites-dubai</loc>
+    <lastmod>2026-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Luxury Car Dealership &amp; Rental Websites in Dubai</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/building-a-watch-resale-marketplace</loc>
+    <lastmod>2026-05-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Building a Watch Resale Marketplace: Inventory, Authentication, Trust</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/llms-txt-making-your-site-ai-readable</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>llms.txt: Making Your Site Readable to AI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/domain-hosting-uae-business-ae-vs-com</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1606868306217-dbf5046868d2?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Choosing a Domain &amp; Hosting for a UAE Business (.ae vs .com)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/real-estate-lead-automation-dubai-brokers</loc>
+    <lastmod>2026-06-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Automating Bayut &amp; Property Finder Leads for Dubai Brokers</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/what-goes-into-brand-identity-system</loc>
+    <lastmod>2026-06-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>What Goes Into a Brand Identity System</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/journal/membership-loyalty-systems-dubai-brands</loc>
+    <lastmod>2026-06-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&amp;fit=crop&amp;w=1600&amp;q=80</image:loc>
+      <image:title>Membership &amp; Loyalty Systems for Dubai Brands</image:title>
     </image:image>
   </url>
 </urlset>
