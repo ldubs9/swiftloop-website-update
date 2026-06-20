@@ -183,6 +183,30 @@ const items = SLUGS.map((slug) => {
 // ---- mix, then date by position ----
 const mixed = mixByCategory(items);
 const total = mixed.length;
+
+// Constraint: an article whose CONTENT references the year 2026 (or any
+// 2026-only subject) must never be dated in 2025. After mixing, swap any
+// such article out of a 2025-dated slot into a 2026-dated one.
+function mentions2026(it) {
+  return /2026/.test((it.fm.title || "") + " " + (it.fm.description || "") + " " + it.body);
+}
+function yearOfPosition(pos) {
+  return Number(dateForPosition(pos, total).ymd.slice(0, 4));
+}
+for (let i = 0; i < mixed.length; i++) {
+  if (yearOfPosition(i + 1) >= 2026) continue; // already a 2026 slot
+  if (!mentions2026(mixed[i])) continue; // fine to sit in 2025
+  // find a 2026-dated slot currently holding a non-2026 article and swap
+  let j = mixed.findIndex((it, k) => yearOfPosition(k + 1) >= 2026 && !mentions2026(it));
+  if (j === -1) {
+    console.warn(`! no 2026 slot available for ${mixed[i].slug}`);
+    continue;
+  }
+  const tmp = mixed[i];
+  mixed[i] = mixed[j];
+  mixed[j] = tmp;
+}
+
 const rows = [];
 
 mixed.forEach((it, idx) => {

@@ -4,7 +4,7 @@ slug: "multi-location-websites-uae"
 description: "Running branches across the Emirates? Here's how to build one website that serves Dubai, Abu Dhabi and Sharjah without confusing customers or Google."
 keywords: ["multi location website uae", "multiple branches website dubai", "abu dhabi sharjah website", "local seo multiple locations"]
 category: "Web Design"
-date: "2026-01-02"
+date: "2025-05-02"
 readTime: "3 min"
 image: "https://images.unsplash.com/photo-1528702748617-c64d49f918af?auto=format&fit=crop&w=1600&q=80"
 imageAlt: "Map and location pins"

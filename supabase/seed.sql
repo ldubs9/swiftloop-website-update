@@ -10,34 +10,37 @@
 insert into public.swiftloop_articles
   (slug, title, description, body, category, keywords, read_time, image, image_alt, featured, published, published_at)
 values
-  ('web-design-in-dubai-what-premium-costs', 'Web Design in Dubai: What Premium Actually Costs in 2026', 'A clear breakdown of what a custom website costs in Dubai in 2026 — and why the cheapest quote is rarely the cheapest outcome.', $body$Ask ten studios for a quote and you'll get ten different numbers. The spread isn't random — it maps almost exactly to what you're actually buying.
+  ('multi-location-websites-uae', 'Multi-Location Websites for UAE Businesses (Dubai, Abu Dhabi, Sharjah)', 'Running branches across the Emirates? Here''s how to build one website that serves Dubai, Abu Dhabi and Sharjah without confusing customers or Google.', $body$Growing across the Emirates is a milestone — and a web design problem most businesses get wrong. A customer in Abu Dhabi shouldn't be shown Dubai's hours, and Google shouldn't be confused about which branch is which. Done well, one site can serve every location clearly. Done badly, it muddles all of them.
 
-## The honest range
+## The core principle: one brand, distinct locations
 
-At SwiftLoop, a custom build sits in the **AED 4,000–7,000+** range. A focused landing page starts around AED 4,000. A full marketing site lands near AED 5,500. E-commerce — with inventory, payments and bilingual support — starts at AED 7,000. Every build ships with a Loop retainer attached by default, because a website that nobody tends to quietly decays.
+You want a single, consistent brand experience, with each location given its own clear, dedicated space. That usually means a **separate page per branch** — Dubai, Abu Dhabi, Sharjah — each with its own address, hours, map, contact and, where relevant, its own team and offers.
 
-Below that range, you're usually buying a template with your logo dropped in. Above it, you're often paying for an agency's downtown rent.
+## Why dedicated location pages matter
 
-## Why the cheap quote costs more
+- **For customers** — they instantly find the branch relevant to them, with the right details. No guessing.
+- **For Google** — dedicated, properly structured location pages help you rank for "X in Abu Dhabi" *and* "X in Sharjah," not just your head office city.
+- **For operations** — hours, stock or services that differ by branch stay accurate per location.
 
-A AED 1,500 site looks fine in the demo. Then the cracks show: it loads in six seconds on a phone, it can't be edited without the original developer, and it ranks nowhere because the code is bloated. You pay again to rebuild it within a year.
+## Local SEO, per emirate
 
-Premium isn't a markup. It's the difference between a site that *looks* done and one that *performs* — measured in load speed, conversion rate and the hours your team gets back.
+Each location should connect to its own Google Business Profile and consistent local listings. This is how you win the "near me" searches in every emirate you operate in — a major source of walk-in and call traffic that a single generic page leaves on the table.
 
-## What you're paying for
+## Keep management sane
 
-- **Custom design, not a theme** — built around your brand and your customer, not a marketplace template.
-- **Speed engineering** — sub-second loads and green Core Web Vitals, which Google rewards and customers feel.
-- **Systems behind the site** — automations for leads, follow-ups and invoices, so the site earns its keep after launch.
-- **Someone who answers** — a retainer means a real person tends the thing as your business changes.
+The fear with multi-location is upkeep. The fix is a structure where shared content lives once and location-specific details are easy to edit per branch — so updating Sharjah's Ramadan hours doesn't mean touching the whole site. We build it so a non-technical team can keep every branch current.
 
-## The question to ask
+## Bilingual across the board
 
-Not "how much is a website" — but "what is one extra customer a month worth to me?" For most Dubai businesses, the answer makes a proper build pay for itself long before the year is out.
+Each location serves a bilingual audience. The English/Arabic experience should be consistent everywhere, with local nuances respected per emirate.
+
+## The takeaway
+
+A multi-location UAE business needs one coherent brand with clear, dedicated, locally-optimised pages per branch — easy to manage and easy for both customers and Google to navigate. We architect multi-emirate sites that scale cleanly as you add the next location.
 
 ---
 
-*Want a real number for your project? Tell us what you're building — [info@swiftloop.tech](mailto:info@swiftloop.tech) or WhatsApp +971 50 972 5199. Designed by hand, run by machine.*$body$, 'Web Design', '{"web design dubai","website cost dubai","custom website uae","web design pricing"}', '3 min', 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1600&q=80', 'Dubai skyline at dusk', false, true, '2025-05-02T09:00:00+04:00')
+*Expanding across the Emirates? Let's build a site that serves every branch. [info@swiftloop.tech](mailto:info@swiftloop.tech) · WhatsApp +971 50 972 5199.*$body$, 'Web Design', '{"multi location website uae","multiple branches website dubai","abu dhabi sharjah website","local seo multiple locations"}', '3 min', 'https://images.unsplash.com/photo-1528702748617-c64d49f918af?auto=format&fit=crop&w=1600&q=80', 'Map and location pins', false, true, '2025-05-02T09:00:00+04:00')
 on conflict (slug) do update set
   title = excluded.title,
   description = excluded.description,
@@ -1626,37 +1629,34 @@ on conflict (slug) do update set
 insert into public.swiftloop_articles
   (slug, title, description, body, category, keywords, read_time, image, image_alt, featured, published, published_at)
 values
-  ('multi-location-websites-uae', 'Multi-Location Websites for UAE Businesses (Dubai, Abu Dhabi, Sharjah)', 'Running branches across the Emirates? Here''s how to build one website that serves Dubai, Abu Dhabi and Sharjah without confusing customers or Google.', $body$Growing across the Emirates is a milestone — and a web design problem most businesses get wrong. A customer in Abu Dhabi shouldn't be shown Dubai's hours, and Google shouldn't be confused about which branch is which. Done well, one site can serve every location clearly. Done badly, it muddles all of them.
+  ('web-design-in-dubai-what-premium-costs', 'Web Design in Dubai: What Premium Actually Costs in 2026', 'A clear breakdown of what a custom website costs in Dubai in 2026 — and why the cheapest quote is rarely the cheapest outcome.', $body$Ask ten studios for a quote and you'll get ten different numbers. The spread isn't random — it maps almost exactly to what you're actually buying.
 
-## The core principle: one brand, distinct locations
+## The honest range
 
-You want a single, consistent brand experience, with each location given its own clear, dedicated space. That usually means a **separate page per branch** — Dubai, Abu Dhabi, Sharjah — each with its own address, hours, map, contact and, where relevant, its own team and offers.
+At SwiftLoop, a custom build sits in the **AED 4,000–7,000+** range. A focused landing page starts around AED 4,000. A full marketing site lands near AED 5,500. E-commerce — with inventory, payments and bilingual support — starts at AED 7,000. Every build ships with a Loop retainer attached by default, because a website that nobody tends to quietly decays.
 
-## Why dedicated location pages matter
+Below that range, you're usually buying a template with your logo dropped in. Above it, you're often paying for an agency's downtown rent.
 
-- **For customers** — they instantly find the branch relevant to them, with the right details. No guessing.
-- **For Google** — dedicated, properly structured location pages help you rank for "X in Abu Dhabi" *and* "X in Sharjah," not just your head office city.
-- **For operations** — hours, stock or services that differ by branch stay accurate per location.
+## Why the cheap quote costs more
 
-## Local SEO, per emirate
+A AED 1,500 site looks fine in the demo. Then the cracks show: it loads in six seconds on a phone, it can't be edited without the original developer, and it ranks nowhere because the code is bloated. You pay again to rebuild it within a year.
 
-Each location should connect to its own Google Business Profile and consistent local listings. This is how you win the "near me" searches in every emirate you operate in — a major source of walk-in and call traffic that a single generic page leaves on the table.
+Premium isn't a markup. It's the difference between a site that *looks* done and one that *performs* — measured in load speed, conversion rate and the hours your team gets back.
 
-## Keep management sane
+## What you're paying for
 
-The fear with multi-location is upkeep. The fix is a structure where shared content lives once and location-specific details are easy to edit per branch — so updating Sharjah's Ramadan hours doesn't mean touching the whole site. We build it so a non-technical team can keep every branch current.
+- **Custom design, not a theme** — built around your brand and your customer, not a marketplace template.
+- **Speed engineering** — sub-second loads and green Core Web Vitals, which Google rewards and customers feel.
+- **Systems behind the site** — automations for leads, follow-ups and invoices, so the site earns its keep after launch.
+- **Someone who answers** — a retainer means a real person tends the thing as your business changes.
 
-## Bilingual across the board
+## The question to ask
 
-Each location serves a bilingual audience. The English/Arabic experience should be consistent everywhere, with local nuances respected per emirate.
-
-## The takeaway
-
-A multi-location UAE business needs one coherent brand with clear, dedicated, locally-optimised pages per branch — easy to manage and easy for both customers and Google to navigate. We architect multi-emirate sites that scale cleanly as you add the next location.
+Not "how much is a website" — but "what is one extra customer a month worth to me?" For most Dubai businesses, the answer makes a proper build pay for itself long before the year is out.
 
 ---
 
-*Expanding across the Emirates? Let's build a site that serves every branch. [info@swiftloop.tech](mailto:info@swiftloop.tech) · WhatsApp +971 50 972 5199.*$body$, 'Web Design', '{"multi location website uae","multiple branches website dubai","abu dhabi sharjah website","local seo multiple locations"}', '3 min', 'https://images.unsplash.com/photo-1528702748617-c64d49f918af?auto=format&fit=crop&w=1600&q=80', 'Map and location pins', false, true, '2026-01-02T09:00:00+04:00')
+*Want a real number for your project? Tell us what you're building — [info@swiftloop.tech](mailto:info@swiftloop.tech) or WhatsApp +971 50 972 5199. Designed by hand, run by machine.*$body$, 'Web Design', '{"web design dubai","website cost dubai","custom website uae","web design pricing"}', '3 min', 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1600&q=80', 'Dubai skyline at dusk', false, true, '2026-01-02T09:00:00+04:00')
 on conflict (slug) do update set
   title = excluded.title,
   description = excluded.description,

@@ -4,7 +4,7 @@ slug: "web-design-in-dubai-what-premium-costs"
 description: "A clear breakdown of what a custom website costs in Dubai in 2026 — and why the cheapest quote is rarely the cheapest outcome."
 keywords: ["web design dubai", "website cost dubai", "custom website uae", "web design pricing"]
 category: "Web Design"
-date: "2025-05-02"
+date: "2026-01-02"
 readTime: "3 min"
 image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1600&q=80"
 imageAlt: "Dubai skyline at dusk"
