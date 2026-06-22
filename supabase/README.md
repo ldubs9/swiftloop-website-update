@@ -68,10 +68,25 @@ To check what's queued: `select slug, published_at from swiftloop_articles where
   exists if you ever want to pin a specific one; the site prefers a `featured = true`
   row if present, otherwise newest-live.)
 
-## Note on SEO
+## Pre-rendered HTML (for SEO + JS-free AI crawlers)
 
-Articles are rendered client-side from Supabase. Google renders JS and will
-index them, and `sitemap.xml` lists every entry. JS-free AI crawlers, however,
-see only the page shell. If you want fully pre-rendered HTML for those, the
-markdown files in `content/articles/` can be statically built to HTML later —
-ask and we can wire up a build step.
+Live articles are also built to fully static, on-brand HTML so crawlers that
+don't run JavaScript still get the complete content:
+
+```bash
+node scripts/prerender.mjs
+```
+
+This writes `journal/<slug>/index.html` for every **live** article (date <=
+today), straight from the markdown in `content/articles/`. Vercel serves static
+files before `vercel.json` rewrites, so `/journal/<slug>` returns the prerendered
+page; `/journal/:slug -> /article.html` (the JS version) remains the fallback for
+slugs without a static file.
+
+Scheduled posts are intentionally **not** prerendered until their date arrives.
+When a scheduled post goes live it is served by the JS `article.html` fallback;
+re-run `node scripts/prerender.mjs` and redeploy (e.g. weekly) to materialise its
+static page too. Override the cutoff with `PRERENDER_TODAY=YYYY-MM-DD`.
+
+The `/journal` listing remains the client-rendered app; crawlers discover the
+articles via `sitemap.xml`, which lists every live entry.
