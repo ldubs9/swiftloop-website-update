@@ -353,6 +353,7 @@
       .doc-head, .doc-foot, .totals .grand { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .row-x, .add-row, .term-x { display: none !important; }
       input, select, textarea { border-bottom-color: transparent !important; }
+      input::placeholder, textarea::placeholder { color: transparent !important; }
       select { appearance: none; -webkit-appearance: none; }
     }
   </style>
@@ -510,7 +511,7 @@
             <textarea class="p-dim" data-f="toAddr" rows="2" placeholder="Address, Emirate, UAE"></textarea>
             <input class="p-dim" data-f="toEmail" placeholder="Email" />
             <input class="p-dim" data-f="toPhone" placeholder="Phone" />
-            <input class="p-dim" data-f="toTrn" id="toTrnInput" placeholder="Client TRN" />
+            <input class="p-dim" data-f="toTrn" id="toTrnInput" placeholder="Client TRN (if VAT registered)" />
           </div>
         </div>
 
@@ -536,8 +537,7 @@
             <textarea data-f="payDetails" id="payDetailsBox" rows="5">Bank transfer (AED):
 Account name: Luca Wiegand — SwiftLoop
 Bank: —  ·  IBAN: AE — — — —
-Reference: document № above.
-Also accepted: payment link on request.</textarea>
+Alternate payments (cash, crypto, etc.) accepted.</textarea>
             <h4 style="margin-top:4mm;">Schedule</h4>
             <textarea data-f="paySchedule" rows="2" id="payScheduleBox">50% deposit on signing · 50% on delivery, prior to launch.</textarea>
           </div>
@@ -608,10 +608,10 @@ Also accepted: payment link on request.</textarea>
   ];
 
   var BANK_ACCOUNTS = {
-    "wio-aed":  "Bank transfer (AED):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE60 0860 0000 0627 3800 686\nBIC/SWIFT: WIOBAEADXXX\nAlternate payment options (crypto, cash, etc.) accepted.",
-    "wio-usd":  "Bank transfer (USD):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE19 0860 0000 0670 5822 546\nBIC/SWIFT: WIOBAEADXXX\nAlternate payment options (crypto, cash, etc.) accepted.",
-    "wise-eur": "Bank transfer (EUR):\nAccount name: Luca Alexander Wiegand\nBank: Wise · Rue du Trône 100, 3rd floor, Brussels, 1050, Belgium\nIBAN: BE40 9677 1411 4063\nBIC/SWIFT: TRWIBEB1XXX\nAlternate payment options (crypto, cash, etc.) accepted.",
-    "crypto":   "Cryptocurrency accepted on request.\nSupported: USDT, USDC, BTC, ETH (TRC-20, ERC-20, BEP-20).\nPlease contact us to confirm wallet address and network before sending.\nAlternate payment options (crypto, cash, etc.) accepted."
+    "wio-aed":  "Bank transfer (AED):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE60 0860 0000 0627 3800 686\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "wio-usd":  "Bank transfer (USD):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE19 0860 0000 0670 5822 546\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "wise-eur": "Bank transfer (EUR):\nAccount name: Luca Alexander Wiegand\nBank: Wise · Rue du Trône 100, 3rd floor, Brussels, 1050, Belgium\nIBAN: BE40 9677 1411 4063\nBIC/SWIFT: TRWIBEB1XXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "crypto":   "Cryptocurrency accepted on request.\nSupported: USDT, USDC, BTC, ETH (TRC-20, ERC-20, BEP-20).\nPlease contact us to confirm wallet address and network before sending.\nAlternate payments (cash, crypto, etc.) accepted."
   };
 
   var SPLIT_TEXT = {
@@ -622,18 +622,18 @@ Also accepted: payment link on request.</textarea>
   };
 
   var DEFAULT_TERMS = [
-    “<b>Acceptance.</b> Written approval of this document (including by email or WhatsApp) constitutes a binding agreement under Federal Decree-Law No. 50 of 2022 (UAE Commercial Transactions Law). Work begins on receipt of the deposit.”,
-    “<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.”,
-    “<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.”,
-    “<b>VAT.</b> SwiftLoop is not VAT-registered and no VAT applies.”,
-    “<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.”,
-    “<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.”,
-    “<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.”,
-    “<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop. SwiftLoop retains the right to showcase the work in its portfolio and to place a small <b>”Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.”,
-    “<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.”,
-    “<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.”,
-    “<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.”,
-    “<b>Governing law.</b> This agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai; the Dubai Courts have exclusive jurisdiction. This document is computer-generated and valid without signature or stamp.”
+    "<b>Acceptance.</b> Written approval of this document (including by email or WhatsApp) constitutes a binding agreement under Federal Decree-Law No. 50 of 2022 (UAE Commercial Transactions Law). Work begins on receipt of the deposit.",
+    "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
+    "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.",
+    "<b>VAT.</b> SwiftLoop is not VAT-registered and no VAT applies.",
+    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop. SwiftLoop retains the right to showcase the work in its portfolio and to place a small <b>\"Site by SwiftLoop\"</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
+    "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
+    "<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Governing law.</b> This agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai; the Dubai Courts have exclusive jurisdiction. This document is computer-generated and valid without signature or stamp."
   ];
 
   var DEFAULT_TERMS_INTL = [
@@ -801,14 +801,6 @@ Also accepted: payment link on request.</textarea>
     $("#vatRow").style.display = vatOn ? "" : "none";
     $("#trnCell").style.display = vatOn ? "" : "none";
 
-    // Update TRN field placeholder based on VAT status
-    var trnInput = $("#toTrnInput");
-    if (vatOn) {
-      trnInput.placeholder = "Tax Registration Number (TRN)";
-    } else {
-      trnInput.placeholder = "";
-    }
-
     $("#tGrand").textContent = fmt(grand);
     $("#amountWords").textContent = amountInWords(grand);
   }
@@ -834,7 +826,7 @@ Also accepted: payment link on request.</textarea>
     var dueDays = num($("#setDue").value);
     var dueDaysText = dueDays === 0 ? "On receipt" : dueDays + " days";
     if (currentMarket === "UAE") {
-      terms[2] = "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>" + dueDaysText + "</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.";
+      terms[2] = "<b>Payment.</b> All amounts are in " + currentCurrency + " and payable per the schedule stated. Invoices unpaid <b>" + dueDaysText + "</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.";
     } else {
       terms[2] = "<b>Payment.</b> All amounts are in the currency stated on this document and payable per the schedule stated. Invoices unpaid <b>" + dueDaysText + "</b> past their due date accrue a late charge of <b>1.5% per month</b> (or the maximum rate permitted by applicable law, whichever is lower) on the outstanding balance, plus reasonable recovery costs.";
     }
@@ -1008,6 +1000,7 @@ Also accepted: payment link on request.</textarea>
     $("#thAmount").textContent = "Amount (" + code + ")";
     $("#grandCurrencyCode").textContent = code;
     $("#discountLbl").textContent = "Discount (" + code + ")";
+    updateTerms();
     recalc();
   }
 
