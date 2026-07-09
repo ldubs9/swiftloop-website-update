@@ -83,7 +83,7 @@ def telemetry_row(top, pad_l, left_txt, right_txt, size=11, pad_r=None):
             f'<span>{left_txt}</span><span>{right_txt}</span></div>')
 
 
-COORDS = '25.20&deg;N / 55.27&deg;E &mdash; DUBAI &mdash; GMT+4'
+COORDS = '25.16&deg;N / 55.20&deg;E &mdash; DUBAI &mdash; GMT+4'
 STATUS = 'STATUS <span class="accent">&#9679;</span> OPEN'
 PHASES = ('<span class="accent">&#9702;</span> 01 MAP &nbsp;&mdash;&nbsp; 02 DESIGN '
           '&nbsp;&mdash;&nbsp; 03 AUTOMATE &nbsp;&mdash;&nbsp; 04 ITERATE')
@@ -160,7 +160,7 @@ def whatsapp_cover():
     body = (
         hairline(top=104) + hairline(bottom=104)
         + telemetry_row(122, 44, "SWIFTLOOP.TECH",
-                        "25.20&deg;N / 55.27&deg;E &mdash; " + STATUS)
+                        "25.16&deg;N / 55.20&deg;E &mdash; " + STATUS)
         + '<div style="position:absolute;top:150px;left:0;right:0;display:flex;'
           'flex-direction:column;align-items:center;gap:22px;">'
         + '<div style="display:flex;align-items:center;gap:26px;">'

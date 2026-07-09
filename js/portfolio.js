@@ -99,6 +99,7 @@
         ["Next.js", "framework"],
         ["Zero", "pagination"],
       ],
+      url: "https://gridportfolio.swiftloop.tech",
     },
     coffeeshop: {
       meta: "Design proposition",
@@ -111,6 +112,20 @@
         ["Live", "UAE clock"],
         ["Bold", "brand identity"],
       ],
+      url: "https://steep.swiftloop.tech",
+    },
+    horizontalportfolio: {
+      meta: "Design proposition",
+      title: "Horizontal Portfolio",
+      tags: ["Web design", "Portfolio", "Next.js", "Agency"],
+      brief: "A concept for a design studio portfolio — horizontal scroll, award-style layout, and bold section reveals that make the work feel like a showreel.",
+      built: "A Next.js site with horizontal-scroll project showcases, awards ticker, expertise cards and a cinematic hero — built to present creative work with the weight it deserves.",
+      stats: [
+        ["Horizontal", "scroll layout"],
+        ["Next.js", "framework"],
+        ["Cinematic", "presentation"],
+      ],
+      url: "https://horizontalportfolio.swiftloop.tech",
     },
     interiordesigner: {
       meta: "Design proposition",
@@ -123,6 +138,7 @@
         ["Next.js", "framework"],
         ["Minimal", "aesthetic"],
       ],
+      url: "https://khouri.swiftloop.tech",
     },
   };
 
