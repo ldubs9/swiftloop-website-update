@@ -215,9 +215,8 @@
 
     /* service tables */
     .item-section + .item-section { margin-top: 7mm; }
-    .item-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; margin-bottom: 2mm; }
+    .item-section-head { display: flex; align-items: baseline; gap: 4mm; margin-bottom: 2mm; }
     .item-section-head h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
-    .item-section-head p { color: var(--paper-dim); font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
     table.items { width: 100%; border-collapse: collapse; }
     table.items th {
       font-family: var(--font-mono);
@@ -429,7 +428,7 @@
       <option value="50">50% deposit / 50% on delivery</option>
       <option value="100">100% on signing</option>
       <option value="403020">40% / 40% / 20% milestones</option>
-      <option value="retainer">Monthly retainer — billed in advance</option>
+      <option value="retainer">Monthly subscription — billed in advance</option>
     </select>
 
     <label class="mono" for="setAccount">Payment account</label>
@@ -472,7 +471,7 @@
         <option value="build-ecom">E-commerce Build — AED 7,000</option>
         <option value="build-landing">Landing Page Sprint — AED 4,000</option>
       </optgroup>
-      <optgroup label="Loop Retainers (default attach)">
+      <optgroup label="Loop Subscriptions (default attach)">
         <option value="ret-care">Loop Care — AED 750 / mo</option>
         <option value="ret-growth">Loop Growth — AED 1,500 / mo</option>
         <option value="ret-scale">Loop Scale — AED 2,500 / mo</option>
@@ -494,6 +493,8 @@
     <h3 class="mono">Saved quotes</h3>
     <input type="text" id="saveName" placeholder="Label (defaults to client + №)" />
     <button class="pbtn" id="saveBtn">Save current quote</button>
+    <button class="pbtn" id="openPdfBtn">Open quote from PDF</button>
+    <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" hidden />
     <div id="savedList"></div>
 
     <h3 class="mono">Export</h3>
@@ -532,7 +533,7 @@
         <div class="parties">
           <div class="party">
             <h4>From</h4>
-            <input class="p-name" data-f="fromName" value="SwiftLoop FZ-LLC" />
+            <input class="p-name" data-f="fromName" value="SwiftLoop" />
             <input data-f="fromContact" value="Luca Wiegand — Founder" />
             <textarea class="p-dim" data-f="fromAddr" rows="2">Dubai, United Arab Emirates</textarea>
             <input class="p-dim" data-f="fromEmail" value="info@swiftloop.tech" />
@@ -552,7 +553,7 @@
 
         <!-- one-time services -->
         <section class="item-section" id="oneTimeSection">
-          <div class="item-section-head"><h4>One-time services</h4><p>Charged once</p></div>
+          <div class="item-section-head"><h4>One-time services</h4></div>
           <table class="items">
             <thead>
               <tr>
@@ -568,9 +569,9 @@
           <button class="add-row screen-only" id="addOneTimeRowBtn">+ Add one-time service</button>
         </section>
 
-        <!-- monthly recurring services -->
+        <!-- monthly subscriptions -->
         <section class="item-section" id="recurringSection">
-          <div class="item-section-head"><h4>Monthly recurring payments</h4><p>Charged monthly, not a one-time payment</p></div>
+          <div class="item-section-head"><h4>Monthly subscriptions</h4></div>
           <table class="items">
             <thead>
               <tr>
@@ -583,7 +584,7 @@
             </thead>
             <tbody class="item-rows" id="recurringRows"></tbody>
           </table>
-          <button class="add-row screen-only" id="addRecurringRowBtn">+ Add monthly payment</button>
+          <button class="add-row screen-only" id="addRecurringRowBtn">+ Add subscription</button>
         </section>
 
         <!-- totals -->
@@ -595,7 +596,8 @@ Account name: Luca Wiegand — SwiftLoop
 Bank: —  ·  IBAN: AE — — — —
 Alternate payments (cash, crypto, etc.) accepted.</textarea>
             <h4 style="margin-top:4mm;">Schedule</h4>
-            <textarea data-f="paySchedule" rows="2" id="payScheduleBox">50% deposit on signing · 50% on delivery, prior to launch.</textarea>
+            <textarea data-f="paySchedule" rows="2" id="payScheduleBox">50% deposit on signing · 50% on delivery, prior to launch.
+Monthly retainer · Billed in advance each month.</textarea>
           </div>
           <div class="totals">
             <div class="trow"><span class="lbl">Subtotal</span><span class="val" id="tSubtotal">0.00</span></div>
@@ -603,7 +605,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
             <div class="trow" id="vatRow" style="display:none;"><span class="lbl">VAT 5%</span><span class="val" id="tVat">0.00</span></div>
             <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em id="grandCurrencyCode">AED</em><span id="tGrand">0.00</span></span></div>
             <div class="amount-words" id="amountWords"></div>
-            <div class="monthly-total" id="monthlyTotalRow"><span class="lbl">Monthly recurring total</span><span class="val"><em id="monthlyCurrencyCode">AED</em><span id="tMonthly">0.00</span> / mo</span></div>
+            <div class="monthly-total" id="monthlyTotalRow"><span class="lbl">Monthly subscription</span><span class="val"><em id="monthlyCurrencyCode">AED</em><span id="tMonthly">0.00</span> / mo</span></div>
           </div>
         </div>
 
@@ -672,17 +674,17 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   };
 
   var SPLIT_TEXT = {
-    "50": "50% deposit on signing · 50% on delivery, prior to launch.",
-    "100": "100% payable on signing, prior to project kick-off.",
-    "403020": "40% on signing · 40% on design approval · 20% on delivery, prior to launch.",
-    "retainer": "Retainer billed monthly in advance, first month on signing."
+    "50": "50% deposit on signing · 50% on delivery, prior to launch.\nMonthly retainer · Billed in advance each month.",
+    "100": "100% payable on signing, prior to project kick-off.\nMonthly retainer · Billed in advance each month.",
+    "403020": "40% on signing · 40% on design approval · 20% on delivery, prior to launch.\nMonthly retainer · Billed in advance each month.",
+    "retainer": "Monthly retainer · Billed in advance each month."
   };
 
   var DEFAULT_TERMS = [
     "<b>Acceptance.</b> Written approval of this document (including by email or WhatsApp) constitutes a binding agreement under Federal Decree-Law No. 50 of 2022 (UAE Commercial Transactions Law). Work begins on receipt of the deposit.",
     "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
     "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.",
-    "<b>VAT.</b> SwiftLoop FZ-LLC is not VAT-registered and no VAT applies.",
+    "<b>VAT.</b> VAT will not be charged to the client on this quote.",
     "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
     "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
     "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
@@ -711,6 +713,9 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   var currentMarket = "UAE";
 
   var LS_KEY = "swiftloop-quotes-v1";
+  var PDFJS_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/build/pdf.min.mjs";
+  var PDFJS_WORKER_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs";
+  var pdfJsPromise = null;
 
   /* ---------------------------------------------------------- utils */
 
@@ -758,6 +763,309 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     t.classList.add("is-on");
     clearTimeout(toast._t);
     toast._t = setTimeout(function () { t.classList.remove("is-on"); }, 1800);
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function termTextToHtml(value) {
+    var safe = escapeHtml(value).trim();
+    var stop = safe.indexOf(".");
+    return stop > 0 && stop < 60
+      ? "<b>" + safe.slice(0, stop + 1) + "</b>" + safe.slice(stop + 1)
+      : safe;
+  }
+
+  function loadPdfJs() {
+    if (!pdfJsPromise) {
+      pdfJsPromise = import(PDFJS_URL).then(function (pdfjs) {
+        pdfjs.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+        return pdfjs;
+      });
+    }
+    return pdfJsPromise;
+  }
+
+  function joinPdfItems(items) {
+    return items.slice().sort(function (a, b) { return a.x - b.x; })
+      .map(function (item) { return item.text; })
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function normalisePdfChunk(value) {
+    return String(value || "")
+      .replace(/\b(?:[A-Z]\s+){1,}[A-Z]\b/g, function (match) { return match.replace(/\s+/g, ""); })
+      .replace(/\s*-\s*/g, "-")
+      .replace(/\(\s+/g, "(")
+      .replace(/\s+\)/g, ")")
+      .trim();
+  }
+
+  function groupPdfLines(items) {
+    var lines = [];
+    items.forEach(function (item) {
+      if (!item.text) return;
+      var line = null;
+      for (var i = 0; i < lines.length; i += 1) {
+        if (Math.abs(lines[i].top - item.top) < 2.5) {
+          line = lines[i];
+          break;
+        }
+      }
+      if (!line) {
+        line = { top: item.top, items: [] };
+        lines.push(line);
+      }
+      line.items.push(item);
+    });
+    lines.forEach(function (line) { line.text = joinPdfItems(line.items); });
+    return lines.sort(function (a, b) { return a.top - b.top; });
+  }
+
+  function pdfLinePart(line, minX, maxX) {
+    return joinPdfItems(line.items.filter(function (item) {
+      return item.x >= minX && item.x < maxX;
+    }));
+  }
+
+  async function readPdfPages(file) {
+    var pdfjs = await loadPdfJs();
+    var data = new Uint8Array(await file.arrayBuffer());
+    var pdf = await pdfjs.getDocument({ data: data }).promise;
+    var pages = [];
+    for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+      var page = await pdf.getPage(pageNumber);
+      var viewport = page.getViewport({ scale: 1 });
+      var content = await page.getTextContent();
+      var items = content.items.map(function (item) {
+        return {
+          text: normalisePdfChunk(item.str),
+          x: item.transform[4],
+          top: viewport.height - item.transform[5],
+          width: item.width || 0
+        };
+      }).filter(function (item) { return item.text; });
+      pages.push({ width: viewport.width, height: viewport.height, items: items, lines: groupPdfLines(items) });
+    }
+    return pages;
+  }
+
+  function extractPdfParty(pages) {
+    var page = pages[0];
+    var labels = page.lines.find(function (line) { return /\bFROM\b/i.test(line.text) && /\bBILL TO\b/i.test(line.text); });
+    var section = page.lines.find(function (line) { return /ONE-TIME SERVICES/i.test(line.text); });
+    if (!labels || !section) return {};
+    var right = page.lines.filter(function (line) {
+      return line.top > labels.top + 3 && line.top < section.top - 3;
+    }).map(function (line) {
+      return pdfLinePart(line, page.width / 2, page.width);
+    }).filter(Boolean);
+    var rest = right.slice(3);
+    var email = rest.find(function (value) { return /@|\.(?:com|ae|net|org|io|tech)\b/i.test(value); }) || "";
+    var trn = rest.find(function (value) { return /\bTRN\b/i.test(value); }) || "";
+    var phones = rest.filter(function (value) {
+      return value !== email && value !== trn && /\+?\d[\d\s()-]{5,}/.test(value);
+    });
+    return {
+      toName: right[0] || "",
+      toContact: right[1] || "",
+      toAddr: right[2] || "",
+      toEmail: email,
+      toPhone: phones.join(" · "),
+      toTrn: trn.replace(/^.*?TRN\s*:?\s*/i, "")
+    };
+  }
+
+  function extractPdfItems(pages) {
+    var rows = [];
+    var mode = null;
+    var current = null;
+    function finishRow() {
+      if (!current) return;
+      current.s = current.details.join(" ").replace(/\s+/g, " ").trim();
+      delete current.details;
+      rows.push(current);
+      current = null;
+    }
+    pages.forEach(function (page) {
+      page.lines.forEach(function (line) {
+        if (/ONE-TIME SERVICES/i.test(line.text)) {
+          finishRow();
+          mode = "project";
+          return;
+        }
+        if (/MONTHLY (?:RECURRING PAYMENTS|SUBSCRIPTIONS)/i.test(line.text)) {
+          finishRow();
+          mode = "months";
+          return;
+        }
+        if (/PAYMENT DETAILS|TERMS\s*&\s*CONDITIONS/i.test(line.text)) {
+          finishRow();
+          mode = null;
+          return;
+        }
+        if (!mode || /DESCRIPTION|UNIT PRICE|AMOUNT \(/i.test(line.text)) return;
+        var description = pdfLinePart(line, 0, page.width * 0.47);
+        var quantity = pdfLinePart(line, page.width * 0.47, page.width * 0.67);
+        var rate = pdfLinePart(line, page.width * 0.67, page.width * 0.84);
+        if (/^\s*-?\d+(?:\.\d+)?\s*(?:×|x)(?:\s|$)/i.test(quantity) || /per month/i.test(quantity)) {
+          finishRow();
+          current = {
+            d: description,
+            s: "",
+            qty: num(quantity) || 1,
+            unit: mode,
+            rate: num(rate),
+            details: []
+          };
+        } else if (current && description) {
+          current.details.push(description);
+        }
+      });
+    });
+    finishRow();
+    return rows;
+  }
+
+  function extractPdfBlock(pages, startPattern, endPattern) {
+    var collecting = false;
+    var output = [];
+    pages.forEach(function (page) {
+      page.lines.forEach(function (line) {
+        if (endPattern.test(line.text)) collecting = false;
+        if (collecting) {
+          var left = pdfLinePart(line, 0, page.width / 2);
+          if (left) output.push(left);
+        }
+        if (startPattern.test(line.text)) collecting = true;
+      });
+    });
+    return output.join("\n").trim();
+  }
+
+  function extractPdfTerms(pages) {
+    var clauses = [];
+    pages.forEach(function (page) {
+      var footer = page.lines.find(function (line) {
+        return /SWIFTLOOP FZ-LLC\s+—\s+WEB DESIGN/i.test(line.text);
+      });
+      var footerTop = footer ? footer.top - 3 : page.height;
+      [
+        [0, page.width / 2],
+        [page.width / 2, page.width]
+      ].forEach(function (range) {
+        var markers = page.items.filter(function (item) {
+          return item.x >= range[0] && item.x < range[0] + 45 && /^(?:0[1-9]|1[0-2])$/.test(item.text);
+        }).sort(function (a, b) { return a.top - b.top; });
+        markers.forEach(function (marker, index) {
+          var nextTop = markers[index + 1] ? markers[index + 1].top - 3 : footerTop;
+          var content = page.items.filter(function (item) {
+            return item !== marker && item.x >= range[0] + 15 && item.x < range[1] &&
+              item.top >= marker.top - 3 && item.top < nextTop;
+          });
+          var lines = groupPdfLines(content);
+          var text = lines.filter(function (line) {
+            return !/SWIFTLOOP FZ-LLC\s+—\s+WEB DESIGN|INFO@SWIFTLOOP/i.test(line.text);
+          }).map(function (line) { return line.text; }).join(" ")
+            .replace(/\s+/g, " ")
+            .replace(/\bre-\s*con\s+fi\s+rmation\b/gi, "re-confirmation")
+            .replace(/\bdefect-\s*fi\s+x\b/gi, "defect-fix")
+            .replace(/\bkick-o\s+ff\b/gi, "kick-off")
+            .replace(/\bcomputer-\s+generated\b/gi, "computer-generated")
+            .trim();
+          if (text) clauses.push({ number: parseInt(marker.text, 10), text: text });
+        });
+      });
+    });
+    var unique = {};
+    clauses.forEach(function (clause) {
+      if (clause.text && !unique[clause.number]) unique[clause.number] = clause.text.replace(/\s+/g, " ").trim();
+    });
+    return Object.keys(unique).map(Number).sort(function (a, b) { return a - b; })
+      .map(function (number) { return termTextToHtml(unique[number]); });
+  }
+
+  function inferSplitFromSchedule(schedule) {
+    if (/^100%/i.test(schedule)) return "100";
+    if (/^40%/i.test(schedule)) return "403020";
+    if (/^50%/i.test(schedule)) return "50";
+    return "retainer";
+  }
+
+  function parseSwiftLoopPdf(pages) {
+    var allLines = [];
+    pages.forEach(function (page) { allLines = allLines.concat(page.lines); });
+    var allText = allLines.map(function (line) { return line.text; }).join("\n");
+    var items = extractPdfItems(pages);
+    var numberMatch = allText.match(/\bSL-(?:Q|INV)-[A-Z0-9-]+\b/i);
+    if (!numberMatch || !items.length) throw new Error("This PDF does not appear to be an editable SwiftLoop quote.");
+    var dates = allText.match(/\b\d{1,2}\s+[A-Za-z]{3}\s+\d{4}\b/g) || [];
+    var currencyMatch = allText.match(/\b(AED|USD|EUR|GBP|SAR|QAR)\b/);
+    var supplierTrnText = allText.slice(Math.max(0, allText.search(/SUPPLIER TRN/i)));
+    var trnMatch = supplierTrnText.match(/\b\d{8,15}\b/);
+    var terms = extractPdfTerms(pages);
+    var termsText = terms.map(function (term) { return term.replace(/<[^>]+>/g, ""); }).join(" ");
+    var schedule = extractPdfBlock(pages, /^SCHEDULE$/i, /TERMS\s*&\s*CONDITIONS/i);
+    var payDetails = extractPdfBlock(pages, /PAYMENT DETAILS/i, /^SCHEDULE$/i);
+    var discountLine = allLines.find(function (line) { return /DISCOUNT\s*\(/i.test(line.text); });
+    var discountText = discountLine ? pdfLinePart(discountLine, pages[0].width / 2, pages[0].width) : "0";
+    var validityMatch = termsText.match(/valid for\s+(\d+)\s+days/i);
+    var dueMatch = termsText.match(/Invoices unpaid\s+(\d+)\s+days/i);
+    var party = extractPdfParty(pages);
+    var docType = /TAX INVOICE/i.test(allText) ? "TAX INVOICE" : (/\bINVOICE\b/i.test(allText) ? "INVOICE" : "QUOTE");
+    var currency = currencyMatch ? currencyMatch[1] : "AED";
+    var vatOn = /VAT\s*5%|VAT is charged at 5%/i.test(allText);
+    if (terms[3]) {
+      terms[3] = vatOn
+        ? "<b>VAT.</b> VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. The TRN stated above confirms SwiftLoop FZ-LLC is VAT-registered."
+        : "<b>VAT.</b> VAT will not be charged to the client on this " + (docType === "QUOTE" ? "quote" : "invoice") + ".";
+    }
+    return {
+      v: 2,
+      docType: docType,
+      settings: {
+        due: dueMatch ? dueMatch[1] : "7",
+        split: inferSplitFromSchedule(schedule),
+        vat: vatOn ? "1" : "0",
+        validity: validityMatch ? validityMatch[1] : "14",
+        currency: currency,
+        market: /UNITED ARAB EMIRATES|DUBAI, UAE/i.test(allText) ? "UAE" : "INTL"
+      },
+      fields: Object.assign({
+        number: numberMatch[0],
+        date: dates[0] || "",
+        due: dates[1] || "",
+        currency: currency,
+        trn: trnMatch ? trnMatch[0] : "",
+        fromName: "SwiftLoop",
+        payDetails: payDetails,
+        paySchedule: schedule,
+        discount: num(discountText)
+      }, party),
+      items: items,
+      terms: terms
+    };
+  }
+
+  async function importPdfQuote(file) {
+    toast("Reading PDF quote…");
+    var state = parseSwiftLoopPdf(await readPdfPages(file));
+    restore(state);
+    ["number", "date", "due"].forEach(function (key) {
+      var el = $('[data-f="' + key + '"]');
+      if (el && state.fields[key]) el.value = state.fields[key];
+    });
+    $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    recalc();
+    toast("Opened: " + state.fields.number);
   }
 
   /* ---------------------------------------------------------- rows */
@@ -915,7 +1223,8 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
       if ($("#setVat").value === "1") {
         terms[3] = "<b>VAT.</b> VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. The TRN stated above confirms SwiftLoop FZ-LLC is VAT-registered.";
       } else {
-        terms[3] = "<b>VAT.</b> SwiftLoop FZ-LLC is not VAT-registered and no VAT applies.";
+        var documentLabel = docType === "QUOTE" ? "quote" : "invoice";
+        terms[3] = "<b>VAT.</b> VAT will not be charged to the client on this " + documentLabel + ".";
       }
     }
 
@@ -981,7 +1290,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     item = item || {};
     var description = item.d || item.description || "";
     var rawUnit = String(item.unit || item.billing || "").toLowerCase();
-    var isMonthly = rawUnit === "month" || rawUnit === "months" || rawUnit === "monthly" || /monthly|per month/i.test(description);
+    var isMonthly = rawUnit === "month" || rawUnit === "months" || rawUnit === "monthly" || /monthly|per month|subscription/i.test(description);
     var savedQty = item.qty !== undefined ? item.qty : (item.quantity !== undefined ? item.quantity : 1);
     var savedRate = item.rate !== undefined ? item.rate : (item.unitPrice !== undefined ? item.unitPrice : (item.price !== undefined ? item.price : 0));
     return {
@@ -1037,16 +1346,15 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
       var el = $('[data-f="' + k + '"]');
       if (el && s.fields[k] !== undefined && s.fields[k] !== null) el.value = s.fields[k];
     });
+    $('[data-f="fromName"]').value = "SwiftLoop";
     oneTimeRowsEl.innerHTML = "";
     recurringRowsEl.innerHTML = "";
     var savedItems = Array.isArray(s.items) ? s.items : (Array.isArray(s.rows) ? s.rows : []);
-    savedItems.map(normaliseSavedItem).forEach(addRow);
-    if (s.terms && s.terms.length) {
-      renderTerms(s.terms);
-    } else {
-      updateTerms();
-    }
+    savedItems.map(normaliseSavedItem).forEach(function (item) {
+      addRow(item);
+    });
     setDocType(s.docType || "QUOTE");
+    if (s.terms && s.terms.length) renderTerms(s.terms);
     // dates intentionally refresh to *today* on recall, per workflow
     $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
     recalc();
@@ -1164,6 +1472,19 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
 
   $("#addOneTimeRowBtn").addEventListener("click", function () { addRow(); });
   $("#addRecurringRowBtn").addEventListener("click", function () { addRow({ d: "", s: "", qty: 1, unit: "months", rate: 0 }, recurringRowsEl); });
+
+  $("#openPdfBtn").addEventListener("click", function () {
+    $("#pdfFileInput").value = "";
+    $("#pdfFileInput").click();
+  });
+  $("#pdfFileInput").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    if (!file) return;
+    importPdfQuote(file).catch(function (err) {
+      console.error("Could not open PDF quote", err);
+      toast(err && err.message ? err.message : "Could not open this PDF quote");
+    });
+  });
 
   $("#saveBtn").addEventListener("click", function () {
     var state = snapshot();
