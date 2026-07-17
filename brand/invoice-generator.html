@@ -213,7 +213,11 @@
     .party input.p-name { font-weight: 700; font-size: 0.95rem; }
     .party input.p-dim, .party textarea.p-dim { color: var(--paper-dim); }
 
-    /* items table */
+    /* service tables */
+    .item-section + .item-section { margin-top: 7mm; }
+    .item-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; margin-bottom: 2mm; }
+    .item-section-head h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+    .item-section-head p { color: var(--paper-dim); font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
     table.items { width: 100%; border-collapse: collapse; }
     table.items th {
       font-family: var(--font-mono);
@@ -296,6 +300,10 @@
     .totals .grand .val { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; letter-spacing: -0.01em; }
     .totals .grand .val em { font-style: normal; color: var(--accent); font-size: 0.75rem; margin-right: 0.35rem; font-family: var(--font-mono); letter-spacing: 0.1em; }
     .amount-words { margin-top: 2mm; font-size: 0.68rem; color: var(--paper-dim); text-align: right; font-style: italic; }
+    .monthly-total { margin-top: 4mm; border-top: 1px solid var(--ink); padding-top: 2.5mm; display: flex; justify-content: space-between; align-items: baseline; gap: 3mm; }
+    .monthly-total .lbl { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-dim); }
+    .monthly-total .val { font-family: var(--font-display); font-weight: 600; font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .monthly-total .val em { font-style: normal; color: var(--accent); font-size: 0.65rem; margin-right: 0.3rem; font-family: var(--font-mono); letter-spacing: 0.1em; }
 
     /* terms */
     .terms { margin-top: 8mm; border-top: 1px solid var(--ink); padding-top: 4mm; }
@@ -340,21 +348,48 @@
     }
 
     /* ====================== PRINT ====================== */
-    /* buffer zone at the top of overflow pages only — page 1 keeps the
-       full-bleed header band, so this never acts as a design margin */
-    @page { size: A4; margin: 12mm 0 0 0; }
-    @page :first { margin: 0; }
+    /* Keep a compact safety edge on continuation pages so text never lands
+       directly on a physical page cut. Page 1 keeps its full-bleed header. */
+    @page { size: A4; margin: 8mm 0; background: #f4f1ea; }
+    @page :first { margin: 0 0 8mm; }
     @media print {
-      body { background: var(--paper); }
+      html, body, .app, .stage { background: var(--paper); }
       .panel, .toast, .screen-only { display: none !important; }
       .app { display: block; }
       .stage { padding: 0; display: block; }
-      .doc { width: 210mm; min-height: 297mm; box-shadow: none; }
+      .doc { width: 210mm; min-height: 0; box-shadow: none; }
       .doc-head, .doc-foot, .totals .grand { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .row-x, .add-row, .term-x { display: none !important; }
       input, select, textarea { border-bottom-color: transparent !important; }
       input::placeholder, textarea::placeholder { color: transparent !important; }
-      select { appearance: none; -webkit-appearance: none; }
+      select { appearance: none; -webkit-appearance: none; background-image: none !important; padding-right: 0 !important; }
+      .item-section.is-empty { display: none; }
+
+      /* Keep section labels, table headers, and complete rows together. */
+      .item-section-head,
+      table.items thead,
+      table.items tbody tr,
+      .totals-wrap,
+      .terms h4,
+      .terms li,
+      .doc-foot {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+      .item-section-head,
+      table.items thead,
+      .terms h4 {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+      table.items { break-before: avoid-page; page-break-before: avoid; }
+      table.items thead { display: table-header-group; }
+      table.items tbody tr:first-child { break-before: avoid-page; page-break-before: avoid; }
+
+      /* Balance the two columns inside each page fragment so clauses use the
+         available space without forcing a partial clause over the page edge. */
+      .terms ol { column-fill: balance; }
+      .terms li { orphans: 3; widows: 3; }
     }
   </style>
 </head>
@@ -487,7 +522,7 @@
           <div class="cell"><label>Date of issue</label><input id="fDate" data-f="date" /></div>
           <div class="cell" id="dueCell"><label id="dueLabel">Valid until</label><input id="fDue" data-f="due" /></div>
           <div class="cell"><label>Currency</label><select id="fCurrency" data-f="currency"><option value="AED">AED — UAE Dirham</option><option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — British Pound</option></select></div>
-          <div class="cell" id="trnCell" style="display:none;"><label>Supplier TRN</label><input data-f="trn" id="fTrn" placeholder="100XXXXXXXXXXXX" /></div>
+          <div class="cell" id="trnCell"><label>Supplier TRN</label><input data-f="trn" id="fTrn" value="47034520" /></div>
         </div>
       </header>
 
@@ -497,7 +532,7 @@
         <div class="parties">
           <div class="party">
             <h4>From</h4>
-            <input class="p-name" data-f="fromName" value="SwiftLoop" />
+            <input class="p-name" data-f="fromName" value="SwiftLoop FZ-LLC" />
             <input data-f="fromContact" value="Luca Wiegand — Founder" />
             <textarea class="p-dim" data-f="fromAddr" rows="2">Dubai, United Arab Emirates</textarea>
             <input class="p-dim" data-f="fromEmail" value="info@swiftloop.tech" />
@@ -515,20 +550,41 @@
           </div>
         </div>
 
-        <!-- items -->
-        <table class="items">
-          <thead>
-            <tr>
-              <th style="width:44%;">Description</th>
-              <th style="width:17%;">Qty / Duration</th>
-              <th class="r" style="width:16%;" id="thUnitPrice">Unit price (AED)</th>
-              <th class="r" style="width:15%;" id="thAmount">Amount (AED)</th>
-              <th class="screen-only" style="width:4%;"></th>
-            </tr>
-          </thead>
-          <tbody id="itemRows"></tbody>
-        </table>
-        <button class="add-row screen-only" id="addRowBtn">+ Add line item</button>
+        <!-- one-time services -->
+        <section class="item-section" id="oneTimeSection">
+          <div class="item-section-head"><h4>One-time services</h4><p>Charged once</p></div>
+          <table class="items">
+            <thead>
+              <tr>
+                <th style="width:44%;">Description</th>
+                <th style="width:17%;">Qty / Duration</th>
+                <th class="r" style="width:16%;" id="thUnitPrice">Unit price (AED)</th>
+                <th class="r" style="width:15%;" id="thAmount">Amount (AED)</th>
+                <th class="screen-only" style="width:4%;"></th>
+              </tr>
+            </thead>
+            <tbody class="item-rows" id="oneTimeRows"></tbody>
+          </table>
+          <button class="add-row screen-only" id="addOneTimeRowBtn">+ Add one-time service</button>
+        </section>
+
+        <!-- monthly recurring services -->
+        <section class="item-section" id="recurringSection">
+          <div class="item-section-head"><h4>Monthly recurring payments</h4><p>Charged monthly, not a one-time payment</p></div>
+          <table class="items">
+            <thead>
+              <tr>
+                <th style="width:44%;">Description</th>
+                <th style="width:17%;">Qty / Duration</th>
+                <th class="r" style="width:16%;" id="thRecurringUnitPrice">Unit price (AED)</th>
+                <th class="r" style="width:15%;" id="thRecurringAmount">Monthly amount (AED)</th>
+                <th class="screen-only" style="width:4%;"></th>
+              </tr>
+            </thead>
+            <tbody class="item-rows" id="recurringRows"></tbody>
+          </table>
+          <button class="add-row screen-only" id="addRecurringRowBtn">+ Add monthly payment</button>
+        </section>
 
         <!-- totals -->
         <div class="totals-wrap">
@@ -547,6 +603,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
             <div class="trow" id="vatRow" style="display:none;"><span class="lbl">VAT 5%</span><span class="val" id="tVat">0.00</span></div>
             <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em id="grandCurrencyCode">AED</em><span id="tGrand">0.00</span></span></div>
             <div class="amount-words" id="amountWords"></div>
+            <div class="monthly-total" id="monthlyTotalRow"><span class="lbl">Monthly recurring total</span><span class="val"><em id="monthlyCurrencyCode">AED</em><span id="tMonthly">0.00</span> / mo</span></div>
           </div>
         </div>
 
@@ -560,7 +617,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
       <!-- footer -->
       <footer class="doc-foot">
         <svg class="ring" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/></svg>
-        <span><b>SwiftLoop Studio</b> — Web design × AI automation · Designed by hand, run by machine</span>
+        <span><b>SwiftLoop FZ-LLC</b> — Web design × AI automation · Designed by hand, run by machine</span>
         <span>info@swiftloop.tech · +971 50 972 5199 · Dubai / GMT+4</span>
       </footer>
 
@@ -580,9 +637,9 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     "build-site":   { d: "Website Design & Development", s: "Custom design, responsive build, CMS, motion, SEO foundations, launch & handover. Two structured revision rounds included.", qty: 1, unit: "project", rate: 5500 },
     "build-ecom":   { d: "E-commerce Design & Build", s: "Storefront design, product architecture, payment gateway, AI inventory hooks, launch & training.", qty: 1, unit: "project", rate: 7000 },
     "build-landing":{ d: "Landing Page Sprint", s: "Single conversion-focused page — copy structure, design, build and analytics. Delivered in 10 working days.", qty: 1, unit: "project", rate: 4000 },
-    "ret-care":     { d: "Loop Care — Monthly Retainer", s: "Hosting management, security & uptime monitoring, content edits (2 hrs/mo), monthly performance report. Default companion to every build.", qty: 6, unit: "months", rate: 750 },
-    "ret-growth":   { d: "Loop Growth — Monthly Retainer", s: "Everything in Loop Care plus conversion iterations, A/B tweaks, prompt & automation tuning (5 hrs/mo).", qty: 6, unit: "months", rate: 1500 },
-    "ret-scale":    { d: "Loop Scale — Monthly Retainer", s: "Everything in Loop Growth plus ongoing feature development, AI agent management and priority support (10 hrs/mo).", qty: 6, unit: "months", rate: 2500 },
+    "ret-care":     { d: "Loop Care — Monthly Retainer", s: "Hosting management, security & uptime monitoring, content edits (2 hrs/mo), monthly performance report. Default companion to every build.", qty: 1, unit: "months", rate: 750 },
+    "ret-growth":   { d: "Loop Growth — Monthly Retainer", s: "Everything in Loop Care plus conversion iterations, A/B tweaks, prompt & automation tuning (5 hrs/mo).", qty: 1, unit: "months", rate: 1500 },
+    "ret-scale":    { d: "Loop Scale — Monthly Retainer", s: "Everything in Loop Growth plus ongoing feature development, AI agent management and priority support (10 hrs/mo).", qty: 1, unit: "months", rate: 2500 },
     "ai-workflow":  { d: "AI Workflow Automation", s: "Mapping of one core process (leads, invoicing, follow-ups), pipeline build, integrations and documentation.", qty: 1, unit: "project", rate: 4500 },
     "ai-agent":     { d: "AI Agent / Assistant", s: "Customer-facing agent trained on your knowledge base — lead qualification, support, bookings. Includes guardrails & dashboard.", qty: 1, unit: "project", rate: 6000 },
     "brand-id":     { d: "Brand & Identity System", s: "Logo system, palette, typography, usage guidelines and asset pack.", qty: 1, unit: "project", rate: 3500 },
@@ -603,7 +660,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
 
   var RATE_OPTIONS = [750, 1000, 1500, 2000, 2500, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8500, 10000];
   var QTY_OPTIONS = [
-    { v: 1, l: "1 × project" }, { v: 1, l: "1 month" }, { v: 3, l: "3 months" },
+    { v: 1, l: "1 × project" }, { v: 1, l: "1 × per month" }, { v: 3, l: "3 months" },
     { v: 6, l: "6 months" }, { v: 12, l: "12 months" }
   ];
 
@@ -625,14 +682,14 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     "<b>Acceptance.</b> Written approval of this document (including by email or WhatsApp) constitutes a binding agreement under Federal Decree-Law No. 50 of 2022 (UAE Commercial Transactions Law). Work begins on receipt of the deposit.",
     "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
     "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.",
-    "<b>VAT.</b> SwiftLoop is not VAT-registered and no VAT applies.",
+    "<b>VAT.</b> SwiftLoop FZ-LLC is not VAT-registered and no VAT applies.",
     "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
     "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
     "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
-    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop. SwiftLoop retains the right to showcase the work in its portfolio and to place a small <b>\"Site by SwiftLoop\"</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop FZ-LLC (trading as SwiftLoop). SwiftLoop FZ-LLC retains the right to showcase the work in its portfolio and to place a small <b>\"Site by SwiftLoop\"</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
     "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
     "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
-    "<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Liability.</b> SwiftLoop FZ-LLC's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
     "<b>Governing law.</b> This agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai; the Dubai Courts have exclusive jurisdiction. This document is computer-generated and valid without signature or stamp."
   ];
 
@@ -644,10 +701,10 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
     "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
     "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
-    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop. SwiftLoop retains the right to showcase the work in its portfolio and to place a small <b>“Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop FZ-LLC (trading as SwiftLoop). SwiftLoop FZ-LLC retains the right to showcase the work in its portfolio and to place a small <b>“Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
     "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
     "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
-    "<b>Liability.</b> SwiftLoop's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Liability.</b> SwiftLoop FZ-LLC's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
     "<b>Governing law.</b> This agreement is governed by the laws of England and Wales; the courts of England and Wales have non-exclusive jurisdiction unless otherwise agreed in writing. This document is computer-generated and valid without signature or stamp."
   ];
 
@@ -705,7 +762,26 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
 
   /* ---------------------------------------------------------- rows */
 
-  var rowsEl = $("#itemRows");
+  var oneTimeRowsEl = $("#oneTimeRows");
+  var recurringRowsEl = $("#recurringRows");
+
+  function isRecurringRow(tr) {
+    return tr.parentNode === recurringRowsEl;
+  }
+
+  function updateSectionStates() {
+    $("#oneTimeSection").classList.toggle("is-empty", !oneTimeRowsEl.children.length);
+    $("#recurringSection").classList.toggle("is-empty", !recurringRowsEl.children.length);
+    $("#monthlyTotalRow").style.display = recurringRowsEl.children.length ? "" : "none";
+  }
+
+  function moveRowForBilling(tr) {
+    var qtyEl = $(".i-qty", tr);
+    var option = qtyEl.options[qtyEl.selectedIndex];
+    var target = option && option.getAttribute("data-unit") === "months" ? recurringRowsEl : oneTimeRowsEl;
+    if (tr.parentNode !== target) target.appendChild(tr);
+    updateSectionStates();
+  }
 
   function rateOptionsHtml(selected) {
     var html = "";
@@ -720,7 +796,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   }
 
   function qtyOptionsHtml(qty, unit) {
-    var label = unit === "months" ? qty + (qty === 1 ? " month" : " months") : qty + " × " + (unit || "project");
+    var label = unit === "months" ? (qty === 1 ? "1 × per month" : qty + " months") : qty + " × " + (unit || "project");
     var html = "", found = false;
     QTY_OPTIONS.forEach(function (o) {
       var sel = !found && o.v === qty && ((unit === "months") === / month/.test(o.l));
@@ -732,7 +808,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     return html;
   }
 
-  function addRow(item) {
+  function addRow(item, target) {
     item = item || { d: "", s: "", qty: 1, unit: "project", rate: 0 };
     var tr = document.createElement("tr");
     tr.innerHTML =
@@ -744,7 +820,7 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
       '<td class="r"><select class="i-rate"></select></td>' +
       '<td class="r"><span class="i-amount">0.00</span></td>' +
       '<td class="screen-only"><button class="row-x" title="Remove line" type="button">✕</button></td>';
-    rowsEl.appendChild(tr);
+    (target || (item.unit === "months" ? recurringRowsEl : oneTimeRowsEl)).appendChild(tr);
 
     $(".i-desc-main", tr).value = item.d;
     var sub = $(".i-desc-sub", tr);
@@ -753,10 +829,11 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     $(".i-qty", tr).innerHTML = qtyOptionsHtml(item.qty, item.unit);
     $(".i-rate", tr).innerHTML = rateOptionsHtml(num(item.rate));
 
-    $(".i-qty", tr).addEventListener("change", function () { customCombo(this, "Quantity (number):"); recalc(); });
+    $(".i-qty", tr).addEventListener("change", function () { customCombo(this, "Quantity (number):"); moveRowForBilling(tr); recalc(); });
     $(".i-rate", tr).addEventListener("change", function () { customCombo(this, "Unit price in AED:"); recalc(); });
-    $(".row-x", tr).addEventListener("click", function () { tr.remove(); recalc(); });
+    $(".row-x", tr).addEventListener("click", function () { tr.remove(); updateSectionStates(); recalc(); });
     sub.addEventListener("input", function () { autosize(sub); });
+    updateSectionStates();
     recalc();
     return tr;
   }
@@ -782,27 +859,29 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   /* ---------------------------------------------------------- totals */
 
   function recalc() {
-    var subtotal = 0;
-    $all("#itemRows tr").forEach(function (tr) {
+    var subtotal = 0, monthlySubtotal = 0;
+    $all(".item-rows tr").forEach(function (tr) {
       var qty = num($(".i-qty", tr).value);
       var rate = num($(".i-rate", tr).value);
       var amt = qty * rate;
       $(".i-amount", tr).textContent = fmt(amt);
-      subtotal += amt;
+      if (isRecurringRow(tr)) monthlySubtotal += amt;
+      else subtotal += amt;
     });
     var discount = num($("#fDiscount").value);
     var base = Math.max(0, subtotal - discount);
     var vatOn = $("#setVat").value === "1";
     var vat = vatOn ? base * 0.05 : 0;
     var grand = base + vat;
+    var monthlyGrand = monthlySubtotal + (vatOn ? monthlySubtotal * 0.05 : 0);
 
     $("#tSubtotal").textContent = fmt(subtotal);
     $("#tVat").textContent = fmt(vat);
     $("#vatRow").style.display = vatOn ? "" : "none";
-    $("#trnCell").style.display = vatOn ? "" : "none";
-
     $("#tGrand").textContent = fmt(grand);
     $("#amountWords").textContent = amountInWords(grand);
+    $("#tMonthly").textContent = fmt(monthlyGrand);
+    updateSectionStates();
   }
 
   /* ---------------------------------------------------------- terms */
@@ -834,9 +913,9 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     // Update term 3 (VAT/Taxes) based on VAT selection
     if (currentMarket === "UAE") {
       if ($("#setVat").value === "1") {
-        terms[3] = "<b>VAT.</b> VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. The TRN stated above confirms SwiftLoop is VAT-registered.";
+        terms[3] = "<b>VAT.</b> VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. The TRN stated above confirms SwiftLoop FZ-LLC is VAT-registered.";
       } else {
-        terms[3] = "<b>VAT.</b> SwiftLoop is not VAT-registered and no VAT applies.";
+        terms[3] = "<b>VAT.</b> SwiftLoop FZ-LLC is not VAT-registered and no VAT applies.";
       }
     }
 
@@ -860,7 +939,6 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     $("#grandLbl").textContent = t === "QUOTE" ? "Total quoted" : "Total due";
     if (t === "TAX INVOICE") {
       $("#setVat").value = "1";
-      $("#trnCell").style.display = "";
     }
     refreshNumber();
     refreshDates();
@@ -892,14 +970,37 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   /* ---------------------------------------------------------- save / load */
 
   function getQuotes() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch (e) { return []; }
+    try {
+      var saved = JSON.parse(localStorage.getItem(LS_KEY)) || [];
+      return Array.isArray(saved) ? saved : (Array.isArray(saved.quotes) ? saved.quotes : []);
+    } catch (e) { return []; }
   }
   function setQuotes(q) { localStorage.setItem(LS_KEY, JSON.stringify(q)); }
+
+  function normaliseSavedItem(item) {
+    item = item || {};
+    var description = item.d || item.description || "";
+    var rawUnit = String(item.unit || item.billing || "").toLowerCase();
+    var isMonthly = rawUnit === "month" || rawUnit === "months" || rawUnit === "monthly" || /monthly|per month/i.test(description);
+    var savedQty = item.qty !== undefined ? item.qty : (item.quantity !== undefined ? item.quantity : 1);
+    var savedRate = item.rate !== undefined ? item.rate : (item.unitPrice !== undefined ? item.unitPrice : (item.price !== undefined ? item.price : 0));
+    return {
+      d: description,
+      s: item.s || item.details || "",
+      qty: num(savedQty),
+      unit: isMonthly ? "months" : "project",
+      rate: num(savedRate)
+    };
+  }
+
+  function normaliseSavedState(saved) {
+    return saved && saved.state ? saved.state : (saved || {});
+  }
 
   function snapshot() {
     var fields = {};
     $all("[data-f]").forEach(function (el) { fields[el.dataset.f] = el.value; });
-    var items = $all("#itemRows tr").map(function (tr) {
+    var items = $all(".item-rows tr").map(function (tr) {
       var qtyEl = $(".i-qty", tr), sel = qtyEl.options[qtyEl.selectedIndex];
       return {
         d: $(".i-desc-main", tr).value,
@@ -922,20 +1023,24 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   }
 
   function restore(s) {
-    $("#setDue").value = s.settings.due;
-    $("#setSplit").value = s.settings.split;
-    $("#setVat").value = s.settings.vat;
-    $("#setValidity").value = s.settings.validity;
-    var cur = s.settings.currency || "AED";
+    s = normaliseSavedState(s);
+    var settings = s.settings || {};
+    if (settings.due) $("#setDue").value = settings.due;
+    if (settings.split) $("#setSplit").value = settings.split;
+    if (settings.vat !== undefined) $("#setVat").value = settings.vat;
+    if (settings.validity) $("#setValidity").value = settings.validity;
+    var cur = settings.currency || "AED";
     $("#setCurrency").value = cur;
     setCurrencyDisplay(cur);
-    setMarket(s.settings.market || "UAE");
+    setMarket(settings.market || "UAE");
     Object.keys(s.fields || {}).forEach(function (k) {
       var el = $('[data-f="' + k + '"]');
-      if (el) el.value = s.fields[k];
+      if (el && s.fields[k] !== undefined && s.fields[k] !== null) el.value = s.fields[k];
     });
-    rowsEl.innerHTML = "";
-    (s.items || []).forEach(addRow);
+    oneTimeRowsEl.innerHTML = "";
+    recurringRowsEl.innerHTML = "";
+    var savedItems = Array.isArray(s.items) ? s.items : (Array.isArray(s.rows) ? s.rows : []);
+    savedItems.map(normaliseSavedItem).forEach(addRow);
     if (s.terms && s.terms.length) {
       renderTerms(s.terms);
     } else {
@@ -956,16 +1061,22 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
       return;
     }
     quotes.slice().reverse().forEach(function (q) {
+      var state = normaliseSavedState(q);
       var div = document.createElement("div");
       div.className = "saved-item";
-      var when = new Date(q.savedAt);
+      var when = new Date(q.savedAt || state.savedAt || Date.now());
       div.innerHTML =
-        '<div class="meta"><b></b><span>' + q.state.docType + " · " + fmtDate(when) + " · AED " + (q.total || "—") + '</span></div>' +
+        '<div class="meta"><b></b><span>' + (state.docType || "QUOTE") + " · " + fmtDate(when) + " · AED " + (q.total || "—") + '</span></div>' +
         '<button title="Delete" type="button">✕</button>';
       $("b", div).textContent = q.name;
       $(".meta", div).addEventListener("click", function () {
-        restore(q.state);
-        toast("Loaded: " + q.name);
+        try {
+          restore(state);
+          toast("Loaded: " + q.name);
+        } catch (err) {
+          console.error("Could not load saved quote", err);
+          toast("Could not load this quote");
+        }
       });
       $("button", div).addEventListener("click", function () {
         if (!confirm('Delete saved quote "' + q.name + '"?')) return;
@@ -998,7 +1109,10 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     $("#setCurrency").value = code;
     $("#thUnitPrice").textContent = "Unit price (" + code + ")";
     $("#thAmount").textContent = "Amount (" + code + ")";
+    $("#thRecurringUnitPrice").textContent = "Unit price (" + code + ")";
+    $("#thRecurringAmount").textContent = "Monthly amount (" + code + ")";
     $("#grandCurrencyCode").textContent = code;
+    $("#monthlyCurrencyCode").textContent = code;
     $("#discountLbl").textContent = "Discount (" + code + ")";
     updateTerms();
     recalc();
@@ -1048,7 +1162,8 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
     toast("Added: " + p.d);
   });
 
-  $("#addRowBtn").addEventListener("click", function () { addRow(); });
+  $("#addOneTimeRowBtn").addEventListener("click", function () { addRow(); });
+  $("#addRecurringRowBtn").addEventListener("click", function () { addRow({ d: "", s: "", qty: 1, unit: "months", rate: 0 }, recurringRowsEl); });
 
   $("#saveBtn").addEventListener("click", function () {
     var state = snapshot();
@@ -1077,7 +1192,8 @@ Alternate payments (cash, crypto, etc.) accepted.</textarea>
   /* ---------------------------------------------------------- init */
 
   function init(blank) {
-    rowsEl.innerHTML = "";
+    oneTimeRowsEl.innerHTML = "";
+    recurringRowsEl.innerHTML = "";
     if (!blank) {
       // default proposal: build + retainer attached (retainer is the default, removal is a downgrade)
       addRow(PRESETS["build-site"]);
