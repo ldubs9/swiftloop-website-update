@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwiftLoop — Invoice Generator</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --ink: #0a0a0c;
+      --ink-2: #101014;
+      --ink-3: #17171d;
+      --line: rgba(236, 232, 223, 0.12);
+      --bone: #ece8df;
+      --bone-dim: #97948b;
+      --accent: #ff4d1f;
+      --paper: #f4f1ea;
+      --paper-line: rgba(10, 10, 12, 0.14);
+      --paper-line-soft: rgba(10, 10, 12, 0.08);
+      --paper-dim: #6d6a63;
+      --font-display: "Clash Display", "Arial Black", sans-serif;
+      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--ink);
+      color: var(--bone);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: var(--accent); color: var(--ink); }
+    .mono { font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+
+    /* ====================== APP LAYOUT ====================== */
+    .app { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+
+    .panel {
+      border-right: 1px solid var(--line);
+      padding: 1.6rem 1.4rem 3rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--ink-2);
+    }
+    .panel-logo { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; letter-spacing: -0.02em; }
+    .panel-logo em { font-style: normal; color: var(--accent); }
+    .panel-sub { color: var(--bone-dim); margin-top: 0.2rem; margin-bottom: 1.6rem; }
+    .panel h3.mono { color: var(--accent); margin: 1.8rem 0 0.8rem; }
+    .panel label.mono { display: block; color: var(--bone-dim); margin: 0.9rem 0 0.35rem; }
+    .panel select, .panel input[type="text"] {
+      width: 100%;
+      background: var(--ink-3);
+      border: 1px solid var(--line);
+      color: var(--bone);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 4px;
+      outline: none;
+    }
+    .panel select:focus, .panel input:focus { border-color: var(--accent); }
+
+    .pbtn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--bone);
+      margin-top: 0.6rem;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+    .pbtn:hover { border-color: var(--accent); color: var(--accent); }
+    .pbtn--primary { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+    .pbtn--primary:hover { background: var(--bone); border-color: var(--bone); color: var(--ink); }
+
+    .seg { display: flex; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
+    .seg button {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--bone-dim);
+      background: none;
+      border: 0;
+      padding: 0.6rem 0.2rem;
+      cursor: pointer;
+    }
+    .seg button.is-on { background: var(--bone); color: var(--ink); }
+
+    .saved-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.55rem 0.7rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .saved-item .meta { flex: 1; min-width: 0; cursor: pointer; }
+    .saved-item .meta b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .saved-item .meta span { color: var(--bone-dim); font-size: 0.7rem; font-family: var(--font-mono); }
+    .saved-item:hover { border-color: var(--accent); }
+    .saved-item button { background: none; border: 0; color: var(--bone-dim); cursor: pointer; font-size: 0.9rem; }
+    .saved-item button:hover { color: var(--accent); }
+    .saved-empty { color: var(--bone-dim); font-size: 0.8rem; margin-top: 0.5rem; }
+
+    .toast {
+      position: fixed;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translate(-50%, 80px);
+      background: var(--bone);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.3rem;
+      border-radius: 99px;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 50;
+    }
+    .toast.is-on { transform: translate(-50%, 0); }
+
+    /* ====================== STAGE / DOCUMENT ====================== */
+    .stage { padding: 2.5rem 2rem 5rem; display: flex; justify-content: center; align-items: flex-start; }
+
+    .doc {
+      width: 210mm;
+      min-height: 297mm;
+      background: var(--paper);
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    /* header band */
+    .doc-head {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 11mm 12mm 9mm;
+    }
+    .doc-head-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .doc-wordmark { display: flex; align-items: center; gap: 0.6rem; }
+    .doc-wordmark svg { width: 26px; height: 26px; }
+    .doc-wordmark span { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; letter-spacing: -0.02em; }
+    .doc-wordmark em { font-style: normal; color: var(--accent); }
+    .doc-type {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 2.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1;
+    }
+    .doc-type small { display: block; font-family: var(--font-mono); font-weight: 500; font-size: 0.6rem; letter-spacing: 0.16em; color: var(--bone-dim); margin-top: 0.45rem; white-space: nowrap; }
+    .doc-meta { display: flex; gap: 2.2rem; margin-top: 7mm; flex-wrap: wrap; }
+    .doc-meta .cell label { display: block; font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone-dim); margin-bottom: 0.25rem; }
+    .doc-meta .cell input, .doc-meta .cell select {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px dashed transparent;
+      color: var(--bone);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      outline: none;
+      width: auto;
+      min-width: 9ch;
+    }
+    .doc-meta .cell select { appearance: none; -webkit-appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23ece8df' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right center; background-size: 12px 8px; padding-right: 14px; }
+    .doc-meta .cell input:hover, .doc-meta .cell input:focus,
+    .doc-meta .cell select:hover, .doc-meta .cell select:focus { border-bottom-color: var(--accent); }
+
+    /* body */
+    .doc-body { flex: 1; padding: 9mm 12mm; }
+
+    .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin-bottom: 8mm; }
+    .party h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--paper-line); padding-bottom: 1.6mm; margin-bottom: 2.5mm; }
+    .party input, .party textarea {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: 0;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      color: var(--ink);
+      line-height: 1.5;
+      resize: none;
+      overflow: hidden;
+      border-bottom: 1px dashed transparent;
+    }
+    .party input:hover, .party input:focus, .party textarea:hover, .party textarea:focus { border-bottom-color: var(--accent); }
+    .party input.p-name { font-weight: 700; font-size: 0.95rem; }
+    .party input.p-dim, .party textarea.p-dim { color: var(--paper-dim); }
+
+    /* service tables */
+    .item-section + .item-section { margin-top: 7mm; }
+    .item-section-head { display: flex; align-items: baseline; gap: 4mm; margin-bottom: 2mm; }
+    .item-section-head h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+    table.items { width: 100%; border-collapse: collapse; }
+    table.items th {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      text-align: left;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--paper-line);
+      padding: 2.2mm 1.5mm;
+    }
+    table.items td { border-bottom: 1px solid var(--paper-line-soft); padding: 2.4mm 1.5mm; vertical-align: top; font-size: 0.84rem; }
+    table.items th.r, table.items td.r { text-align: right; }
+    .items input, .items select, .items textarea {
+      background: transparent;
+      border: 0;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      color: var(--ink);
+      width: 100%;
+      resize: none;
+      overflow: hidden;
+      border-bottom: 1px dashed transparent;
+    }
+    .items input:hover, .items input:focus, .items select:hover, .items select:focus,
+    .items textarea:hover, .items textarea:focus { border-bottom-color: var(--accent); }
+    .items .i-desc-main { font-weight: 500; }
+    .items .i-desc-sub { color: var(--paper-dim); font-size: 0.74rem; line-height: 1.45; }
+    .items select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+    .items td.r input, .items td.r select { text-align: right; font-variant-numeric: tabular-nums; }
+    .items .i-amount { font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .row-x {
+      background: none; border: 0; color: var(--paper-dim); cursor: pointer; font-size: 0.85rem; padding: 0 1mm; line-height: 1;
+    }
+    .row-x:hover { color: var(--accent); }
+    .add-row {
+      margin-top: 3mm;
+      background: none;
+      border: 1px dashed var(--paper-line);
+      border-radius: 99px;
+      color: var(--paper-dim);
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 1.8mm 5mm;
+      cursor: pointer;
+    }
+    .add-row:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* totals */
+    .totals-wrap { display: flex; justify-content: space-between; gap: 10mm; margin-top: 7mm; }
+    .pay-note { flex: 1; max-width: 78mm; }
+    .pay-note h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 2mm; }
+    .pay-note textarea, .pay-note input {
+      width: 100%; background: transparent; border: 0; outline: none; resize: none; overflow: hidden;
+      font-size: 0.76rem; line-height: 1.55; color: var(--paper-dim); font-family: var(--font-body);
+      border-bottom: 1px dashed transparent;
+    }
+    .pay-note textarea:hover, .pay-note textarea:focus { border-bottom-color: var(--accent); }
+
+    .totals { width: 70mm; }
+    .totals .trow { display: flex; justify-content: space-between; align-items: center; padding: 1.8mm 0; border-bottom: 1px solid var(--paper-line-soft); font-size: 0.84rem; }
+    .totals .trow .lbl { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-dim); }
+    .totals .trow .val { font-variant-numeric: tabular-nums; }
+    .totals .trow input { width: 18mm; text-align: right; background: transparent; border: 0; border-bottom: 1px dashed var(--paper-line); outline: none; font-size: 0.84rem; font-family: var(--font-body); color: var(--ink); }
+    .totals .grand {
+      background: var(--ink);
+      color: var(--bone);
+      padding: 3.5mm 3.5mm;
+      margin-top: 2.5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .totals .grand .lbl { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone-dim); }
+    .totals .grand .val { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; letter-spacing: -0.01em; }
+    .totals .grand .val em { font-style: normal; color: var(--accent); font-size: 0.75rem; margin-right: 0.35rem; font-family: var(--font-mono); letter-spacing: 0.1em; }
+    .amount-words { margin-top: 2mm; font-size: 0.68rem; color: var(--paper-dim); text-align: right; font-style: italic; }
+    .monthly-total { margin-top: 4mm; border-top: 1px solid var(--ink); padding-top: 2.5mm; display: flex; justify-content: space-between; align-items: baseline; gap: 3mm; }
+    .monthly-total .lbl { font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-dim); }
+    .monthly-total .val { font-family: var(--font-display); font-weight: 600; font-size: 1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .monthly-total .val em { font-style: normal; color: var(--accent); font-size: 0.65rem; margin-right: 0.3rem; font-family: var(--font-mono); letter-spacing: 0.1em; }
+
+    /* terms */
+    .terms { margin-top: 8mm; border-top: 1px solid var(--ink); padding-top: 4mm; }
+    .terms h4 { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 2.5mm; }
+    .terms ol { list-style: none; counter-reset: t; columns: 2; column-gap: 10mm; }
+    .terms li { counter-increment: t; display: block; break-inside: avoid; margin-bottom: 2.4mm; padding-left: 7mm; position: relative; }
+    .terms li::before {
+      content: counter(t, decimal-leading-zero);
+      position: absolute; left: 0; top: 0.25mm;
+      font-family: var(--font-mono); font-size: 0.58rem; color: var(--accent); letter-spacing: 0.05em;
+    }
+    .terms li div[contenteditable] { font-size: 0.7rem; line-height: 1.5; color: var(--paper-dim); outline: none; border-bottom: 1px dashed transparent; }
+    .terms li div[contenteditable]:hover, .terms li div[contenteditable]:focus { border-bottom-color: var(--accent); }
+    .terms li div b { color: var(--ink); font-weight: 600; }
+    .term-x { position: absolute; right: -4.5mm; top: 0; background: none; border: 0; color: var(--paper-dim); cursor: pointer; font-size: 0.7rem; opacity: 0; }
+    .terms li:hover .term-x { opacity: 1; }
+    .term-x:hover { color: var(--accent); }
+
+    /* footer band */
+    .doc-foot {
+      background: var(--ink);
+      color: var(--bone-dim);
+      padding: 5mm 12mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4mm;
+      font-family: var(--font-mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .doc-foot .ring { width: 12px; height: 12px; flex-shrink: 0; }
+    .doc-foot b { color: var(--bone); font-weight: 500; }
+
+    .screen-only {} /* marker class */
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .panel { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      .stage { padding: 1.5rem 0.5rem 4rem; overflow-x: auto; justify-content: flex-start; }
+    }
+
+    /* ====================== PRINT ====================== */
+    /* Keep a compact safety edge on continuation pages so text never lands
+       directly on a physical page cut. Page 1 keeps its full-bleed header. */
+    @page { size: A4; margin: 8mm 0; background: #f4f1ea; }
+    @page :first { margin: 0 0 8mm; }
+    @media print {
+      html, body, .app, .stage { background: var(--paper); }
+      .panel, .toast, .screen-only { display: none !important; }
+      .app { display: block; }
+      .stage { padding: 0; display: block; }
+      .doc { width: 210mm; min-height: 0; box-shadow: none; }
+      .doc-head, .doc-foot, .totals .grand { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .row-x, .add-row, .term-x { display: none !important; }
+      input, select, textarea { border-bottom-color: transparent !important; }
+      input::placeholder, textarea::placeholder { color: transparent !important; }
+      select { appearance: none; -webkit-appearance: none; background-image: none !important; padding-right: 0 !important; }
+      .item-section.is-empty { display: none; }
+
+      /* Keep section labels, table headers, and complete rows together. */
+      .item-section-head,
+      table.items thead,
+      table.items tbody tr,
+      .totals-wrap,
+      .terms h4,
+      .terms li,
+      .doc-foot {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+      }
+      .item-section-head,
+      table.items thead,
+      .terms h4 {
+        break-after: avoid-page;
+        page-break-after: avoid;
+      }
+      table.items { break-before: avoid-page; page-break-before: avoid; }
+      table.items thead { display: table-header-group; }
+      table.items tbody tr:first-child { break-before: avoid-page; page-break-before: avoid; }
+
+      /* Balance the two columns inside each page fragment so clauses use the
+         available space without forcing a partial clause over the page edge. */
+      .terms ol { column-fill: balance; }
+      .terms li { orphans: 3; widows: 3; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ====================== CONTROL PANEL ====================== -->
+  <aside class="panel">
+    <div class="panel-logo">Swift<em>Loop</em><em>.</em></div>
+    <p class="panel-sub mono" id="panelSub">Billing console — UAE</p>
+
+    <h3 class="mono">Market</h3>
+    <div class="seg" id="marketSeg">
+      <button data-market="UAE" class="is-on">UAE</button>
+      <button data-market="INTL">International</button>
+    </div>
+
+    <h3 class="mono">Document type</h3>
+    <div class="seg" id="docTypeSeg">
+      <button data-type="QUOTE" class="is-on">Quote</button>
+      <button data-type="INVOICE">Invoice</button>
+      <button data-type="TAX INVOICE">Tax Inv.</button>
+    </div>
+
+    <h3 class="mono">Quick settings</h3>
+    <label class="mono" for="setDue">Payment due</label>
+    <select id="setDue">
+      <option value="0">Due on receipt</option>
+      <option value="7" selected>Net 7 days</option>
+      <option value="14">Net 14 days</option>
+      <option value="30">Net 30 days</option>
+    </select>
+
+    <label class="mono" for="setSplit">Payment structure</label>
+    <select id="setSplit">
+      <option value="50">50% deposit / 50% on delivery</option>
+      <option value="100">100% on signing</option>
+      <option value="403020">40% / 40% / 20% milestones</option>
+      <option value="retainer">Monthly subscription — billed in advance</option>
+    </select>
+
+    <label class="mono" for="setAccount">Payment account</label>
+    <select id="setAccount">
+      <option value="">— Select account —</option>
+      <option value="wio-aed">Wio Bank — AED (UAE)</option>
+      <option value="wio-usd">Wio Bank — USD (UAE)</option>
+      <option value="wise-eur">Wise — EUR (Belgium)</option>
+      <option value="crypto">Cryptocurrency (on request)</option>
+    </select>
+
+    <label class="mono" for="setCurrency">Currency</label>
+    <select id="setCurrency">
+      <option value="AED" selected>AED — UAE Dirham</option>
+      <option value="USD">USD — US Dollar</option>
+      <option value="EUR">EUR — Euro</option>
+      <option value="GBP">GBP — British Pound</option>
+      <option value="SAR">SAR — Saudi Riyal</option>
+      <option value="QAR">QAR — Qatari Riyal</option>
+    </select>
+
+    <label class="mono" id="vatLabel" for="setVat">VAT (5% UAE)</label>
+    <select id="setVat">
+      <option value="0" selected>Not VAT registered — no VAT</option>
+      <option value="1">Apply 5% VAT (TRN required)</option>
+    </select>
+
+    <label class="mono" for="setValidity">Quote validity</label>
+    <select id="setValidity">
+      <option value="7">7 days</option>
+      <option value="14" selected>14 days</option>
+      <option value="30">30 days</option>
+    </select>
+
+    <h3 class="mono">Add service preset</h3>
+    <select id="presetSelect">
+      <option value="">— Choose a service —</option>
+      <optgroup label="Builds (always pair with a retainer)">
+        <option value="build-site">Website Design &amp; Build — AED 5,500</option>
+        <option value="build-ecom">E-commerce Build — AED 7,000</option>
+        <option value="build-landing">Landing Page Sprint — AED 4,000</option>
+      </optgroup>
+      <optgroup label="Loop Subscriptions (default attach)">
+        <option value="ret-care">Loop Care — AED 750 / mo</option>
+        <option value="ret-growth">Loop Growth — AED 1,500 / mo</option>
+        <option value="ret-scale">Loop Scale — AED 2,500 / mo</option>
+      </optgroup>
+      <optgroup label="AI &amp; Automation">
+        <option value="ai-workflow">AI Workflow Automation — AED 4,500</option>
+        <option value="ai-agent">AI Agent / Assistant — AED 6,000</option>
+      </optgroup>
+      <optgroup label="Brand &amp; Motion">
+        <option value="brand-id">Brand &amp; Identity System — AED 3,500</option>
+        <option value="motion-3d">Motion &amp; 3D Package — AED 2,500</option>
+      </optgroup>
+      <optgroup label="Other">
+        <option value="custom">Custom line item</option>
+      </optgroup>
+    </select>
+    <button class="pbtn" id="addPresetBtn">+ Add to document</button>
+
+    <h3 class="mono">Saved quotes</h3>
+    <input type="text" id="saveName" placeholder="Label (defaults to client + №)" />
+    <button class="pbtn" id="saveBtn">Save current quote</button>
+    <button class="pbtn" id="openPdfBtn">Open quote from PDF</button>
+    <input type="file" id="pdfFileInput" accept="application/pdf,.pdf" hidden />
+    <div id="savedList"></div>
+
+    <h3 class="mono">Export</h3>
+    <button class="pbtn pbtn--primary" id="printBtn">Save as PDF / Print</button>
+    <button class="pbtn" id="resetBtn">New blank document</button>
+  </aside>
+
+  <!-- ====================== DOCUMENT ====================== -->
+  <main class="stage">
+    <article class="doc" id="doc">
+
+      <!-- header -->
+      <header class="doc-head">
+        <div class="doc-head-top">
+          <div class="doc-wordmark">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/></svg>
+            <span>Swift<em>Loop</em><em>.</em></span>
+          </div>
+          <div class="doc-type">
+            <span id="docTypeLabel">Quote</span>
+            <small id="docTypeSub">Commercial proposal — Dubai, UAE</small>
+          </div>
+        </div>
+        <div class="doc-meta">
+          <div class="cell"><label>Document №</label><input id="fNumber" data-f="number" /></div>
+          <div class="cell"><label>Date of issue</label><input id="fDate" data-f="date" /></div>
+          <div class="cell" id="dueCell"><label id="dueLabel">Valid until</label><input id="fDue" data-f="due" /></div>
+          <div class="cell"><label>Currency</label><select id="fCurrency" data-f="currency"><option value="AED">AED — UAE Dirham</option><option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — British Pound</option></select></div>
+          <div class="cell" id="trnCell"><label>Supplier TRN</label><input data-f="trn" id="fTrn" value="47034520" /></div>
+        </div>
+      </header>
+
+      <!-- body -->
+      <div class="doc-body">
+
+        <div class="parties">
+          <div class="party">
+            <h4>From</h4>
+            <input class="p-name" data-f="fromName" value="SwiftLoop" />
+            <input data-f="fromContact" value="Luca Wiegand — Founder" />
+            <textarea class="p-dim" data-f="fromAddr" rows="2">Dubai, United Arab Emirates</textarea>
+            <input class="p-dim" data-f="fromEmail" value="info@swiftloop.tech" />
+            <input class="p-dim" data-f="fromPhone" value="+971 50 972 5199" />
+            <input class="p-dim" data-f="fromWeb" value="swiftloop.tech" />
+          </div>
+          <div class="party">
+            <h4>Bill to</h4>
+            <input class="p-name" data-f="toName" placeholder="Client / Company name" />
+            <input data-f="toContact" placeholder="Contact person" />
+            <textarea class="p-dim" data-f="toAddr" rows="2" placeholder="Address, Emirate, UAE"></textarea>
+            <input class="p-dim" data-f="toEmail" placeholder="Email" />
+            <input class="p-dim" data-f="toPhone" placeholder="Phone" />
+            <input class="p-dim" data-f="toTrn" id="toTrnInput" placeholder="Client TRN (if VAT registered)" />
+          </div>
+        </div>
+
+        <!-- one-time services -->
+        <section class="item-section" id="oneTimeSection">
+          <div class="item-section-head"><h4>One-time services</h4></div>
+          <table class="items">
+            <thead>
+              <tr>
+                <th style="width:44%;">Description</th>
+                <th style="width:17%;">Qty / Duration</th>
+                <th class="r" style="width:16%;" id="thUnitPrice">Unit price (AED)</th>
+                <th class="r" style="width:15%;" id="thAmount">Amount (AED)</th>
+                <th class="screen-only" style="width:4%;"></th>
+              </tr>
+            </thead>
+            <tbody class="item-rows" id="oneTimeRows"></tbody>
+          </table>
+          <button class="add-row screen-only" id="addOneTimeRowBtn">+ Add one-time service</button>
+        </section>
+
+        <!-- monthly subscriptions -->
+        <section class="item-section" id="recurringSection">
+          <div class="item-section-head"><h4>Monthly subscriptions</h4></div>
+          <table class="items">
+            <thead>
+              <tr>
+                <th style="width:44%;">Description</th>
+                <th style="width:17%;">Qty / Duration</th>
+                <th class="r" style="width:16%;" id="thRecurringUnitPrice">Unit price (AED)</th>
+                <th class="r" style="width:15%;" id="thRecurringAmount">Monthly amount (AED)</th>
+                <th class="screen-only" style="width:4%;"></th>
+              </tr>
+            </thead>
+            <tbody class="item-rows" id="recurringRows"></tbody>
+          </table>
+          <button class="add-row screen-only" id="addRecurringRowBtn">+ Add subscription</button>
+        </section>
+
+        <!-- totals -->
+        <div class="totals-wrap">
+          <div class="pay-note">
+            <h4>Payment details</h4>
+            <textarea data-f="payDetails" id="payDetailsBox" rows="5">Bank transfer (AED):
+Account name: Luca Wiegand — SwiftLoop
+Bank: —  ·  IBAN: AE — — — —
+Alternate payments (cash, crypto, etc.) accepted.</textarea>
+            <h4 style="margin-top:4mm;">Schedule</h4>
+            <textarea data-f="paySchedule" rows="2" id="payScheduleBox">50% deposit on signing · 50% on delivery, prior to launch.
+Monthly retainer · Billed in advance each month.</textarea>
+          </div>
+          <div class="totals">
+            <div class="trow"><span class="lbl">Subtotal</span><span class="val" id="tSubtotal">0.00</span></div>
+            <div class="trow"><span class="lbl" id="discountLbl">Discount (AED)</span><input type="text" inputmode="decimal" data-f="discount" id="fDiscount" value="0" /></div>
+            <div class="trow" id="vatRow" style="display:none;"><span class="lbl">VAT 5%</span><span class="val" id="tVat">0.00</span></div>
+            <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em id="grandCurrencyCode">AED</em><span id="tGrand">0.00</span></span></div>
+            <div class="amount-words" id="amountWords"></div>
+            <div class="monthly-total" id="monthlyTotalRow"><span class="lbl">Monthly subscription</span><span class="val"><em id="monthlyCurrencyCode">AED</em><span id="tMonthly">0.00</span> / mo</span></div>
+          </div>
+        </div>
+
+        <!-- terms -->
+        <div class="terms">
+          <h4 id="termsTitle">Terms &amp; conditions — United Arab Emirates</h4>
+          <ol id="termsList"></ol>
+        </div>
+      </div>
+
+      <!-- footer -->
+      <footer class="doc-foot">
+        <svg class="ring" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/></svg>
+        <span><b>SwiftLoop FZ-LLC</b> — Web design × AI automation · Designed by hand, run by machine</span>
+        <span>info@swiftloop.tech · +971 50 972 5199 · Dubai / GMT+4</span>
+      </footer>
+
+    </article>
+  </main>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------------- data */
+
+  var PRESETS = {
+    "build-site":   { d: "Website Design & Development", s: "Custom design, responsive build, CMS, motion, SEO foundations, launch & handover. Two structured revision rounds included.", qty: 1, unit: "project", rate: 5500 },
+    "build-ecom":   { d: "E-commerce Design & Build", s: "Storefront design, product architecture, payment gateway, AI inventory hooks, launch & training.", qty: 1, unit: "project", rate: 7000 },
+    "build-landing":{ d: "Landing Page Sprint", s: "Single conversion-focused page — copy structure, design, build and analytics. Delivered in 10 working days.", qty: 1, unit: "project", rate: 4000 },
+    "ret-care":     { d: "Loop Care — Monthly Retainer", s: "Hosting management, security & uptime monitoring, content edits (2 hrs/mo), monthly performance report. Default companion to every build.", qty: 1, unit: "months", rate: 750 },
+    "ret-growth":   { d: "Loop Growth — Monthly Retainer", s: "Everything in Loop Care plus conversion iterations, A/B tweaks, prompt & automation tuning (5 hrs/mo).", qty: 1, unit: "months", rate: 1500 },
+    "ret-scale":    { d: "Loop Scale — Monthly Retainer", s: "Everything in Loop Growth plus ongoing feature development, AI agent management and priority support (10 hrs/mo).", qty: 1, unit: "months", rate: 2500 },
+    "ai-workflow":  { d: "AI Workflow Automation", s: "Mapping of one core process (leads, invoicing, follow-ups), pipeline build, integrations and documentation.", qty: 1, unit: "project", rate: 4500 },
+    "ai-agent":     { d: "AI Agent / Assistant", s: "Customer-facing agent trained on your knowledge base — lead qualification, support, bookings. Includes guardrails & dashboard.", qty: 1, unit: "project", rate: 6000 },
+    "brand-id":     { d: "Brand & Identity System", s: "Logo system, palette, typography, usage guidelines and asset pack.", qty: 1, unit: "project", rate: 3500 },
+    "motion-3d":    { d: "Motion & 3D Package", s: "Interactive 3D scene or motion system for an existing site — concept, build, performance pass.", qty: 1, unit: "project", rate: 2500 },
+    "custom":       { d: "Custom line item", s: "", qty: 1, unit: "project", rate: 0 }
+  };
+
+  var CURRENCIES = {
+    "AED": { name: "UAE Dirham",    subunit: "Fils"     },
+    "USD": { name: "US Dollar",     subunit: "Cents"    },
+    "EUR": { name: "Euro",          subunit: "Cents"    },
+    "GBP": { name: "British Pound", subunit: "Pence"    },
+    "SAR": { name: "Saudi Riyal",   subunit: "Halalas"  },
+    "QAR": { name: "Qatari Riyal",  subunit: "Dirhams"  }
+  };
+
+  var currentCurrency = "AED";
+
+  var RATE_OPTIONS = [750, 1000, 1500, 2000, 2500, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8500, 10000];
+  var QTY_OPTIONS = [
+    { v: 1, l: "1 × project" }, { v: 1, l: "1 × per month" }, { v: 3, l: "3 months" },
+    { v: 6, l: "6 months" }, { v: 12, l: "12 months" }
+  ];
+
+  var BANK_ACCOUNTS = {
+    "wio-aed":  "Bank transfer (AED):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE60 0860 0000 0627 3800 686\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "wio-usd":  "Bank transfer (USD):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE19 0860 0000 0670 5822 546\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "wise-eur": "Bank transfer (EUR):\nAccount name: Luca Alexander Wiegand\nBank: Wise · Rue du Trône 100, 3rd floor, Brussels, 1050, Belgium\nIBAN: BE40 9677 1411 4063\nBIC/SWIFT: TRWIBEB1XXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "crypto":   "Cryptocurrency accepted on request.\nSupported: USDT, USDC, BTC, ETH (TRC-20, ERC-20, BEP-20).\nPlease contact us to confirm wallet address and network before sending.\nAlternate payments (cash, crypto, etc.) accepted."
+  };
+
+  var SPLIT_TEXT = {
+    "50": "50% deposit on signing · 50% on delivery, prior to launch.\nMonthly retainer · Billed in advance each month.",
+    "100": "100% payable on signing, prior to project kick-off.\nMonthly retainer · Billed in advance each month.",
+    "403020": "40% on signing · 40% on design approval · 20% on delivery, prior to launch.\nMonthly retainer · Billed in advance each month.",
+    "retainer": "Monthly retainer · Billed in advance each month."
+  };
+
+  var DEFAULT_TERMS = [
+    "<b>Acceptance.</b> Written approval of this document (including by email or WhatsApp) constitutes a binding agreement under Federal Decree-Law No. 50 of 2022 (UAE Commercial Transactions Law). Work begins on receipt of the deposit.",
+    "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
+    "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.",
+    "<b>VAT.</b> VAT will not be charged to the client on this quote.",
+    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop FZ-LLC (trading as SwiftLoop). SwiftLoop FZ-LLC retains the right to showcase the work in its portfolio and to place a small <b>\"Site by SwiftLoop\"</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
+    "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
+    "<b>Liability.</b> SwiftLoop FZ-LLC's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Governing law.</b> This agreement is governed by the laws of the United Arab Emirates and the Emirate of Dubai; the Dubai Courts have exclusive jurisdiction. This document is computer-generated and valid without signature or stamp."
+  ];
+
+  var DEFAULT_TERMS_INTL = [
+    "<b>Acceptance.</b> Written approval of this document (including by email or electronic means) constitutes a binding agreement. Work begins on receipt of the deposit.",
+    "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
+    "<b>Payment.</b> All amounts are in the currency stated on this document and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1.5% per month</b> (or the maximum rate permitted by applicable law, whichever is lower) on the outstanding balance, plus reasonable recovery costs.",
+    "<b>Taxes.</b> All prices are exclusive of applicable sales tax, VAT, GST, withholding tax, or similar levies. The client is responsible for any taxes imposed in their jurisdiction. Where SwiftLoop is required by law to collect such taxes, they will be added to the invoice and itemised separately.",
+    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
+    "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop FZ-LLC (trading as SwiftLoop). SwiftLoop FZ-LLC retains the right to showcase the work in its portfolio and to place a small <b>“Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
+    "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
+    "<b>Cancellation.</b> If the client cancels after kick-off, the deposit is non-refundable and work completed beyond the deposit value is invoiced pro-rata.",
+    "<b>Liability.</b> SwiftLoop FZ-LLC's aggregate liability is limited to the total fees paid under this document. Neither party is liable for indirect or consequential loss.",
+    "<b>Governing law.</b> This agreement is governed by the laws of England and Wales; the courts of England and Wales have non-exclusive jurisdiction unless otherwise agreed in writing. This document is computer-generated and valid without signature or stamp."
+  ];
+
+  var currentMarket = "UAE";
+
+  var LS_KEY = "swiftloop-quotes-v1";
+  var PDFJS_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/build/pdf.min.mjs";
+  var PDFJS_WORKER_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@5.6.205/build/pdf.worker.min.mjs";
+  var pdfJsPromise = null;
+
+  /* ---------------------------------------------------------- utils */
+
+  function $(s, c) { return (c || document).querySelector(s); }
+  function $all(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+
+  function fmt(n) {
+    return (isFinite(n) ? n : 0).toLocaleString("en-AE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function num(v) {
+    var n = parseFloat(String(v).replace(/[^0-9.\-]/g, ""));
+    return isFinite(n) ? n : 0;
+  }
+  function fmtDate(d) {
+    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  }
+
+  var ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  var TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  function words999(n) {
+    var out = "";
+    if (n >= 100) { out += ONES[Math.floor(n / 100)] + " Hundred"; n %= 100; if (n) out += " "; }
+    if (n >= 20) { out += TENS[Math.floor(n / 10)]; n %= 10; if (n) out += "-" + ONES[n]; }
+    else if (n > 0) out += ONES[n];
+    return out;
+  }
+  function amountInWords(n) {
+    var cur = CURRENCIES[currentCurrency] || CURRENCIES["AED"];
+    n = Math.round(n * 100) / 100;
+    var whole = Math.floor(n), cents = Math.round((n - whole) * 100);
+    if (whole === 0 && cents === 0) return "";
+    var parts = [], scales = [[1000000, "Million"], [1000, "Thousand"], [1, ""]];
+    var rem = whole;
+    scales.forEach(function (s) {
+      var q = Math.floor(rem / s[0]);
+      if (q) { parts.push(words999(q) + (s[1] ? " " + s[1] : "")); rem %= s[0]; }
+    });
+    var str = parts.join(" ") || "Zero";
+    return currentCurrency + " " + str + (cents ? " and " + words999(cents) + " " + cur.subunit : "") + " only";
+  }
+
+  function toast(msg) {
+    var t = $("#toast");
+    t.textContent = msg;
+    t.classList.add("is-on");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("is-on"); }, 1800);
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function termTextToHtml(value) {
+    var safe = escapeHtml(value).trim();
+    var stop = safe.indexOf(".");
+    return stop > 0 && stop < 60
+      ? "<b>" + safe.slice(0, stop + 1) + "</b>" + safe.slice(stop + 1)
+      : safe;
+  }
+
+  function loadPdfJs() {
+    if (!pdfJsPromise) {
+      pdfJsPromise = import(PDFJS_URL).then(function (pdfjs) {
+        pdfjs.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+        return pdfjs;
+      });
+    }
+    return pdfJsPromise;
+  }
+
+  function joinPdfItems(items) {
+    return items.slice().sort(function (a, b) { return a.x - b.x; })
+      .map(function (item) { return item.text; })
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function normalisePdfChunk(value) {
+    return String(value || "")
+      .replace(/\b(?:[A-Z]\s+){1,}[A-Z]\b/g, function (match) { return match.replace(/\s+/g, ""); })
+      .replace(/\s*-\s*/g, "-")
+      .replace(/\(\s+/g, "(")
+      .replace(/\s+\)/g, ")")
+      .trim();
+  }
+
+  function groupPdfLines(items) {
+    var lines = [];
+    items.forEach(function (item) {
+      if (!item.text) return;
+      var line = null;
+      for (var i = 0; i < lines.length; i += 1) {
+        if (Math.abs(lines[i].top - item.top) < 2.5) {
+          line = lines[i];
+          break;
+        }
+      }
+      if (!line) {
+        line = { top: item.top, items: [] };
+        lines.push(line);
+      }
+      line.items.push(item);
+    });
+    lines.forEach(function (line) { line.text = joinPdfItems(line.items); });
+    return lines.sort(function (a, b) { return a.top - b.top; });
+  }
+
+  function pdfLinePart(line, minX, maxX) {
+    return joinPdfItems(line.items.filter(function (item) {
+      return item.x >= minX && item.x < maxX;
+    }));
+  }
+
+  async function readPdfPages(file) {
+    var pdfjs = await loadPdfJs();
+    var data = new Uint8Array(await file.arrayBuffer());
+    var pdf = await pdfjs.getDocument({ data: data }).promise;
+    var pages = [];
+    for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+      var page = await pdf.getPage(pageNumber);
+      var viewport = page.getViewport({ scale: 1 });
+      var content = await page.getTextContent();
+      var items = content.items.map(function (item) {
+        return {
+          text: normalisePdfChunk(item.str),
+          x: item.transform[4],
+          top: viewport.height - item.transform[5],
+          width: item.width || 0
+        };
+      }).filter(function (item) { return item.text; });
+      pages.push({ width: viewport.width, height: viewport.height, items: items, lines: groupPdfLines(items) });
+    }
+    return pages;
+  }
+
+  function extractPdfParty(pages) {
+    var page = pages[0];
+    var labels = page.lines.find(function (line) { return /\bFROM\b/i.test(line.text) && /\bBILL TO\b/i.test(line.text); });
+    var section = page.lines.find(function (line) { return /ONE-TIME SERVICES/i.test(line.text); });
+    if (!labels || !section) return {};
+    var right = page.lines.filter(function (line) {
+      return line.top > labels.top + 3 && line.top < section.top - 3;
+    }).map(function (line) {
+      return pdfLinePart(line, page.width / 2, page.width);
+    }).filter(Boolean);
+    var rest = right.slice(3);
+    var email = rest.find(function (value) { return /@|\.(?:com|ae|net|org|io|tech)\b/i.test(value); }) || "";
+    var trn = rest.find(function (value) { return /\bTRN\b/i.test(value); }) || "";
+    var phones = rest.filter(function (value) {
+      return value !== email && value !== trn && /\+?\d[\d\s()-]{5,}/.test(value);
+    });
+    return {
+      toName: right[0] || "",
+      toContact: right[1] || "",
+      toAddr: right[2] || "",
+      toEmail: email,
+      toPhone: phones.join(" · "),
+      toTrn: trn.replace(/^.*?TRN\s*:?\s*/i, "")
+    };
+  }
+
+  function extractPdfItems(pages) {
+    var rows = [];
+    var mode = null;
+    var current = null;
+    function finishRow() {
+      if (!current) return;
+      current.s = current.details.join(" ").replace(/\s+/g, " ").trim();
+      delete current.details;
+      rows.push(current);
+      current = null;
+    }
+    pages.forEach(function (page) {
+      page.lines.forEach(function (line) {
+        if (/ONE-TIME SERVICES/i.test(line.text)) {
+          finishRow();
+          mode = "project";
+          return;
+        }
+        if (/MONTHLY (?:RECURRING PAYMENTS|SUBSCRIPTIONS)/i.test(line.text)) {
+          finishRow();
+          mode = "months";
+          return;
+        }
+        if (/PAYMENT DETAILS|TERMS\s*&\s*CONDITIONS/i.test(line.text)) {
+          finishRow();
+          mode = null;
+          return;
+        }
+        if (!mode || /DESCRIPTION|UNIT PRICE|AMOUNT \(/i.test(line.text)) return;
+        var description = pdfLinePart(line, 0, page.width * 0.47);
+        var quantity = pdfLinePart(line, page.width * 0.47, page.width * 0.67);
+        var rate = pdfLinePart(line, page.width * 0.67, page.width * 0.84);
+        if (/^\s*-?\d+(?:\.\d+)?\s*(?:×|x)(?:\s|$)/i.test(quantity) || /per month/i.test(quantity)) {
+          finishRow();
+          current = {
+            d: description,
+            s: "",
+            qty: num(quantity) || 1,
+            unit: mode,
+            rate: num(rate),
+            details: []
+          };
+        } else if (current && description) {
+          current.details.push(description);
+        }
+      });
+    });
+    finishRow();
+    return rows;
+  }
+
+  function extractPdfBlock(pages, startPattern, endPattern) {
+    var collecting = false;
+    var output = [];
+    pages.forEach(function (page) {
+      page.lines.forEach(function (line) {
+        if (endPattern.test(line.text)) collecting = false;
+        if (collecting) {
+          var left = pdfLinePart(line, 0, page.width / 2);
+          if (left) output.push(left);
+        }
+        if (startPattern.test(line.text)) collecting = true;
+      });
+    });
+    return output.join("\n").trim();
+  }
+
+  function extractPdfTerms(pages) {
+    var clauses = [];
+    pages.forEach(function (page) {
+      var footer = page.lines.find(function (line) {
+        return /SWIFTLOOP FZ-LLC\s+—\s+WEB DESIGN/i.test(line.text);
+      });
+      var footerTop = footer ? footer.top - 3 : page.height;
+      [
+        [0, page.width / 2],
+        [page.width / 2, page.width]
+      ].forEach(function (range) {
+        var markers = page.items.filter(function (item) {
+          return item.x >= range[0] && item.x < range[0] + 45 && /^(?:0[1-9]|1[0-2])$/.test(item.text);
+        }).sort(function (a, b) { return a.top - b.top; });
+        markers.forEach(function (marker, index) {
+          var nextTop = markers[index + 1] ? markers[index + 1].top - 3 : footerTop;
+          var content = page.items.filter(function (item) {
+            return item !== marker && item.x >= range[0] + 15 && item.x < range[1] &&
+              item.top >= marker.top - 3 && item.top < nextTop;
+          });
+          var lines = groupPdfLines(content);
+          var text = lines.filter(function (line) {
+            return !/SWIFTLOOP FZ-LLC\s+—\s+WEB DESIGN|INFO@SWIFTLOOP/i.test(line.text);
+          }).map(function (line) { return line.text; }).join(" ")
+            .replace(/\s+/g, " ")
+            .replace(/\bre-\s*con\s+fi\s+rmation\b/gi, "re-confirmation")
+            .replace(/\bdefect-\s*fi\s+x\b/gi, "defect-fix")
+            .replace(/\bkick-o\s+ff\b/gi, "kick-off")
+            .replace(/\bcomputer-\s+generated\b/gi, "computer-generated")
+            .trim();
+          if (text) clauses.push({ number: parseInt(marker.text, 10), text: text });
+        });
+      });
+    });
+    var unique = {};
+    clauses.forEach(function (clause) {
+      if (clause.text && !unique[clause.number]) unique[clause.number] = clause.text.replace(/\s+/g, " ").trim();
+    });
+    return Object.keys(unique).map(Number).sort(function (a, b) { return a - b; })
+      .map(function (number) { return termTextToHtml(unique[number]); });
+  }
+
+  function inferSplitFromSchedule(schedule) {
+    if (/^100%/i.test(schedule)) return "100";
+    if (/^40%/i.test(schedule)) return "403020";
+    if (/^50%/i.test(schedule)) return "50";
+    return "retainer";
+  }
+
+  function parseSwiftLoopPdf(pages) {
+    var allLines = [];
+    pages.forEach(function (page) { allLines = allLines.concat(page.lines); });
+    var allText = allLines.map(function (line) { return line.text; }).join("\n");
+    var items = extractPdfItems(pages);
+    var numberMatch = allText.match(/\bSL-(?:Q|INV)-[A-Z0-9-]+\b/i);
+    if (!numberMatch || !items.length) throw new Error("This PDF does not appear to be an editable SwiftLoop quote.");
+    var dates = allText.match(/\b\d{1,2}\s+[A-Za-z]{3}\s+\d{4}\b/g) || [];
+    var currencyMatch = allText.match(/\b(AED|USD|EUR|GBP|SAR|QAR)\b/);
+    var supplierTrnText = allText.slice(Math.max(0, allText.search(/SUPPLIER TRN/i)));
+    var trnMatch = supplierTrnText.match(/\b\d{8,15}\b/);
+    var terms = extractPdfTerms(pages);
+    var termsText = terms.map(function (term) { return term.replace(/<[^>]+>/g, ""); }).join(" ");
+    var schedule = extractPdfBlock(pages, /^SCHEDULE$/i, /TERMS\s*&\s*CONDITIONS/i);
+    var payDetails = extractPdfBlock(pages, /PAYMENT DETAILS/i, /^SCHEDULE$/i);
+    var discountLine = allLines.find(function (line) { return /DISCOUNT\s*\(/i.test(line.text); });
+    var discountText = discountLine ? pdfLinePart(discountLine, pages[0].width / 2, pages[0].width) : "0";
+    var validityMatch = termsText.match(/valid for\s+(\d+)\s+days/i);
+    var dueMatch = termsText.match(/Invoices unpaid\s+(\d+)\s+days/i);
+    var party = extractPdfParty(pages);
+    var docType = /TAX INVOICE/i.test(allText) ? "TAX INVOICE" : (/\bINVOICE\b/i.test(allText) ? "INVOICE" : "QUOTE");
+    var currency = currencyMatch ? currencyMatch[1] : "AED";
+    var vatOn = /VAT\s*5%|VAT is charged at 5%/i.test(allText);
+    if (terms[3]) {
+      terms[3] = vatOn
+        ? "<b>VAT.</b> VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. The TRN stated above confirms SwiftLoop FZ-LLC is VAT-registered."
+        : "<b>VAT.</b> VAT will not be charged to the client on this " + (docType === "QUOTE" ? "quote" : "invoice") + ".";
+    }
+    return {
+      v: 2,
+      docType: docType,
+      settings: {
+        due: dueMatch ? dueMatch[1] : "7",
+        split: inferSplitFromSchedule(schedule),
+        vat: vatOn ? "1" : "0",
+        validity: validityMatch ? validityMatch[1] : "14",
+        currency: currency,
+        market: /UNITED ARAB EMIRATES|DUBAI, UAE/i.test(allText) ? "UAE" : "INTL"
+      },
+      fields: Object.assign({
+        number: numberMatch[0],
+        date: dates[0] || "",
+        due: dates[1] || "",
+        currency: currency,
+        trn: trnMatch ? trnMatch[0] : "",
+        fromName: "SwiftLoop",
+        payDetails: payDetails,
+        paySchedule: schedule,
+        discount: num(discountText)
+      }, party),
+      items: items,
+      terms: terms
+    };
+  }
+
+  async function importPdfQuote(file) {
+    toast("Reading PDF quote…");
+    var state = parseSwiftLoopPdf(await readPdfPages(file));
+    restore(state);
+    ["number", "date", "due"].forEach(function (key) {
+      var el = $('[data-f="' + key + '"]');
+      if (el && state.fields[key]) el.value = state.fields[key];
+    });
+    $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    recalc();
+    toast("Opened: " + state.fields.number);
+  }
+
+  /* ---------------------------------------------------------- rows */
+
+  var oneTimeRowsEl = $("#oneTimeRows");
+  var recurringRowsEl = $("#recurringRows");
+
+  function isRecurringRow(tr) {
+    return tr.parentNode === recurringRowsEl;
+  }
+
+  function updateSectionStates() {
+    $("#oneTimeSection").classList.toggle("is-empty", !oneTimeRowsEl.children.length);
+    $("#recurringSection").classList.toggle("is-empty", !recurringRowsEl.children.length);
+    $("#monthlyTotalRow").style.display = recurringRowsEl.children.length ? "" : "none";
+  }
+
+  function moveRowForBilling(tr) {
+    var qtyEl = $(".i-qty", tr);
+    var option = qtyEl.options[qtyEl.selectedIndex];
+    var target = option && option.getAttribute("data-unit") === "months" ? recurringRowsEl : oneTimeRowsEl;
+    if (tr.parentNode !== target) target.appendChild(tr);
+    updateSectionStates();
+  }
+
+  function rateOptionsHtml(selected) {
+    var html = "";
+    var found = false;
+    RATE_OPTIONS.forEach(function (r) {
+      if (r === selected) found = true;
+      html += '<option value="' + r + '"' + (r === selected ? " selected" : "") + ">" + r.toLocaleString("en-AE") + "</option>";
+    });
+    if (!found) html = '<option value="' + selected + '" selected>' + selected.toLocaleString("en-AE") + "</option>" + html;
+    html += '<option value="__custom">Custom…</option>';
+    return html;
+  }
+
+  function qtyOptionsHtml(qty, unit) {
+    var label = unit === "months" ? (qty === 1 ? "1 × per month" : qty + " months") : qty + " × " + (unit || "project");
+    var html = "", found = false;
+    QTY_OPTIONS.forEach(function (o) {
+      var sel = !found && o.v === qty && ((unit === "months") === / month/.test(o.l));
+      if (sel) found = true;
+      html += '<option value="' + o.v + '" data-unit="' + (/ month/.test(o.l) ? "months" : "project") + '"' + (sel ? " selected" : "") + ">" + o.l + "</option>";
+    });
+    if (!found) html = '<option value="' + qty + '" data-unit="' + (unit || "project") + '" selected>' + label + "</option>" + html;
+    html += '<option value="__custom">Custom…</option>';
+    return html;
+  }
+
+  function addRow(item, target) {
+    item = item || { d: "", s: "", qty: 1, unit: "project", rate: 0 };
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td>' +
+        '<input class="i-desc-main" placeholder="Service description" />' +
+        '<textarea class="i-desc-sub" rows="2" placeholder="Details (optional)"></textarea>' +
+      '</td>' +
+      '<td><select class="i-qty"></select></td>' +
+      '<td class="r"><select class="i-rate"></select></td>' +
+      '<td class="r"><span class="i-amount">0.00</span></td>' +
+      '<td class="screen-only"><button class="row-x" title="Remove line" type="button">✕</button></td>';
+    (target || (item.unit === "months" ? recurringRowsEl : oneTimeRowsEl)).appendChild(tr);
+
+    $(".i-desc-main", tr).value = item.d;
+    var sub = $(".i-desc-sub", tr);
+    sub.value = item.s;
+    autosize(sub);
+    $(".i-qty", tr).innerHTML = qtyOptionsHtml(item.qty, item.unit);
+    $(".i-rate", tr).innerHTML = rateOptionsHtml(num(item.rate));
+
+    $(".i-qty", tr).addEventListener("change", function () { customCombo(this, "Quantity (number):"); moveRowForBilling(tr); recalc(); });
+    $(".i-rate", tr).addEventListener("change", function () { customCombo(this, "Unit price in AED:"); recalc(); });
+    $(".row-x", tr).addEventListener("click", function () { tr.remove(); updateSectionStates(); recalc(); });
+    sub.addEventListener("input", function () { autosize(sub); });
+    updateSectionStates();
+    recalc();
+    return tr;
+  }
+
+  function customCombo(sel, promptText) {
+    if (sel.value !== "__custom") return;
+    var v = prompt(promptText, "");
+    var n = num(v);
+    if (v === null || !isFinite(n)) { sel.selectedIndex = 0; return; }
+    var opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = sel.classList.contains("i-rate") ? n.toLocaleString("en-AE") : (n + " ×");
+    if (sel.classList.contains("i-qty")) opt.setAttribute("data-unit", "project");
+    sel.insertBefore(opt, sel.firstChild);
+    sel.value = String(n);
+  }
+
+  function autosize(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+
+  /* ---------------------------------------------------------- totals */
+
+  function recalc() {
+    var subtotal = 0, monthlySubtotal = 0;
+    $all(".item-rows tr").forEach(function (tr) {
+      var qty = num($(".i-qty", tr).value);
+      var rate = num($(".i-rate", tr).value);
+      var amt = qty * rate;
+      $(".i-amount", tr).textContent = fmt(amt);
+      if (isRecurringRow(tr)) monthlySubtotal += amt;
+      else subtotal += amt;
+    });
+    var discount = num($("#fDiscount").value);
+    var base = Math.max(0, subtotal - discount);
+    var vatOn = $("#setVat").value === "1";
+    var vat = vatOn ? base * 0.05 : 0;
+    var grand = base + vat;
+    var monthlyGrand = monthlySubtotal + (vatOn ? monthlySubtotal * 0.05 : 0);
+
+    $("#tSubtotal").textContent = fmt(subtotal);
+    $("#tVat").textContent = fmt(vat);
+    $("#vatRow").style.display = vatOn ? "" : "none";
+    $("#tGrand").textContent = fmt(grand);
+    $("#amountWords").textContent = amountInWords(grand);
+    $("#tMonthly").textContent = fmt(monthlyGrand);
+    updateSectionStates();
+  }
+
+  /* ---------------------------------------------------------- terms */
+
+  function renderTerms(terms) {
+    var ol = $("#termsList");
+    ol.innerHTML = "";
+    terms.forEach(function (t) {
+      var li = document.createElement("li");
+      li.innerHTML = '<div contenteditable="true"></div><button class="term-x screen-only" title="Remove clause" type="button">✕</button>';
+      $("div", li).innerHTML = t;
+      $(".term-x", li).addEventListener("click", function () { li.remove(); });
+      ol.appendChild(li);
+    });
+  }
+
+  function updateTerms() {
+    var terms = currentMarket === "UAE" ? DEFAULT_TERMS.slice() : DEFAULT_TERMS_INTL.slice();
+
+    // Update term 2 (Payment) with current due days
+    var dueDays = num($("#setDue").value);
+    var dueDaysText = dueDays === 0 ? "On receipt" : dueDays + " days";
+    if (currentMarket === "UAE") {
+      terms[2] = "<b>Payment.</b> All amounts are in " + currentCurrency + " and payable per the schedule stated. Invoices unpaid <b>" + dueDaysText + "</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.";
+    } else {
+      terms[2] = "<b>Payment.</b> All amounts are in the currency stated on this document and payable per the schedule stated. Invoices unpaid <b>" + dueDaysText + "</b> past their due date accrue a late charge of <b>1.5% per month</b> (or the maximum rate permitted by applicable law, whichever is lower) on the outstanding balance, plus reasonable recovery costs.";
+    }
+
+    // Update term 3 (VAT/Taxes) based on VAT selection
+    if (currentMarket === "UAE") {
+      if ($("#setVat").value === "1") {
+        terms[3] = "<b>VAT.</b> VAT is charged at 5% in accordance with Federal Decree-Law No. 8 of 2017 and its amendments. The TRN stated above confirms SwiftLoop FZ-LLC is VAT-registered.";
+      } else {
+        var documentLabel = docType === "QUOTE" ? "quote" : "invoice";
+        terms[3] = "<b>VAT.</b> VAT will not be charged to the client on this " + documentLabel + ".";
+      }
+    }
+
+    renderTerms(terms);
+  }
+
+  /* ---------------------------------------------------------- doc type & dates */
+
+  var docType = "QUOTE";
+
+  function setDocType(t) {
+    docType = t;
+    $all("#docTypeSeg button").forEach(function (b) { b.classList.toggle("is-on", b.dataset.type === t); });
+    $("#docTypeLabel").textContent = t === "TAX INVOICE" ? "Tax Invoice" : (t.charAt(0) + t.slice(1).toLowerCase());
+    var isUAE = currentMarket === "UAE";
+    $("#docTypeSub").textContent =
+      t === "QUOTE"   ? (isUAE ? "Commercial proposal — Dubai, UAE"              : "Commercial proposal — International") :
+      t === "INVOICE" ? (isUAE ? "Commercial invoice — Dubai, UAE"               : "Commercial invoice — International")  :
+                        (isUAE ? "Per Federal Decree-Law No. 8 of 2017 — UAE VAT": "Tax invoice — VAT / GST");
+    $("#dueLabel").textContent = t === "QUOTE" ? "Valid until" : "Payment due";
+    $("#grandLbl").textContent = t === "QUOTE" ? "Total quoted" : "Total due";
+    if (t === "TAX INVOICE") {
+      $("#setVat").value = "1";
+    }
+    refreshNumber();
+    refreshDates();
+    updateTerms();
+    recalc();
+  }
+
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+
+  function refreshNumber() {
+    var d = new Date();
+    var prefix = docType === "QUOTE" ? "SL-Q" : "SL-INV";
+    var cur = $("#fNumber").value;
+    // keep a user-edited suffix if same day & type, otherwise regenerate
+    var stamp = "" + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate());
+    if (!cur || cur.indexOf(stamp) === -1 || cur.indexOf(prefix) !== 0) {
+      $("#fNumber").value = prefix + "-" + stamp + "-01";
+    }
+  }
+
+  function refreshDates() {
+    var today = new Date();
+    $("#fDate").value = fmtDate(today);
+    var days = docType === "QUOTE" ? num($("#setValidity").value) : num($("#setDue").value);
+    var due = new Date(today.getTime() + days * 86400000);
+    $("#fDue").value = days === 0 ? "On receipt" : fmtDate(due);
+  }
+
+  /* ---------------------------------------------------------- save / load */
+
+  function getQuotes() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(LS_KEY)) || [];
+      return Array.isArray(saved) ? saved : (Array.isArray(saved.quotes) ? saved.quotes : []);
+    } catch (e) { return []; }
+  }
+  function setQuotes(q) { localStorage.setItem(LS_KEY, JSON.stringify(q)); }
+
+  function normaliseSavedItem(item) {
+    item = item || {};
+    var description = item.d || item.description || "";
+    var rawUnit = String(item.unit || item.billing || "").toLowerCase();
+    var isMonthly = rawUnit === "month" || rawUnit === "months" || rawUnit === "monthly" || /monthly|per month|subscription/i.test(description);
+    var savedQty = item.qty !== undefined ? item.qty : (item.quantity !== undefined ? item.quantity : 1);
+    var savedRate = item.rate !== undefined ? item.rate : (item.unitPrice !== undefined ? item.unitPrice : (item.price !== undefined ? item.price : 0));
+    return {
+      d: description,
+      s: item.s || item.details || "",
+      qty: num(savedQty),
+      unit: isMonthly ? "months" : "project",
+      rate: num(savedRate)
+    };
+  }
+
+  function normaliseSavedState(saved) {
+    return saved && saved.state ? saved.state : (saved || {});
+  }
+
+  function snapshot() {
+    var fields = {};
+    $all("[data-f]").forEach(function (el) { fields[el.dataset.f] = el.value; });
+    var items = $all(".item-rows tr").map(function (tr) {
+      var qtyEl = $(".i-qty", tr), sel = qtyEl.options[qtyEl.selectedIndex];
+      return {
+        d: $(".i-desc-main", tr).value,
+        s: $(".i-desc-sub", tr).value,
+        qty: num(qtyEl.value),
+        unit: sel ? (sel.getAttribute("data-unit") || "project") : "project",
+        rate: num($(".i-rate", tr).value)
+      };
+    });
+    var terms = $all("#termsList li div").map(function (d) { return d.innerHTML; });
+    return {
+      v: 1,
+      docType: docType,
+      settings: { due: $("#setDue").value, split: $("#setSplit").value, vat: $("#setVat").value, validity: $("#setValidity").value, currency: currentCurrency, market: currentMarket },
+      fields: fields,
+      items: items,
+      terms: terms,
+      savedAt: new Date().toISOString()
+    };
+  }
+
+  function restore(s) {
+    s = normaliseSavedState(s);
+    var settings = s.settings || {};
+    if (settings.due) $("#setDue").value = settings.due;
+    if (settings.split) $("#setSplit").value = settings.split;
+    if (settings.vat !== undefined) $("#setVat").value = settings.vat;
+    if (settings.validity) $("#setValidity").value = settings.validity;
+    var cur = settings.currency || "AED";
+    $("#setCurrency").value = cur;
+    setCurrencyDisplay(cur);
+    setMarket(settings.market || "UAE");
+    Object.keys(s.fields || {}).forEach(function (k) {
+      var el = $('[data-f="' + k + '"]');
+      if (el && s.fields[k] !== undefined && s.fields[k] !== null) el.value = s.fields[k];
+    });
+    $('[data-f="fromName"]').value = "SwiftLoop";
+    oneTimeRowsEl.innerHTML = "";
+    recurringRowsEl.innerHTML = "";
+    var savedItems = Array.isArray(s.items) ? s.items : (Array.isArray(s.rows) ? s.rows : []);
+    savedItems.map(normaliseSavedItem).forEach(function (item) {
+      addRow(item);
+    });
+    setDocType(s.docType || "QUOTE");
+    if (s.terms && s.terms.length) renderTerms(s.terms);
+    // dates intentionally refresh to *today* on recall, per workflow
+    $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    recalc();
+  }
+
+  function renderSavedList() {
+    var list = $("#savedList");
+    var quotes = getQuotes();
+    list.innerHTML = "";
+    if (!quotes.length) {
+      list.innerHTML = '<p class="saved-empty">No saved quotes yet.</p>';
+      return;
+    }
+    quotes.slice().reverse().forEach(function (q) {
+      var state = normaliseSavedState(q);
+      var div = document.createElement("div");
+      div.className = "saved-item";
+      var when = new Date(q.savedAt || state.savedAt || Date.now());
+      div.innerHTML =
+        '<div class="meta"><b></b><span>' + (state.docType || "QUOTE") + " · " + fmtDate(when) + " · AED " + (q.total || "—") + '</span></div>' +
+        '<button title="Delete" type="button">✕</button>';
+      $("b", div).textContent = q.name;
+      $(".meta", div).addEventListener("click", function () {
+        try {
+          restore(state);
+          toast("Loaded: " + q.name);
+        } catch (err) {
+          console.error("Could not load saved quote", err);
+          toast("Could not load this quote");
+        }
+      });
+      $("button", div).addEventListener("click", function () {
+        if (!confirm('Delete saved quote "' + q.name + '"?')) return;
+        setQuotes(getQuotes().filter(function (x) { return x.id !== q.id; }));
+        renderSavedList();
+      });
+      list.appendChild(div);
+    });
+  }
+
+  /* ---------------------------------------------------------- market */
+
+  function setMarket(m) {
+    currentMarket = m;
+    $all("#marketSeg button").forEach(function (b) { b.classList.toggle("is-on", b.dataset.market === m); });
+    $("#panelSub").textContent = m === "UAE" ? "Billing console — UAE" : "Billing console — International";
+    $("#vatLabel").textContent = m === "UAE" ? "VAT (5% UAE)" : "Tax / VAT";
+    $("#termsTitle").textContent = m === "UAE"
+      ? "Terms & conditions — United Arab Emirates"
+      : "Terms & conditions — International";
+    setDocType(docType);
+  }
+
+  /* ---------------------------------------------------------- currency */
+
+  function setCurrencyDisplay(code) {
+    currentCurrency = code;
+    var cur = CURRENCIES[code] || CURRENCIES["AED"];
+    $("#fCurrency").value = code;
+    $("#setCurrency").value = code;
+    $("#thUnitPrice").textContent = "Unit price (" + code + ")";
+    $("#thAmount").textContent = "Amount (" + code + ")";
+    $("#thRecurringUnitPrice").textContent = "Unit price (" + code + ")";
+    $("#thRecurringAmount").textContent = "Monthly amount (" + code + ")";
+    $("#grandCurrencyCode").textContent = code;
+    $("#monthlyCurrencyCode").textContent = code;
+    $("#discountLbl").textContent = "Discount (" + code + ")";
+    updateTerms();
+    recalc();
+  }
+
+  /* ---------------------------------------------------------- wiring */
+
+  $all("#marketSeg button").forEach(function (b) {
+    b.addEventListener("click", function () { setMarket(b.dataset.market); });
+  });
+
+  $all("#docTypeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () { setDocType(b.dataset.type); });
+  });
+
+  $("#setAccount").addEventListener("change", function () {
+    var txt = BANK_ACCOUNTS[this.value];
+    if (!txt) return;
+    $("#payDetailsBox").value = txt;
+    autosize($("#payDetailsBox"));
+  });
+
+  $("#setCurrency").addEventListener("change", function () { setCurrencyDisplay(this.value); });
+  $("#fCurrency").addEventListener("change", function () { setCurrencyDisplay(this.value); });
+
+  $("#setDue").addEventListener("change", function () {
+    refreshDates();
+    updateTerms();
+  });
+  $("#setValidity").addEventListener("change", refreshDates);
+  $("#setVat").addEventListener("change", function () {
+    recalc();
+    updateTerms();
+  });
+  $("#setSplit").addEventListener("change", function () {
+    $("#payScheduleBox").value = SPLIT_TEXT[this.value];
+    autosize($("#payScheduleBox"));
+  });
+  $("#fDiscount").addEventListener("input", recalc);
+
+  $("#addPresetBtn").addEventListener("click", function () {
+    var key = $("#presetSelect").value;
+    if (!key) { toast("Choose a service first"); return; }
+    var p = PRESETS[key];
+    addRow({ d: p.d, s: p.s, qty: p.qty, unit: p.unit, rate: p.rate });
+    $all(".i-desc-sub").forEach(autosize);
+    toast("Added: " + p.d);
+  });
+
+  $("#addOneTimeRowBtn").addEventListener("click", function () { addRow(); });
+  $("#addRecurringRowBtn").addEventListener("click", function () { addRow({ d: "", s: "", qty: 1, unit: "months", rate: 0 }, recurringRowsEl); });
+
+  $("#openPdfBtn").addEventListener("click", function () {
+    $("#pdfFileInput").value = "";
+    $("#pdfFileInput").click();
+  });
+  $("#pdfFileInput").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    if (!file) return;
+    importPdfQuote(file).catch(function (err) {
+      console.error("Could not open PDF quote", err);
+      toast(err && err.message ? err.message : "Could not open this PDF quote");
+    });
+  });
+
+  $("#saveBtn").addEventListener("click", function () {
+    var state = snapshot();
+    var name = $("#saveName").value.trim() ||
+      ((state.fields.toName || "Untitled client") + " — " + state.fields.number);
+    var quotes = getQuotes();
+    quotes.push({ id: Date.now(), name: name, total: $("#tGrand").textContent, state: state, savedAt: new Date().toISOString() });
+    setQuotes(quotes);
+    $("#saveName").value = "";
+    renderSavedList();
+    toast("Saved: " + name);
+  });
+
+  $("#printBtn").addEventListener("click", function () {
+    var prev = document.title;
+    document.title = $("#fNumber").value + " — SwiftLoop";
+    window.print();
+    document.title = prev;
+  });
+
+  $("#resetBtn").addEventListener("click", function () {
+    if (!confirm("Start a new blank document? Unsaved changes will be lost.")) return;
+    init(true);
+  });
+
+  /* ---------------------------------------------------------- init */
+
+  function init(blank) {
+    oneTimeRowsEl.innerHTML = "";
+    recurringRowsEl.innerHTML = "";
+    if (!blank) {
+      // default proposal: build + retainer attached (retainer is the default, removal is a downgrade)
+      addRow(PRESETS["build-site"]);
+      addRow(PRESETS["ret-care"]);
+    } else {
+      $all('.party input[data-f^="to"], .party textarea[data-f^="to"]').forEach(function (el) { el.value = ""; });
+      $("#fDiscount").value = "0";
+      addRow();
+    }
+    setMarket("UAE");
+    setDocType("QUOTE");
+    updateTerms();
+    $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    recalc();
+  }
+
+  setCurrencyDisplay("AED");
+  init(false);
+  renderSavedList();
+
+  // re-measure once webfonts are in, so autosized textareas stay tight
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () {
+      $all(".party textarea, .pay-note textarea, .i-desc-sub").forEach(autosize);
+    });
+  }
+})();
+</script>
+
+
+<script>
+window.addEventListener('load', function () {
+  function setValue(selector, value, eventName) {
+    var el = document.querySelector(selector);
+    if (!el) throw new Error('Missing element: ' + selector);
+    el.value = value;
+    el.dispatchEvent(new Event(eventName || 'input', { bubbles: true }));
+    return el;
+  }
+  function setSelect(selector, value) { return setValue(selector, value, 'change'); }
+  function setRate(row, value) {
+    var select = row.querySelector('.i-rate');
+    var option = Array.from(select.options).find(function (o) { return o.value === String(value); });
+    if (!option) {
+      option = document.createElement('option');
+      option.value = String(value);
+      option.textContent = Number(value).toLocaleString('en-AE');
+      select.insertBefore(option, select.firstChild);
+    }
+    select.value = String(value);
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  document.querySelector('#docTypeSeg button[data-type="INVOICE"]').click();
+  setSelect('#setDue', '7');
+  setSelect('#setSplit', '50');
+  setSelect('#setAccount', 'wio-aed');
+  setSelect('#setCurrency', 'AED');
+  setSelect('#setVat', '0');
+
+  setValue('#fNumber', 'SL-INV-20260721-01');
+  setValue('#fDate', '21 Jul 2026');
+  setValue('#fDue', '28 Jul 2026');
+  setValue('[data-f="toName"]', 'Imaginary Friends');
+  setValue('[data-f="toContact"]', 'Agency Operations Team');
+  setValue('[data-f="toAddr"]', 'Dubai, United Arab Emirates');
+
+  var one = document.querySelector('#oneTimeRows tr');
+  setValue('.i-desc-main', 'Standalone Operations Platform Build');
+  one.querySelector('.i-desc-main').value = 'Standalone Operations Platform Build';
+  one.querySelector('.i-desc-sub').value = 'Role-based agency and talent views; unified dashboard; tasks, campaigns, paid partnerships, projects and client spaces; gifting, barter and loan workflows; controlled automations; MVP review and refinement; Notion data migration; permissions testing; deployment, onboarding and launch stabilisation.';
+  setRate(one, 16000);
+
+  var recurring = document.querySelector('#recurringRows tr');
+  recurring.querySelector('.i-desc-main').value = 'Platform Hosting, Maintenance & Support';
+  recurring.querySelector('.i-desc-sub').value = 'Begins after launch. Includes hosting and infrastructure management within normal usage, monitoring, backups, security and dependency updates, routine maintenance, bug fixes, integration monitoring, operational support and up to four hours per month of minor adjustments.';
+  setRate(recurring, 1750);
+
+  setValue('#payScheduleBox', '50% deposit on signing · 50% on delivery, prior to launch.\nMonthly retainer of AED 1,750 begins after launch and is billed monthly in advance.');
+
+  var terms = Array.from(document.querySelectorAll('#termsList li div'));
+  if (terms[1]) terms[1].innerHTML = '<b>Validity.</b> The underlying project quote is valid for <b>30 days</b> from 21 July 2026. This invoice is payable by the payment due date stated above.';
+  if (terms[4]) terms[4].innerHTML = '<b>Scope & revisions.</b> The AED 16,000 build fee covers the agreed standalone platform scope described above. Phase 2 priorities will be confirmed after the MVP review; requests that materially expand the agreed scope will be priced before implementation.';
+  if (terms[5]) terms[5].innerHTML = '<b>Monthly retainer.</b> The AED 1,750 monthly retainer begins after launch and covers the services itemised above. Large new features, major redesigns, complex integrations and paid third-party services are excluded and will be agreed and quoted before work begins.';
+
+  document.querySelectorAll('textarea').forEach(function (el) {
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  });
+  document.title = 'SL-INV-20260721-01 — Imaginary Friends — SwiftLoop';
+  document.documentElement.setAttribute('data-invoice-ready', 'true');
+});
+</script>
+
+</body>
+</html>

@@ -3,6 +3,54 @@
    ink canvas · bone type · signal orange · mono telemetry
    ============================================================ */
 
+@font-face {
+  font-family: "SwiftLoop Clash";
+  src: url("../fonts/clash-display-medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SwiftLoop Clash";
+  src: url("../fonts/clash-display-semibold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SwiftLoop Satoshi";
+  src: url("../fonts/satoshi-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SwiftLoop Satoshi";
+  src: url("../fonts/satoshi-medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SwiftLoop Satoshi";
+  src: url("../fonts/satoshi-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SwiftLoop Mono";
+  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+}
+
 :root {
   --ink: #0a0a0c;
   --ink-2: #101014;
@@ -14,9 +62,9 @@
   --accent: #ff4d1f;
   --accent-soft: rgba(255, 77, 31, 0.14);
 
-  --font-display: "Clash Display", "Arial Black", sans-serif;
-  --font-body: "Satoshi", "Helvetica Neue", sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
+  --font-display: "SwiftLoop Clash", "Clash Display", "Arial Black", sans-serif;
+  --font-body: "SwiftLoop Satoshi", "Satoshi", "Helvetica Neue", sans-serif;
+  --font-mono: "SwiftLoop Mono", "JetBrains Mono", "SFMono-Regular", monospace;
 
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -81,8 +129,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-wrap: balance;
 }
 
-.section-kicker { color: var(--bone-dim); }
-.section-kicker::before { content: "◦ "; color: var(--accent); }
+.section-kicker {
+  color: var(--bone-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.section-kicker::before {
+  content: "";
+  width: 0.7rem;
+  aspect-ratio: 1;
+  flex: none;
+  background: url("../brand/logo/swiftloop-ring.svg") center / contain no-repeat;
+}
 
 /* split-line reveal scaffolding */
 .line-mask { display: block; overflow: hidden; }
@@ -128,13 +188,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .preloader-inner { text-align: center; }
 
 .preloader-logo {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
-  letter-spacing: -0.02em;
+  width: clamp(9rem, 24vw, 13rem);
+  aspect-ratio: 5228 / 1000;
+  margin-inline: auto;
+  background: url("../brand/logo/swiftloop-wordmark-primary.svg") center / contain no-repeat;
+  overflow: hidden;
+  text-indent: -9999px;
 }
-
-.preloader-logo em { font-style: normal; color: var(--accent); }
 
 .preloader-bar {
   width: clamp(140px, 30vw, 240px);
@@ -179,15 +239,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .nav-logo {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.2rem;
-  letter-spacing: -0.02em;
+  display: inline-block;
+  width: 7.1066rem;
+  aspect-ratio: 5228 / 1000;
+  background: url("../brand/logo/swiftloop-wordmark-primary.svg") center / contain no-repeat;
+  overflow: hidden;
+  text-indent: -9999px;
+  flex: none;
   z-index: 102;
   position: relative;
 }
-
-.nav-logo em { font-style: normal; color: var(--accent); }
 
 .nav-links {
   display: flex;
@@ -374,25 +435,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .hero-inner { position: relative; z-index: 2; }
 
-.hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--bone-dim);
-  margin-bottom: 1.4rem;
-}
-
-.hero-eyebrow::before {
-  content: "";
-  width: 36px;
-  height: 1px;
-  background: var(--accent);
-}
-
 .hero-title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2.9rem, 9.5vw, 8.5rem);
+  font-size: clamp(2.9rem, min(9.5vw, 15vh), 8.5rem);
   line-height: 0.98;
   letter-spacing: -0.03em;
   text-transform: uppercase;
@@ -413,8 +459,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   justify-content: space-between;
   gap: 2rem;
   flex-wrap: wrap;
-  /* keep the actions clear of the absolutely-positioned scroll hint */
-  padding-right: clamp(0rem, 8vw, 8rem);
 }
 
 .hero-sub {
@@ -440,42 +484,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .hero-meta span b { color: var(--bone); font-weight: 500; }
-
-.scroll-hint {
-  position: absolute;
-  /* raised slightly so it sits centred against the hero CTA buttons */
-  bottom: calc(clamp(2rem, 6vh, 4rem) + 0.5rem);
-  right: var(--gutter);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: var(--bone-dim);
-}
-
-.scroll-hint i {
-  display: block;
-  width: 1px;
-  height: 38px;
-  background: var(--line);
-  position: relative;
-  overflow: hidden;
-}
-
-.scroll-hint i::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: var(--accent);
-  animation: scroll-drip 1.8s var(--ease-out) infinite;
-}
-
-@keyframes scroll-drip {
-  to { top: 110%; }
-}
 
 /* ---------- marquee ---------- */
 
@@ -643,6 +651,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--bone-dim);
 }
 
+.process-loopline span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.process-loopline span:first-child::before {
+  content: "";
+  width: 0.85rem;
+  aspect-ratio: 1;
+  flex: none;
+  background: url("../brand/logo/swiftloop-ring.svg") center / contain no-repeat;
+}
+
 .process-loopline i {
   flex: 1;
   height: 1px;
@@ -764,6 +786,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding-block: clamp(7rem, 18vh, 12rem);
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .cta::before {
@@ -772,6 +795,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   inset: 0;
   background: radial-gradient(ellipse 55% 45% at 50% 60%, var(--accent-soft), transparent 70%);
   pointer-events: none;
+  z-index: 0;
+}
+
+.cta::after {
+  content: "";
+  position: absolute;
+  right: clamp(-5rem, -4vw, -2rem);
+  bottom: clamp(-6rem, -8vw, -3rem);
+  width: clamp(14rem, 30vw, 28rem);
+  aspect-ratio: 1;
+  background: url("../brand/logo/swiftloop-ring.svg") center / contain no-repeat;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .cta-title {
@@ -782,11 +819,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: -0.03em;
   text-transform: uppercase;
   position: relative;
+  z-index: 1;
 }
 
 .cta-title .outline { color: transparent; -webkit-text-stroke: 1.5px var(--bone); }
 
-.cta p { color: var(--bone-dim); margin: 1.4rem auto 2.4rem; max-width: 44ch; position: relative; }
+.cta p { color: var(--bone-dim); margin: 1.4rem auto 2.4rem; max-width: 44ch; position: relative; z-index: 1; }
 
 .cta .btn { position: relative; }
 
@@ -796,6 +834,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   justify-content: center;
   flex-wrap: wrap;
   position: relative;
+  z-index: 1;
 }
 
 /* ---------- footer ---------- */
@@ -812,7 +851,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin-bottom: 3rem;
 }
 
-.footer-brand .nav-logo { font-size: 1.45rem; }
+.footer-brand::before {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  aspect-ratio: 1;
+  margin-bottom: 1rem;
+  background: url("../brand/logo/swiftloop-ring.svg") center / contain no-repeat;
+}
+
+.footer-brand .nav-logo { width: 8.59rem; }
 
 .footer-brand p { color: var(--bone-dim); max-width: 30ch; margin-top: 0.9rem; font-size: 0.95rem; }
 
@@ -1056,8 +1104,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .burger { display: flex; }
 
   .hero-meta { display: none; }
-  .scroll-hint { display: none; }
-  .hero-foot { padding-right: 0; }
 
   .work-card:nth-child(n) { grid-column: 1 / -1; margin-top: 0; }
 
@@ -1084,8 +1130,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .process-step { min-height: 0; gap: 1.2rem; }
 
   .hero-title { font-size: clamp(2.55rem, 12.5vw, 4rem); }
-
-  .scroll-hint { display: none; }
 
   .case-stats { grid-template-columns: 1fr; }
 
