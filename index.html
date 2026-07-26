@@ -31,11 +31,11 @@
   <meta name="twitter:description" content="A Dubai studio building award-calibre websites wired to AI automation that runs itself." />
   <meta name="twitter:image" content="https://swiftloop.tech/img/portfolio/velora.jpg" />
 
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Clash Display, Satoshi and JetBrains Mono are self-hosted in /fonts; the
+       three faces the first screen needs are preloaded, the rest load on demand. -->
+  <link rel="preload" href="fonts/clash-display-semibold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/satoshi-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
   <script>
@@ -140,6 +140,8 @@
     </div>
   </div>
 
+  <a class="skip-link" href="#top">Skip to content</a>
+
   <div class="grain" aria-hidden="true"></div>
 
   <!-- nav -->
@@ -172,7 +174,7 @@
     </div>
   </div>
 
-  <main id="top">
+  <main id="top" tabindex="-1">
 
     <!-- hero -->
     <section class="hero">
@@ -321,7 +323,7 @@
       <div class="work-grid">
         <a class="work-card gs-reveal" href="portfolio.html#falcon">
           <div class="work-media">
-            <img src="img/portfolio/falcon.jpg" alt="Falcon Timepieces — luxury watch e-commerce website built by SwiftLoop, Dubai" width="800" height="600" loading="lazy" decoding="async" />
+            <img src="img/portfolio/falcon.jpg" alt="Falcon Timepieces — luxury watch e-commerce website built by SwiftLoop, Dubai" width="1446" height="906" loading="lazy" decoding="async" />
           </div>
           <div class="work-info">
             <h3>Falcon Timepieces</h3>
@@ -331,7 +333,7 @@
 
         <a class="work-card gs-reveal" href="portfolio.html#mainspring">
           <div class="work-media">
-            <img src="img/portfolio/mainspring.jpg" alt="Mainspring — e-commerce website built by SwiftLoop, Dubai" width="800" height="600" loading="lazy" decoding="async" />
+            <img src="img/portfolio/mainspring.jpg" alt="Mainspring — e-commerce website built by SwiftLoop, Dubai" width="1441" height="912" loading="lazy" decoding="async" />
           </div>
           <div class="work-info">
             <h3>Mainspring</h3>
@@ -341,7 +343,7 @@
 
         <a class="work-card gs-reveal" href="portfolio.html#esmeywr">
           <div class="work-media">
-            <img src="img/portfolio/esmeywr.jpg" alt="ESM EYWR — e-commerce website built by SwiftLoop, Montreal and Dubai" width="800" height="600" loading="lazy" decoding="async" />
+            <img src="img/portfolio/esmeywr.jpg" alt="ESM EYWR — e-commerce website built by SwiftLoop, Montreal and Dubai" width="1442" height="908" loading="lazy" decoding="async" />
           </div>
           <div class="work-info">
             <h3>ESM EYWR</h3>
@@ -351,7 +353,7 @@
 
         <a class="work-card gs-reveal" href="portfolio.html#brrnbarre">
           <div class="work-media">
-            <img src="img/portfolio/brrnbarre.jpg" alt="BRRN BARRE — website and booking system built by SwiftLoop, Dubai" width="800" height="600" loading="lazy" decoding="async" />
+            <img src="img/portfolio/brrnbarre.jpg" alt="BRRN BARRE — website and booking system built by SwiftLoop, Dubai" width="1406" height="908" loading="lazy" decoding="async" />
           </div>
           <div class="work-info">
             <h3>BRRN BARRE</h3>
@@ -431,9 +433,8 @@
       </div>
       <div class="footer-col">
         <h4 class="mono">Social</h4>
-        <a href="#" rel="noopener">X / Twitter</a>
-        <a href="#" rel="noopener">LinkedIn</a>
-        <a href="#" rel="noopener">Dribbble</a>
+        <a href="https://www.linkedin.com/company/135106065/" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="footer-soon">X / Twitter <i>Soon</i></span>
       </div>
       <div class="footer-col">
         <h4 class="mono">Contact</h4>

@@ -109,15 +109,19 @@
     var counts = { all: ALL.length };
     ALL.forEach(function (a) { counts[a.category] = (counts[a.category] || 0) + 1; });
     var cats = Object.keys(counts).filter(function (c) { return c !== "all"; }).sort();
-    var html = '<button class="filter-btn is-active" data-filter="all">All<sup>' + counts.all + "</sup></button>";
+    var html = '<button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">All<sup>' + counts.all + "</sup></button>";
     cats.forEach(function (c) {
-      html += '<button class="filter-btn" data-filter="' + esc(c) + '">' + esc(c) + "<sup>" + counts[c] + "</sup></button>";
+      html += '<button type="button" class="filter-btn" data-filter="' + esc(c) + '" aria-pressed="false">' + esc(c) + "<sup>" + counts[c] + "</sup></button>";
     });
     filtersWrap.innerHTML = html;
     filtersWrap.querySelectorAll(".filter-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        filtersWrap.querySelectorAll(".filter-btn").forEach(function (b) { b.classList.remove("is-active"); });
+        filtersWrap.querySelectorAll(".filter-btn").forEach(function (b) {
+          b.classList.remove("is-active");
+          b.setAttribute("aria-pressed", "false");
+        });
         btn.classList.add("is-active");
+        btn.setAttribute("aria-pressed", "true");
         activeCat = btn.getAttribute("data-filter");
         applyFilter();
       });

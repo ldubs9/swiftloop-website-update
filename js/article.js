@@ -89,9 +89,13 @@
     // hero image
     if (a.image) {
       var fig = document.getElementById("artFigure");
-      var img = document.getElementById("artImage");
-      img.src = a.image;
+      var img = document.createElement("img");
+      img.id = "artImage";
+      img.setAttribute("fetchpriority", "high");
+      img.decoding = "async";
       img.alt = a.image_alt || a.title;
+      img.src = a.image;
+      document.getElementById("artFrame").appendChild(img);
       fig.hidden = false;
     }
 

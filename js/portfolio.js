@@ -151,8 +151,12 @@
   buttons.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var filter = btn.getAttribute("data-filter");
-      buttons.forEach(function (b) { b.classList.remove("is-active"); });
+      buttons.forEach(function (b) {
+        b.classList.remove("is-active");
+        b.setAttribute("aria-pressed", "false");
+      });
       btn.classList.add("is-active");
+      btn.setAttribute("aria-pressed", "true");
 
       var state = hasFlip && !reduceMotion ? Flip.getState(cards) : null;
       var shown = 0;
@@ -191,7 +195,9 @@
   function openCase(id, sourceCard) {
     var data = CASES[id];
     if (!data) return;
-    lastFocus = document.activeElement;
+    // deep links and programmatic opens have no meaningful activeElement —
+    // send focus back to the card that stands for this case
+    lastFocus = sourceCard || document.activeElement;
 
     document.getElementById("caseMeta").textContent = data.meta;
     document.getElementById("caseTitle").textContent = data.title;
@@ -204,12 +210,14 @@
       tags.appendChild(s);
     });
 
-    // display the portfolio image
+    // display the portfolio image (the card already holds a sized, decoded copy)
     var media = document.getElementById("caseMedia");
     media.innerHTML = "";
     var img = document.createElement("img");
-    img.src = "img/portfolio/" + id + ".jpg";
-    img.alt = data.title + " portfolio showcase";
+    var source = sourceCard && sourceCard.querySelector("img");
+    img.src = source ? source.getAttribute("src") : "img/portfolio/" + id + ".jpg";
+    img.alt = source ? source.getAttribute("alt") : data.title;
+    img.decoding = "async";
     media.appendChild(img);
 
     document.getElementById("caseBrief").textContent = data.brief;
@@ -239,6 +247,7 @@
     });
 
     overlay.classList.add("is-open");
+    overlay.removeAttribute("aria-hidden");
     document.body.classList.add("is-locked");
     closeBtn.focus();
 
@@ -251,6 +260,7 @@
 
   function closeCase() {
     overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
     document.body.classList.remove("is-locked");
     if (lastFocus) lastFocus.focus();
   }
@@ -263,8 +273,23 @@
 
   closeBtn.addEventListener("click", closeCase);
   scrim.addEventListener("click", closeCase);
+
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && overlay.classList.contains("is-open")) closeCase();
+    if (!overlay.classList.contains("is-open")) return;
+    if (e.key === "Escape") { closeCase(); return; }
+    if (e.key !== "Tab") return;
+
+    // a modal owns the keyboard while it is open
+    var stops = Array.prototype.filter.call(
+      overlay.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+      function (el) { return el.offsetParent !== null; }
+    );
+    if (!stops.length) return;
+    var first = stops[0];
+    var last = stops[stops.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    else if (!overlay.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
   });
 
   /* deep links: portfolio.html#ferra opens the case */

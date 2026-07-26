@@ -15,13 +15,21 @@ function initScene() {
     alpha: true,
     powerPreference: "high-performance",
   });
+  // The hero is sized in svh, which is shorter than window.innerHeight on
+  // mobile — measuring the canvas itself keeps the knot from stretching.
+  const size = () => {
+    const r = canvas.getBoundingClientRect();
+    return { w: Math.max(1, r.width), h: Math.max(1, r.height) };
+  };
+
+  let { w, h } = size();
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(w, h, false);
 
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x0a0a0c, 0.06);
 
-  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+  const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
   camera.position.set(0, 0, isMobile ? 13 : 9.5);
 
   // --- particles along a torus knot, with radial scatter ---
@@ -131,11 +139,21 @@ function initScene() {
   let scrollY = 0;
   window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
 
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+  const resize = () => {
+    const next = size();
+    if (next.w === w && next.h === h) return; // mobile URL-bar scroll churn
+    w = next.w;
+    h = next.h;
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+    renderer.setSize(w, h, false);
+  };
+
+  if (typeof ResizeObserver !== "undefined") {
+    new ResizeObserver(resize).observe(canvas);
+  } else {
+    window.addEventListener("resize", resize);
+  }
 
   const clock = new THREE.Clock();
   let visible = true;
@@ -154,10 +172,9 @@ function initScene() {
     points.rotation.x = 0.55 + mouse.y * 0.18;
     ring.rotation.z = t * 0.05;
 
-    const heroH = window.innerHeight;
-    const drift = Math.min(scrollY / heroH, 1);
+    const drift = Math.min(scrollY / h, 1);
     camera.position.y = -drift * 2.2;
-    camera.position.z = (window.innerWidth < 768 ? 13 : 9.5) + drift * 1.5;
+    camera.position.z = (isMobile ? 13 : 9.5) + drift * 1.5;
     camera.lookAt(0, -drift * 1.2, 0);
 
     renderer.render(scene, camera);

@@ -136,7 +136,7 @@ const FOOTER = `
         <p>A web-design and AI-automation studio. Designed by hand, run by machine.</p>
       </div>
       <div class="footer-col"><h4 class="mono">Studio</h4><a href="/index.html#services">Services</a><a href="/index.html#process">Process</a><a href="/portfolio.html">Portfolio</a><a href="/journal">Journal</a></div>
-      <div class="footer-col"><h4 class="mono">Social</h4><a href="#" rel="noopener">X / Twitter</a><a href="#" rel="noopener">LinkedIn</a><a href="#" rel="noopener">Dribbble</a></div>
+      <div class="footer-col"><h4 class="mono">Social</h4><a href="https://www.linkedin.com/company/135106065/" target="_blank" rel="noopener">LinkedIn</a><span class="footer-soon">X / Twitter <i>Soon</i></span></div>
       <div class="footer-col"><h4 class="mono">Contact</h4><a href="https://wa.me/971509725199" target="_blank" rel="noopener">WhatsApp +971 50 972 5199</a><a href="mailto:info@swiftloop.tech">info@swiftloop.tech</a></div>
     </div>
     <div class="footer-base mono"><span>© 2026 SwiftLoop Studio</span><span>Dubai / Remote — GMT+4</span></div>
@@ -198,12 +198,10 @@ function page(a, related) {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(a.title)}" />
   <meta name="twitter:image" content="${esc(a.image)}" />
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" href="/fonts/clash-display-semibold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/satoshi-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
   <script>
@@ -212,10 +210,11 @@ function page(a, related) {
   <script type="application/ld+json">${jsonLd}</script>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="grain" aria-hidden="true"></div>
   <div class="read-progress" id="readProgress" aria-hidden="true"></div>
 ${NAV}
-  <main>
+  <main id="top" tabindex="-1">
     <article>
       <header class="article-hero article-wrap">
         <a href="/journal" class="article-back">← Back to journal</a>
@@ -223,7 +222,7 @@ ${NAV}
         <h1 class="article-title">${esc(a.title)}</h1>
         <p class="article-lede">${esc(a.description)}</p>
       </header>
-      ${a.image ? `<figure class="article-figure"><div class="frame"><img src="${esc(a.image)}" alt="${esc(a.imageAlt || a.title)}" /></div></figure>` : ""}
+      ${a.image ? `<figure class="article-figure"><div class="frame"><img src="${esc(a.image)}" alt="${esc(a.imageAlt || a.title)}" fetchpriority="high" decoding="async" /></div></figure>` : ""}
       <div class="article-body">
       ${a.bodyHtml}
       </div>

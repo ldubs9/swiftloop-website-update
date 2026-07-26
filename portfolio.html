@@ -26,11 +26,11 @@
   <meta name="twitter:description" content="Luxury & jewelry e-commerce, booking sites and AI automation built in Dubai." />
   <meta name="twitter:image" content="https://swiftloop.tech/img/portfolio/velora.jpg" />
 
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Clash Display, Satoshi and JetBrains Mono are self-hosted in /fonts; the
+       three faces the first screen needs are preloaded, the rest load on demand. -->
+  <link rel="preload" href="fonts/clash-display-semibold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/satoshi-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
   <script>
@@ -83,6 +83,8 @@
 </head>
 <body>
 
+  <a class="skip-link" href="#top">Skip to content</a>
+
   <div class="grain" aria-hidden="true"></div>
 
   <!-- nav -->
@@ -115,7 +117,7 @@
     </div>
   </div>
 
-  <main>
+  <main id="top" tabindex="-1">
     <!-- folio hero -->
     <section class="folio-hero">
       <h1>
@@ -124,25 +126,25 @@
       </h1>
       <div class="folio-hero-foot">
         <p class="gs-reveal">Ten projects, one principle: design that earns attention, automation that earns time. Tap any card for the full case.</p>
-        <span class="mono gs-reveal">Client work & designs / <span class="accent" id="gridCount">10</span> projects</span>
+        <span class="mono gs-reveal" role="status">Client work &amp; designs / <span class="accent" id="gridCount">10</span> projects</span>
       </div>
     </section>
 
     <!-- filters -->
-    <div class="filters" role="tablist" aria-label="Filter projects">
-      <button class="filter-btn is-active" data-filter="all">All<sup>10</sup></button>
-      <button class="filter-btn" data-filter="ecommerce">E-commerce<sup>4</sup></button>
-      <button class="filter-btn" data-filter="ai">AI Inventory<sup>4</sup></button>
-      <button class="filter-btn" data-filter="web">Web<sup>2</sup></button>
-      <button class="filter-btn" data-filter="design">Designs<sup>4</sup></button>
+    <div class="filters" role="group" aria-label="Filter projects" aria-controls="folioGrid">
+      <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">All<sup>10</sup></button>
+      <button type="button" class="filter-btn" data-filter="ecommerce" aria-pressed="false">E-commerce<sup>4</sup></button>
+      <button type="button" class="filter-btn" data-filter="ai" aria-pressed="false">AI Inventory<sup>4</sup></button>
+      <button type="button" class="filter-btn" data-filter="web" aria-pressed="false">Web<sup>2</sup></button>
+      <button type="button" class="filter-btn" data-filter="design" aria-pressed="false">Designs<sup>4</sup></button>
     </div>
 
     <!-- grid -->
     <div class="folio-grid" id="folioGrid">
 
-      <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="falcon" id="falcon">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="falcon" id="falcon">
         <div class="work-media">
-          <img src="img/portfolio/falcon.jpg" alt="Falcon Timepieces — luxury watch e-commerce website, Dubai" width="800" height="600" loading="eager" fetchpriority="high" decoding="async" />
+          <img src="img/portfolio/falcon.jpg" alt="Falcon Timepieces — luxury watch e-commerce website, Dubai" width="1446" height="906" loading="eager" fetchpriority="high" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Falcon Timepieces</h3>
@@ -150,9 +152,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="mainspring" id="mainspring">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="mainspring" id="mainspring">
         <div class="work-media">
-          <img src="img/portfolio/mainspring.jpg" alt="Mainspring — e-commerce website, Dubai" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/mainspring.jpg" alt="Mainspring — e-commerce website, Dubai" width="1441" height="912" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Mainspring</h3>
@@ -160,9 +162,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="esmeywr" id="esmeywr">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="esmeywr" id="esmeywr">
         <div class="work-media">
-          <img src="img/portfolio/esmeywr.jpg" alt="ESM EYWR — e-commerce and Cartier eyewear configurator, Montreal and Dubai" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/esmeywr.jpg" alt="ESM EYWR — e-commerce and Cartier eyewear configurator, Montreal and Dubai" width="1442" height="908" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>ESM EYWR</h3>
@@ -170,9 +172,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="velora" id="velora">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="ecommerce ai" data-project="velora" id="velora">
         <div class="work-media">
-          <img src="img/portfolio/velora.jpg" alt="Velora Fine Jewelry — luxury jewelry e-commerce website, English and Arabic" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/velora.jpg" alt="Velora Fine Jewelry — luxury jewelry e-commerce website, English and Arabic" width="1443" height="907" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Velora Fine Jewelry</h3>
@@ -180,9 +182,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="web" data-project="brrnbarre" id="brrnbarre">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="web" data-project="brrnbarre" id="brrnbarre">
         <div class="work-media">
-          <img src="img/portfolio/brrnbarre.jpg" alt="BRRN BARRE — website and booking system, Dubai" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/brrnbarre.jpg" alt="BRRN BARRE — website and booking system, Dubai" width="1406" height="908" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>BRRN BARRE</h3>
@@ -190,9 +192,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="web" data-project="creativefinishings" id="creativefinishings">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="web" data-project="creativefinishings" id="creativefinishings">
         <div class="work-media">
-          <img src="img/portfolio/creativefinishings.jpg" alt="Creative Finishings — website with wrap estimator, Dubai" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/creativefinishings.jpg" alt="Creative Finishings — website with wrap estimator, Dubai" width="1446" height="917" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Creative Finishings</h3>
@@ -200,9 +202,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="design" data-project="agencyportfolio" id="agencyportfolio">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="design" data-project="agencyportfolio" id="agencyportfolio">
         <div class="work-media">
-          <img src="img/portfolio/agencyportfolio.jpg" alt="Agency Portfolio — design proposition" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/agencyportfolio.jpg" alt="Agency Portfolio — design proposition" width="1600" height="937" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Agency Portfolio</h3>
@@ -210,9 +212,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="design" data-project="coffeeshop" id="coffeeshop">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="design" data-project="coffeeshop" id="coffeeshop">
         <div class="work-media">
-          <img src="img/portfolio/coffeeshop.jpg" alt="STEEP™ Coffee Shop — design proposition" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/coffeeshop.jpg" alt="STEEP™ Coffee Shop — design proposition" width="1600" height="1019" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>STEEP™ Coffee Shop</h3>
@@ -220,9 +222,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="design" data-project="horizontalportfolio" id="horizontalportfolio">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="design" data-project="horizontalportfolio" id="horizontalportfolio">
         <div class="work-media">
-          <img src="img/portfolio/horizontalportfolio.jpg" alt="Horizontal Portfolio — design proposition" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/horizontalportfolio.jpg" alt="Horizontal Portfolio — design proposition" width="1600" height="976" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Horizontal Portfolio</h3>
@@ -230,9 +232,9 @@
         </div>
       </button>
 
-      <button class="folio-card gs-reveal" data-cats="design" data-project="interiordesigner" id="interiordesigner">
+      <button type="button" aria-haspopup="dialog" class="folio-card gs-reveal" data-cats="design" data-project="interiordesigner" id="interiordesigner">
         <div class="work-media">
-          <img src="img/portfolio/interiordesigner.jpg" alt="Interior Designer — design proposition" width="800" height="600" loading="lazy" decoding="async" />
+          <img src="img/portfolio/interiordesigner.jpg" alt="Interior Designer — design proposition" width="1600" height="946" loading="lazy" decoding="async" />
         </div>
         <div class="work-info">
           <h3>Interior Designer</h3>
@@ -271,9 +273,8 @@
       </div>
       <div class="footer-col">
         <h4 class="mono">Social</h4>
-        <a href="#" rel="noopener">X / Twitter</a>
-        <a href="#" rel="noopener">LinkedIn</a>
-        <a href="#" rel="noopener">Dribbble</a>
+        <a href="https://www.linkedin.com/company/135106065/" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="footer-soon">X / Twitter <i>Soon</i></span>
       </div>
       <div class="footer-col">
         <h4 class="mono">Contact</h4>
@@ -288,7 +289,7 @@
   </footer>
 
   <!-- case study overlay -->
-  <div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="caseTitle">
+  <div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="caseTitle" aria-hidden="true">
     <div class="case-scrim" id="caseScrim"></div>
     <div class="case-panel">
       <button class="case-close" id="caseClose" aria-label="Close case study">✕</button>

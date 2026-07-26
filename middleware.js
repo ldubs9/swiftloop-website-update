@@ -15,7 +15,14 @@ const COOKIE = 'sl_admin';
 const TOKEN = 'sl-console-9f3a2c7e-ok'; // opaque session marker
 const MAX_AGE = 60 * 60 * 12; // 12 hours
 
+// /brand/logo/* holds the public wordmark and ring marks that css/style.css
+// paints into the nav, footer, preloader, section kickers and CTA watermark.
+// Gating them would swap every logo on the public site for the login page, so
+// they stay open; the internal /brand tools and deliverables stay closed.
+const PUBLIC_BRAND_PREFIX = '/brand/logo/';
+
 function isProtected(pathname) {
+  if (pathname.startsWith(PUBLIC_BRAND_PREFIX)) return false;
   return (
     pathname === '/admin' ||
     pathname === '/admin.html' ||
