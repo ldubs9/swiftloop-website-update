@@ -434,7 +434,8 @@
     <label class="mono" for="setAccount">Payment account</label>
     <select id="setAccount">
       <option value="">— Select account —</option>
-      <option value="wio-aed">Wio Bank — AED (UAE)</option>
+      <option value="wio-aed">Wio Bank — AED (UAE, personal)</option>
+      <option value="wio-aed-business">Wio Bank — AED (UAE, business)</option>
       <option value="wio-usd">Wio Bank — USD (UAE)</option>
       <option value="wise-eur">Wise — EUR (Belgium)</option>
       <option value="crypto">Cryptocurrency (on request)</option>
@@ -455,6 +456,17 @@
       <option value="0" selected>Not VAT registered — no VAT</option>
       <option value="1">Apply 5% VAT (TRN required)</option>
     </select>
+
+    <label class="mono" for="setAddress">Supplier address</label>
+    <select id="setAddress">
+      <option value="dubai" selected>Dubai, United Arab Emirates</option>
+      <option value="rak">Ras Al Khaimah — Compass Building (full)</option>
+    </select>
+
+    <label class="mono" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+      <input type="checkbox" id="setDiscountToggle" style="width:auto;margin:0;" />
+      Apply discount
+    </label>
 
     <label class="mono" for="setValidity">Quote validity</label>
     <select id="setValidity">
@@ -523,7 +535,8 @@
           <div class="cell"><label>Date of issue</label><input id="fDate" data-f="date" /></div>
           <div class="cell" id="dueCell"><label id="dueLabel">Valid until</label><input id="fDue" data-f="due" /></div>
           <div class="cell"><label>Currency</label><select id="fCurrency" data-f="currency"><option value="AED">AED — UAE Dirham</option><option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — British Pound</option></select></div>
-          <div class="cell" id="trnCell"><label>Supplier TRN</label><input data-f="trn" id="fTrn" value="47034520" /></div>
+          <div class="cell" id="trnCell"><label>Supplier TRN</label><input data-f="trn" id="fTrn" value="105522643300001" /></div>
+          <div class="cell" id="licenseCell"><label>Trade licence №</label><input data-f="license" id="fLicense" value="47034520" /></div>
         </div>
       </header>
 
@@ -601,7 +614,7 @@ Monthly retainer · Billed in advance each month.</textarea>
           </div>
           <div class="totals">
             <div class="trow"><span class="lbl">Subtotal</span><span class="val" id="tSubtotal">0.00</span></div>
-            <div class="trow"><span class="lbl" id="discountLbl">Discount (AED)</span><input type="text" inputmode="decimal" data-f="discount" id="fDiscount" value="0" /></div>
+            <div class="trow" id="discountRow" style="display:none;"><span class="lbl" id="discountLbl">Discount (AED)</span><input type="text" inputmode="decimal" data-f="discount" id="fDiscount" value="0" /></div>
             <div class="trow" id="vatRow" style="display:none;"><span class="lbl">VAT 5%</span><span class="val" id="tVat">0.00</span></div>
             <div class="grand"><span class="lbl" id="grandLbl">Total due</span><span class="val"><em id="grandCurrencyCode">AED</em><span id="tGrand">0.00</span></span></div>
             <div class="amount-words" id="amountWords"></div>
@@ -668,6 +681,7 @@ Monthly retainer · Billed in advance each month.</textarea>
 
   var BANK_ACCOUNTS = {
     "wio-aed":  "Bank transfer (AED):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE60 0860 0000 0627 3800 686\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
+    "wio-aed-business":  "Bank transfer (AED):\nAccount name: SwiftLoop LLC-FZ\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE52 0860 0000 0980 1385 280\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
     "wio-usd":  "Bank transfer (USD):\nAccount name: Luca Alexander Wiegand\nBank: Wio Bank PJSC · Etihad Airways Centre 5th Floor, Abu Dhabi, UAE\nIBAN: AE19 0860 0000 0670 5822 546\nBIC/SWIFT: WIOBAEADXXX\nAlternate payments (cash, crypto, etc.) accepted.",
     "wise-eur": "Bank transfer (EUR):\nAccount name: Luca Alexander Wiegand\nBank: Wise · Rue du Trône 100, 3rd floor, Brussels, 1050, Belgium\nIBAN: BE40 9677 1411 4063\nBIC/SWIFT: TRWIBEB1XXX\nAlternate payments (cash, crypto, etc.) accepted.",
     "crypto":   "Cryptocurrency accepted on request.\nSupported: USDT, USDC, BTC, ETH (TRC-20, ERC-20, BEP-20).\nPlease contact us to confirm wallet address and network before sending.\nAlternate payments (cash, crypto, etc.) accepted."
@@ -1245,6 +1259,7 @@ Monthly retainer · Billed in advance each month.</textarea>
       t === "INVOICE" ? (isUAE ? "Commercial invoice — Dubai, UAE"               : "Commercial invoice — International")  :
                         (isUAE ? "Per Federal Decree-Law No. 8 of 2017 — UAE VAT": "Tax invoice — VAT / GST");
     $("#dueLabel").textContent = t === "QUOTE" ? "Valid until" : "Payment due";
+    $("#trnCell").style.display = t === "TAX INVOICE" ? "" : "none";
     $("#grandLbl").textContent = t === "QUOTE" ? "Total quoted" : "Total due";
     if (t === "TAX INVOICE") {
       $("#setVat").value = "1";
@@ -1461,6 +1476,27 @@ Monthly retainer · Billed in advance each month.</textarea>
   });
   $("#fDiscount").addEventListener("input", recalc);
 
+  var SUPPLIER_ADDRESSES = {
+    "dubai": "Dubai, United Arab Emirates",
+    "rak":   "CWEP7561 Compass Building, Al Shohada Road, Al Hamra Industrial Zone-FZ, Ras Al Khaimah, United Arab Emirates"
+  };
+  $("#setAddress").addEventListener("change", function () {
+    var txt = SUPPLIER_ADDRESSES[this.value];
+    if (!txt) return;
+    var ta = $('[data-f="fromAddr"]');
+    ta.value = txt;
+    autosize(ta);
+  });
+
+  $("#setDiscountToggle").addEventListener("change", function () {
+    var on = this.checked;
+    $("#discountRow").style.display = on ? "" : "none";
+    if (!on) {
+      $("#fDiscount").value = "0";
+      recalc();
+    }
+  });
+
   $("#addPresetBtn").addEventListener("click", function () {
     var key = $("#presetSelect").value;
     if (!key) { toast("Choose a service first"); return; }
@@ -1522,6 +1558,8 @@ Monthly retainer · Billed in advance each month.</textarea>
     } else {
       $all('.party input[data-f^="to"], .party textarea[data-f^="to"]').forEach(function (el) { el.value = ""; });
       $("#fDiscount").value = "0";
+      $("#setDiscountToggle").checked = false;
+      $("#discountRow").style.display = "none";
       addRow();
     }
     setMarket("UAE");
