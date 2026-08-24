@@ -12,6 +12,48 @@
     document.documentElement.classList.add("gsap-off");
   }
 
+  /* ---------- theme switch ----------
+     The theme itself is already applied by the inline resolver in <head>;
+     this only owns the control, the persisted choice, and the notification
+     that lets the WebGL hero repaint itself for the new surface. */
+  var root = document.documentElement;
+  var themeToggle = document.getElementById("themeToggle");
+
+  function currentTheme() {
+    return root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  }
+
+  function syncToggle() {
+    if (!themeToggle) return;
+    var dark = currentTheme() === "dark";
+    themeToggle.setAttribute("aria-checked", String(dark));
+    themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  }
+
+  function setTheme(next) {
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("sl-theme", next); } catch (e) {}
+    syncToggle();
+    window.dispatchEvent(new CustomEvent("sl:themechange", { detail: { theme: next } }));
+  }
+
+  syncToggle();
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      setTheme(currentTheme() === "dark" ? "light" : "dark");
+    });
+  }
+
+  // another tab flipping the switch keeps this one in step
+  window.addEventListener("storage", function (e) {
+    if (e.key !== "sl-theme" || !e.newValue) return;
+    var next = e.newValue === "dark" ? "dark" : "light";
+    if (next === currentTheme()) return;
+    root.setAttribute("data-theme", next);
+    syncToggle();
+    window.dispatchEvent(new CustomEvent("sl:themechange", { detail: { theme: next } }));
+  });
+
   /* ---------- nav scroll state ---------- */
   var nav = document.getElementById("nav");
   function onScroll() {

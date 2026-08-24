@@ -1,87 +1,128 @@
 /* ============================================================
    SWIFTLOOP — kinetic precision
-   ink canvas · bone type · signal orange · mono telemetry
+   cream canvas · ink type · signal orange · hairline telemetry
+
+   THEMING
+   Every colour lives in one of two blocks below. `:root` is the
+   light (cream) theme and is the default; `[data-theme="dark"]`
+   overrides it. Nothing else in this file hard-codes a colour, so
+   a new theme is a matter of redefining these tokens.
+
+   Token vocabulary:
+     --surface / -2 / -3   page, panel, panel-hover backgrounds
+     --fg / --fg-soft / --fg-dim   primary, long-form, muted text
+     --accent              signal orange, for FILLS and decoration
+     --accent-ink          signal orange corrected for TEXT on --surface
+     --accent-on-fg        signal orange for text on an inverted chip
+     --on-accent           text/ink that sits on an --accent fill
    ============================================================ */
 
+/* Mirava — display. One cut, declared across the range the site uses so the
+   browser never synthesises a faux bold from it. */
 @font-face {
-  font-family: "SwiftLoop Clash";
-  src: url("../fonts/clash-display-medium.woff2") format("woff2");
+  font-family: "SwiftLoop Display";
+  src: url("../fonts/mirava-regular.woff2") format("woff2");
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400 700;
   font-display: swap;
 }
 
+/* Oxanium — body. Variable, 200–800 in one file. */
 @font-face {
-  font-family: "SwiftLoop Clash";
-  src: url("../fonts/clash-display-semibold.woff2") format("woff2");
+  font-family: "SwiftLoop Body";
+  src: url("../fonts/oxanium-variable.woff2") format("woff2");
   font-style: normal;
-  font-weight: 600;
+  font-weight: 200 800;
   font-display: swap;
 }
 
+/* Doto — telemetry labels. A genuinely monospaced dot-matrix face, variable
+   across 100–900 (plus a ROND axis this site leaves square). */
 @font-face {
-  font-family: "SwiftLoop Satoshi";
-  src: url("../fonts/satoshi-regular.woff2") format("woff2");
+  font-family: "SwiftLoop Label";
+  src: url("../fonts/doto-variable.woff2") format("woff2");
   font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SwiftLoop Satoshi";
-  src: url("../fonts/satoshi-medium.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SwiftLoop Satoshi";
-  src: url("../fonts/satoshi-bold.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SwiftLoop Mono";
-  src: url("../fonts/jetbrains-mono-latin.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400 500;
+  font-weight: 100 900;
   font-display: swap;
 }
 
 :root {
-  --ink: #0a0a0c;
-  --ink-2: #101014;
-  --ink-3: #17171d;
-  --line: rgba(236, 232, 223, 0.12);
-  --line-soft: rgba(236, 232, 223, 0.07);
-  --bone: #ece8df;
-  --bone-dim: #97948b;
+  /* ---- light (default) ---- */
+  --surface: #ece8df;      /* the cream from the light logo */
+  --surface-2: #e4dfd3;
+  --surface-3: #dbd5c6;
+  --line: rgba(20, 19, 26, 0.14);
+  --line-soft: rgba(20, 19, 26, 0.07);
+  --fg: #14131a;
+  --fg-soft: #3c3931;
+  --fg-dim: #5c574a;
   --accent: #ff4d1f;
-  --accent-soft: rgba(255, 77, 31, 0.14);
-  /* signal orange darkened for use on bone surfaces (4.8:1 on --bone) */
-  --accent-on-bone: #b83512;
+  --accent-ink: #c4380f;   /* 4.9:1 on --surface */
+  --accent-on-fg: #ff7a4d; /* on the inverted (ink) chip */
+  --accent-soft: rgba(255, 77, 31, 0.2);
+  --on-accent: #1a0d07;
 
-  /* every mono micro-label sits on one step, not three */
-  --mono-size: 0.6875rem;
+  --nav-bg: rgba(236, 232, 223, 0.78);
+  --hero-fade: rgba(236, 232, 223, 0.94);
+  --scrim: rgba(28, 24, 18, 0.42);
+  --shimmer: rgba(20, 19, 26, 0.06);
+  --chip-over-media: rgba(10, 10, 12, 0.62);
+  --grain-opacity: 0.035;
 
-  --font-display: "SwiftLoop Clash", "Clash Display", "Arial Black", sans-serif;
-  --font-body: "SwiftLoop Satoshi", "Satoshi", "Helvetica Neue", sans-serif;
-  --font-mono: "SwiftLoop Mono", "JetBrains Mono", "SFMono-Regular", monospace;
+  --logo-wordmark: url("../brand/logo/swiftloop-wordmark-on-light.svg");
+
+  /* every dot-matrix micro-label sits on one step, not three; the dots need
+     weight behind them or the word dissolves at label size */
+  --mono-size: 0.72rem;
+  --mono-tracking: 0.12em;
+  --mono-weight: 600;
+
+  --font-display: "SwiftLoop Display", "Mirava", "Arial Black", sans-serif;
+  --font-body: "SwiftLoop Body", "Oxanium", "Helvetica Neue", sans-serif;
+  --font-mono: "SwiftLoop Label", "Doto", "SFMono-Regular", monospace;
+  /* actual code wants actual monospace — the label face is not one */
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+[data-theme="dark"] {
+  --surface: #0a0a0c;
+  --surface-2: #101014;
+  --surface-3: #17171d;
+  --line: rgba(236, 232, 223, 0.12);
+  --line-soft: rgba(236, 232, 223, 0.07);
+  --fg: #ece8df;
+  --fg-soft: #d7d3ca;
+  --fg-dim: #97948b;
+  --accent: #ff4d1f;
+  --accent-ink: #ff5c31;
+  --accent-on-fg: #b83512; /* on the inverted (cream) chip */
+  --accent-soft: rgba(255, 77, 31, 0.14);
+  --on-accent: #1a0d07;
+
+  --nav-bg: rgba(10, 10, 12, 0.72);
+  --hero-fade: rgba(10, 10, 12, 0.92);
+  --scrim: rgba(5, 5, 7, 0.7);
+  --shimmer: rgba(236, 232, 223, 0.05);
+  --chip-over-media: rgba(10, 10, 12, 0.6);
+  --grain-opacity: 0.05;
+
+  --logo-wordmark: url("../brand/logo/swiftloop-wordmark-primary.svg");
+}
+
+/* the surface swap is a deliberate, visible state change — ease it so the
+   toggle reads as one motion rather than a flash */
+html, body { transition: background-color 0.35s var(--ease-out), color 0.35s var(--ease-out); }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--ink);
-  color: var(--bone);
+  background: var(--surface);
+  color: var(--fg);
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.6;
@@ -91,7 +132,7 @@ body {
 
 body.is-locked { overflow: hidden; }
 
-::selection { background: var(--accent); color: var(--ink); }
+::selection { background: var(--accent); color: var(--on-accent); }
 
 img, svg, canvas { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -99,7 +140,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* one focus ring for the whole site — signal orange, never clipped */
 :where(a, button, summary, input, [tabindex]):focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 3px;
   border-radius: 3px;
 }
@@ -121,11 +162,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   z-index: 400;
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: var(--mono-weight);
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
-  color: var(--ink);
-  background: var(--bone);
+  color: var(--surface);
+  background: var(--fg);
   border-radius: 99px;
   padding: 0.75rem 1.25rem;
   transform: translateY(-160%);
@@ -139,12 +180,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .mono {
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: var(--mono-weight);
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
 }
 
-.accent { color: var(--accent); }
+.accent { color: var(--accent-ink); }
 
 .section {
   position: relative;
@@ -171,7 +212,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .section-kicker {
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -198,7 +239,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   height: 200%;
   pointer-events: none;
   z-index: 200;
-  opacity: 0.05;
+  opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain-shift 0.9s steps(4) infinite;
 }
@@ -217,7 +258,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: fixed;
   inset: 0;
   z-index: 300;
-  background: var(--ink);
+  background: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,7 +273,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   width: clamp(9rem, 24vw, 13rem);
   aspect-ratio: 5228 / 1000;
   margin-inline: auto;
-  background: url("../brand/logo/swiftloop-wordmark-primary.svg") center / contain no-repeat;
+  background: var(--logo-wordmark) center / contain no-repeat;
   overflow: hidden;
   text-indent: -9999px;
 }
@@ -254,7 +295,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transform-origin: left;
 }
 
-.preloader-count { color: var(--bone-dim); }
+.preloader-count { color: var(--fg-dim); }
 
 /* ---------- nav ---------- */
 
@@ -274,7 +315,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .nav.is-scrolled {
-  background: rgba(10, 10, 12, 0.72);
+  background: var(--nav-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   padding-block: 0.8rem;
@@ -285,7 +326,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: inline-block;
   width: 7.1066rem;
   aspect-ratio: 5228 / 1000;
-  background: url("../brand/logo/swiftloop-wordmark-primary.svg") center / contain no-repeat;
+  background: var(--logo-wordmark) center / contain no-repeat;
   overflow: hidden;
   text-indent: -9999px;
   flex: none;
@@ -301,15 +342,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-links a {
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   position: relative;
   transition: color 0.3s;
 }
 
 .nav-links a:hover,
-.nav-links a.is-active { color: var(--bone); }
+.nav-links a.is-active { color: var(--fg); }
 
 .nav-links a::after {
   content: "";
@@ -329,11 +370,47 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .nav-cta { display: inline-flex; }
 
+/* theme switch — the right-hand cluster keeps the CTA, the switch and the
+   burger together so the nav stays a three-part bar at every width */
+.nav-tail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 102;
+  position: relative;
+}
+
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--fg-dim);
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+
+.theme-toggle:hover { color: var(--fg); border-color: var(--fg-dim); }
+
+.theme-toggle svg {
+  grid-area: 1 / 1;
+  width: 17px;
+  height: 17px;
+  transition: opacity 0.35s, transform 0.45s var(--ease-out);
+}
+
+/* light showing → offer the moon; dark showing → offer the sun */
+.theme-toggle .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+.theme-toggle .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+
+[data-theme="dark"] .theme-toggle .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.6); }
+[data-theme="dark"] .theme-toggle .icon-sun { opacity: 1; transform: rotate(0deg) scale(1); }
+
 /* burger */
 .burger {
   display: none;
-  z-index: 102;
-  position: relative;
   width: 42px;
   height: 42px;
   border: 1px solid var(--line);
@@ -348,7 +425,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: block;
   width: 16px;
   height: 1.5px;
-  background: var(--bone);
+  background: var(--fg);
   transition: transform 0.35s var(--ease-out), opacity 0.2s;
 }
 
@@ -360,7 +437,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: fixed;
   inset: 0;
   z-index: 101;
-  background: var(--ink-2);
+  background: var(--surface-2);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -386,20 +463,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: color 0.3s;
 }
 
-.menu-links a:active, .menu-links a:hover { color: var(--accent); }
+.menu-links a:active, .menu-links a:hover { color: var(--accent-ink); }
 
 .menu-links a i {
   font-family: var(--font-mono);
   font-style: normal;
   font-size: 0.75rem;
-  color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .menu-foot {
   margin-top: 3rem;
   display: flex;
   justify-content: space-between;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
 /* ---------- buttons ---------- */
@@ -410,11 +487,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   gap: 0.6rem;
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: var(--mono-weight);
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
-  color: var(--ink);
-  background: var(--bone);
+  color: var(--surface);
+  background: var(--fg);
   border-radius: 99px;
   padding: 0.85rem 1.5rem;
   position: relative;
@@ -436,13 +513,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .btn:hover::before { transform: translateY(0); }
 
+.btn:hover { color: var(--on-accent); }
+
 .btn--ghost {
   background: transparent;
-  color: var(--bone);
+  color: var(--fg);
   border: 1px solid var(--line);
 }
 
-.btn--ghost:hover { color: var(--ink); }
+.btn--ghost:hover { color: var(--on-accent); }
 
 .btn--small { padding: 0.65rem 1.2rem; }
 
@@ -464,15 +543,31 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 #scene {
   position: absolute;
   inset: 0;
+  /* a canvas is a replaced element: inset alone does NOT stretch it, so it was
+     sizing itself from the drawing buffer's aspect and letterboxing inside the
+     hero instead of filling it */
+  width: 100%;
+  height: 100%;
   z-index: 0;
+  /* the knot is draggable: pan-y hands vertical swipes back to the page so a
+     finger can still scroll off the hero, while horizontal ones spin the loop */
+  touch-action: pan-y;
+  cursor: grab;
 }
+
+#scene.is-dragging { cursor: grabbing; }
 
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(ellipse 90% 60% at 50% 110%, rgba(10, 10, 12, 0.92), transparent 60%);
+  background: linear-gradient(
+    to bottom,
+    transparent 48%,
+    var(--hero-fade) 70%,
+    var(--surface) 82%
+  );
   pointer-events: none;
 }
 
@@ -490,10 +585,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .hero-title .outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--bone);
+  -webkit-text-stroke: 1.5px var(--fg);
 }
 
-.hero-title .accent { color: var(--accent); }
+.hero-title .accent { color: var(--accent-ink); }
 
 .hero-foot {
   margin-top: clamp(1.8rem, 4vh, 3rem);
@@ -506,11 +601,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .hero-sub {
   max-width: 42ch;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   font-size: clamp(1rem, 1.4vw, 1.15rem);
 }
 
-.hero-sub strong { color: var(--bone); font-weight: 500; }
+.hero-sub strong { color: var(--fg); font-weight: 500; }
 
 .hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
@@ -523,11 +618,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   flex-direction: column;
   gap: 0.5rem;
   text-align: right;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
-.hero-meta span b { color: var(--bone); font-weight: 500; }
-.hero-meta span b.accent { color: var(--accent); }
+.hero-meta span b { color: var(--fg); font-weight: 500; }
+.hero-meta span b.accent { color: var(--accent-ink); }
 
 /* ---------- marquee ---------- */
 
@@ -560,13 +655,22 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-weight: 500;
   font-size: 1.05rem;
   letter-spacing: 0.02em;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
 .marquee-track em {
   font-style: normal;
-  color: var(--accent);
-  font-size: 0.8rem;
+  font-size: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.marquee-track em::before {
+  content: "";
+  width: 0.3rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 /* ---------- services ---------- */
@@ -594,7 +698,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--ink-2);
+  background: var(--surface-2);
   transform: scaleY(0);
   transform-origin: bottom;
   transition: transform 0.5s var(--ease-out);
@@ -603,7 +707,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .service-row:hover::before { transform: scaleY(1); }
 .service-row:hover .service-link { transform: translateX(0.5rem); }
 
-.service-num { color: var(--accent); }
+.service-num { color: var(--accent-ink); }
 
 .service-name {
   font-family: var(--font-display);
@@ -626,25 +730,25 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--mono-size);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   border: 1px solid var(--line);
   border-radius: 99px;
   padding: 0.35rem 0.8rem;
   transition: border-color 0.3s, color 0.3s;
 }
 
-.service-row:hover .service-tags span { border-color: var(--accent); color: var(--bone); }
+.service-row:hover .service-tags span { border-color: var(--accent-ink); color: var(--fg); }
 
 .service-desc {
   grid-column: 2 / -1;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   max-width: 58ch;
   font-size: 0.95rem;
 }
 
 /* ---------- process / the loop ---------- */
 
-.process { background: var(--ink-2); }
+.process { background: var(--surface-2); }
 
 .process-track {
   display: grid;
@@ -655,7 +759,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .process-step {
-  background: var(--ink-2);
+  background: var(--surface-2);
   padding: clamp(1.6rem, 3vw, 2.4rem);
   min-height: clamp(280px, 36vh, 380px);
   display: flex;
@@ -666,9 +770,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: background 0.4s;
 }
 
-.process-step:hover { background: var(--ink-3); }
+.process-step:hover { background: var(--surface-3); }
 
-.process-step .mono { color: var(--accent); }
+.process-step .mono { color: var(--accent-ink); }
 
 .process-step h3 {
   font-family: var(--font-display);
@@ -678,23 +782,23 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin: 0.8rem 0 0.6rem;
 }
 
-.process-step p { color: var(--bone-dim); font-size: 0.95rem; }
+.process-step p { color: var(--fg-dim); font-size: 0.95rem; }
 
 .process-step .step-icon {
   width: 44px;
   height: 44px;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   transition: color 0.4s, transform 0.6s var(--ease-out);
 }
 
-.process-step:hover .step-icon { color: var(--accent); transform: rotate(90deg); }
+.process-step:hover .step-icon { color: var(--accent-ink); transform: rotate(90deg); }
 
 .process-loopline {
   margin-top: 2.2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
 .process-loopline span:first-child {
@@ -763,8 +867,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--mono-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: var(--ink);
-  color: var(--bone);
+  background: var(--surface);
+  color: var(--fg);
   border-radius: 99px;
   padding: 0.5rem 0.9rem;
   opacity: 0;
@@ -791,7 +895,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: -0.01em;
 }
 
-.work-info .mono { color: var(--bone-dim); }
+.work-info .mono { color: var(--fg-dim); }
 
 .work-more { text-align: center; margin-top: clamp(3rem, 8vw, 6rem); }
 
@@ -821,9 +925,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   line-height: 1;
 }
 
-.metric b sup { font-size: 0.45em; color: var(--accent); }
+.metric b sup { font-size: 0.45em; color: var(--accent-ink); }
 
-.metric span { color: var(--bone-dim); display: block; margin-top: 0.6rem; }
+.metric span { color: var(--fg-dim); display: block; margin-top: 0.6rem; }
 
 /* ---------- CTA ---------- */
 
@@ -868,9 +972,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   z-index: 1;
 }
 
-.cta-title .outline { color: transparent; -webkit-text-stroke: 1.5px var(--bone); }
+.cta-title .outline { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
 
-.cta p { color: var(--bone-dim); margin: 1.4rem auto 2.4rem; max-width: 44ch; position: relative; z-index: 1; }
+.cta p { color: var(--fg-dim); margin: 1.4rem auto 2.4rem; max-width: 44ch; position: relative; z-index: 1; }
 
 .cta .btn { position: relative; }
 
@@ -908,26 +1012,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .footer-brand .nav-logo { width: 8.59rem; }
 
-.footer-brand p { color: var(--bone-dim); max-width: 30ch; margin-top: 0.9rem; font-size: 0.95rem; }
+.footer-brand p { color: var(--fg-dim); max-width: 30ch; margin-top: 0.9rem; font-size: 0.95rem; }
 
-.footer h4 { margin-bottom: 1rem; color: var(--bone-dim); }
+.footer h4 { margin-bottom: 1rem; color: var(--fg-dim); }
 
 .footer-col a {
   display: block;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   padding: 0.3rem 0;
   font-size: 0.95rem;
   transition: color 0.3s, transform 0.3s var(--ease-out);
 }
 
-.footer-col a:hover { color: var(--accent); transform: translateX(4px); }
+.footer-col a:hover { color: var(--accent-ink); transform: translateX(4px); }
 
 /* a channel that exists but isn't live yet — listed, never linked */
 .footer-soon {
   display: flex;
   align-items: baseline;
   gap: 0.55rem;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   padding: 0.3rem 0;
   font-size: 0.95rem;
 }
@@ -936,10 +1040,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-style: normal;
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  font-weight: 500;
+  font-weight: var(--mono-weight);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-ink);
   border: 1px solid var(--line);
   border-radius: 99px;
   padding: 0.05rem 0.5rem;
@@ -952,7 +1056,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
 /* ============================================================
@@ -972,7 +1076,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   text-transform: uppercase;
 }
 
-.folio-hero h1 .outline { color: transparent; -webkit-text-stroke: 1.5px var(--bone); }
+.folio-hero h1 .outline { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
 
 .folio-hero-foot {
   display: flex;
@@ -983,7 +1087,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   flex-wrap: wrap;
 }
 
-.folio-hero-foot p { color: var(--bone-dim); max-width: 46ch; }
+.folio-hero-foot p { color: var(--fg-dim); max-width: 46ch; }
 
 /* filters */
 .filters {
@@ -998,25 +1102,25 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--mono-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   border: 1px solid var(--line);
   border-radius: 99px;
   padding: 0.6rem 1.2rem;
   transition: color 0.3s, border-color 0.3s, background 0.3s;
 }
 
-.filter-btn sup { color: var(--accent); margin-left: 0.3rem; }
+.filter-btn sup { color: var(--accent-ink); margin-left: 0.3rem; }
 
-.filter-btn:hover { color: var(--bone); border-color: var(--bone-dim); }
+.filter-btn:hover { color: var(--fg); border-color: var(--fg-dim); }
 
 .filter-btn.is-active {
-  background: var(--bone);
-  color: var(--ink);
-  border-color: var(--bone);
+  background: var(--fg);
+  color: var(--surface);
+  border-color: var(--fg);
 }
 
 /* on the bone chip the signal orange needs to darken to stay legible */
-.filter-btn.is-active sup { color: var(--accent-on-bone); }
+.filter-btn.is-active sup { color: var(--accent-on-fg); }
 
 /* folio grid */
 .folio-grid {
@@ -1057,7 +1161,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .case-scrim {
   position: absolute;
   inset: 0;
-  background: rgba(5, 5, 7, 0.7);
+  background: var(--scrim);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;
@@ -1070,7 +1174,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   position: relative;
   width: min(680px, 100%);
   height: 100%;
-  background: var(--ink-2);
+  background: var(--surface-2);
   border-left: 1px solid var(--line);
   overflow-y: auto;
   transform: translateX(100%);
@@ -1091,12 +1195,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ink-2);
+  background: var(--surface-2);
   z-index: 2;
   transition: border-color 0.3s, transform 0.3s;
 }
 
-.case-close:hover { border-color: var(--accent); transform: rotate(90deg); }
+.case-close:hover { border-color: var(--accent-ink); transform: rotate(90deg); }
 
 .case-media {
   border-radius: 6px;
@@ -1135,14 +1239,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border: 1px solid var(--line);
   border-radius: 99px;
   padding: 0.35rem 0.8rem;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
 .case-body { margin-top: 2rem; display: grid; gap: 1.8rem; }
 
-.case-body h3 { color: var(--accent); margin-bottom: 0.5rem; }
+.case-body h3 { color: var(--accent-ink); margin-bottom: 0.5rem; }
 
-.case-body p { color: var(--bone-dim); }
+.case-body p { color: var(--fg-dim); }
 
 .case-stats {
   display: grid;
@@ -1153,7 +1257,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin-top: 0.6rem;
 }
 
-.case-stats div { background: var(--ink-2); padding: 1.2rem 1rem; }
+.case-stats div { background: var(--surface-2); padding: 1.2rem 1rem; }
 
 .case-stats b {
   display: block;
@@ -1163,7 +1267,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   letter-spacing: -0.02em;
 }
 
-.case-stats span { color: var(--bone-dim); font-size: 0.8rem; }
+.case-stats span { color: var(--fg-dim); font-size: 0.8rem; }
 
 .case-visit { margin-top: 2.2rem; }
 
@@ -1194,6 +1298,33 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
   .folio-grid { grid-template-columns: 1fr; }
   .folio-card:nth-child(n) { transform: none; }
+}
+
+/* Below this width the loop is framed to cover a column of type rather than a
+   band of it (FRAMING.mobile / MOBILE_AT in js/scene.js — keep the two
+   breakpoints in step), so it reaches further down the hero and the fade has to
+   start earlier to keep the sub-copy and buttons off the particles. */
+@media (max-width: 767px) {
+  /* The hero content is far shorter than a phone screen, and flex-end pooled
+     every pixel of that slack into one dead band under the nav. Anchor it to
+     the top instead: the slack falls below the buttons, where it reads as room
+     to scroll rather than as a hole. */
+  .hero {
+    justify-content: flex-start;
+    padding-top: clamp(6.5rem, 15vh, 9rem);
+    /* and stop short of a full screen, so the slack that is left reads as the
+       next section peeking in rather than as a second hole */
+    min-height: 86svh;
+  }
+
+  .hero::after {
+    background: linear-gradient(
+      to bottom,
+      transparent 32%,
+      var(--hero-fade) 44%,
+      var(--surface) 52%
+    );
+  }
 }
 
 /* the telemetry column and the headline share the same band — keep them apart
@@ -1277,7 +1408,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   content: "+";
   font-family: var(--font-mono);
   font-size: 1.5rem;
-  color: var(--accent);
+  color: var(--accent-ink);
   transition: transform 0.3s var(--ease-out);
   flex: none;
 }
@@ -1285,15 +1416,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .faq-item[open] summary::after { transform: rotate(45deg); }
 
 .faq-item p {
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   max-width: 60ch;
   padding: 0 0 1.6rem;
   margin-top: -0.3rem;
 }
 
-.faq-item p strong { color: var(--bone); font-weight: 500; }
+.faq-item p strong { color: var(--fg); font-weight: 500; }
 
-.footer-addr { font-style: normal; color: var(--bone-dim); margin-top: 0.9rem; }
+.footer-addr { font-style: normal; color: var(--fg-dim); margin-top: 0.9rem; }
 
 /* ============================================================
    JOURNAL — listing (blog.html)
@@ -1324,15 +1455,21 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .jr-marquee-track span {
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   display: inline-flex;
   align-items: center;
   gap: 2.4rem;
 }
 
-.jr-marquee-track span::after { content: "◦"; color: var(--accent); }
+.jr-marquee-track span::after {
+  content: "";
+  width: 0.28rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
+}
 
 /* search + filter bar */
 .jr-controls {
@@ -1356,7 +1493,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--line);
-  color: var(--bone);
+  color: var(--fg);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -1365,8 +1502,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transition: border-color 0.3s;
 }
 
-.jr-search input::placeholder { color: var(--bone-dim); letter-spacing: 0.12em; text-transform: uppercase; }
-.jr-search input:focus { border-color: var(--accent); }
+.jr-search input::placeholder { color: var(--fg-dim); letter-spacing: 0.12em; text-transform: uppercase; }
+.jr-search input:focus { border-color: var(--accent-ink); }
 
 .jr-search::after {
   content: "";
@@ -1378,13 +1515,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   height: 0.95rem;
   pointer-events: none;
   background: currentColor;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   transition: color 0.3s;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 21 21'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 21 21'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.jr-search:focus-within::after { color: var(--accent); }
+.jr-search:focus-within::after { color: var(--accent-ink); }
 
 /* featured (latest) article */
 .jr-featured {
@@ -1399,14 +1536,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow: hidden;
-  background: var(--ink-2);
+  background: var(--surface-2);
   text-align: left;
   width: 100%;
   position: relative;
   transition: border-color 0.4s;
 }
 
-.jr-featured-card:hover { border-color: var(--bone-dim); }
+.jr-featured-card:hover { border-color: var(--fg-dim); }
 
 .jr-featured-media {
   position: relative;
@@ -1433,11 +1570,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   left: 1rem;
   z-index: 2;
   background: var(--accent);
-  color: var(--ink);
+  color: var(--on-accent);
   font-family: var(--font-mono);
   font-size: var(--mono-size);
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: var(--mono-weight);
+  letter-spacing: var(--mono-tracking);
   text-transform: uppercase;
   border-radius: 99px;
   padding: 0.4rem 0.85rem;
@@ -1456,7 +1593,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .jr-featured-body p {
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   margin: 1rem 0 1.6rem;
   max-width: 48ch;
 }
@@ -1470,12 +1607,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--mono-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   flex-wrap: wrap;
 }
 
-.jr-meta .cat { color: var(--accent); }
-.jr-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--bone-dim); }
+.jr-meta .cat { color: var(--accent-ink); }
+.jr-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--fg-dim); }
 
 /* card grid */
 .jr-grid {
@@ -1488,7 +1625,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .jr-card {
-  background: var(--ink);
+  background: var(--surface);
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -1499,7 +1636,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .jr-card.is-hidden { display: none; }
-.jr-card:hover { background: var(--ink-2); }
+.jr-card:hover { background: var(--surface-2); }
 
 .jr-card-media {
   position: relative;
@@ -1527,8 +1664,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--mono-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: var(--ink);
-  color: var(--bone);
+  background: var(--surface);
+  color: var(--fg);
   border-radius: 99px;
   padding: 0.45rem 0.8rem;
   opacity: 0;
@@ -1546,8 +1683,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-family: var(--font-mono);
   font-size: var(--mono-size);
   letter-spacing: 0.1em;
-  color: var(--bone);
-  background: rgba(10, 10, 12, 0.6);
+  color: var(--fg);
+  background: var(--chip-over-media);
   backdrop-filter: blur(4px);
   border-radius: 99px;
   padding: 0.35rem 0.6rem;
@@ -1571,7 +1708,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .jr-card-body p {
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   font-size: 0.9rem;
   line-height: 1.55;
   display: -webkit-box;
@@ -1603,41 +1740,41 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   grid-column: 1 / -1;
   padding: clamp(3rem, 8vw, 6rem) var(--gutter);
   text-align: center;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
 }
 
 .jr-state h3 {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.6rem;
-  color: var(--bone);
+  color: var(--fg);
   letter-spacing: -0.01em;
   margin-bottom: 0.6rem;
 }
 
 .jr-state code {
-  font-family: var(--font-mono);
+  font-family: var(--font-code);
   font-size: 0.8rem;
-  color: var(--accent);
-  background: var(--ink-2);
+  color: var(--accent-ink);
+  background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 0.15rem 0.45rem;
 }
 
-.jr-skeleton { background: var(--ink-2); position: relative; overflow: hidden; min-height: 320px; }
+.jr-skeleton { background: var(--surface-2); position: relative; overflow: hidden; min-height: 320px; }
 .jr-skeleton::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(236, 232, 223, 0.05), transparent);
+  background: linear-gradient(90deg, transparent, var(--shimmer), transparent);
   transform: translateX(-100%);
   animation: jr-shimmer 1.4s infinite;
 }
 @keyframes jr-shimmer { to { transform: translateX(100%); } }
 
-.jr-foot-count { text-align: center; padding: clamp(3rem, 7vw, 5rem) var(--gutter) 0; color: var(--bone-dim); }
-.jr-foot-count b { color: var(--accent); }
+.jr-foot-count { text-align: center; padding: clamp(3rem, 7vw, 5rem) var(--gutter) 0; color: var(--fg-dim); }
+.jr-foot-count b { color: var(--accent-ink); }
 
 /* ============================================================
    JOURNAL — article (article.html)
@@ -1657,7 +1794,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .article-wrap { max-width: 920px; margin-inline: auto; padding-inline: var(--gutter); }
 
-.article-hero { padding: clamp(8rem, 18vh, 11rem) 0 0; }
+/* the shorthand here used to zero the inline padding .article-wrap sets, so
+   the headline and lede ran to the very edge of the viewport */
+.article-hero { padding: clamp(8rem, 18vh, 11rem) var(--gutter) 0; }
 
 .article-back {
   display: inline-flex;
@@ -1667,12 +1806,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: var(--mono-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   margin-bottom: 2rem;
   transition: color 0.3s, gap 0.3s var(--ease-out);
 }
 
-.article-back:hover { color: var(--bone); gap: 0.8rem; }
+.article-back:hover { color: var(--fg); gap: 0.8rem; }
 
 .article-title {
   font-family: var(--font-display);
@@ -1686,7 +1825,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .article-lede {
   font-size: clamp(1.1rem, 1.8vw, 1.4rem);
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   max-width: 60ch;
   line-height: 1.5;
 }
@@ -1736,27 +1875,27 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin: 2rem 0 0.8rem;
 }
 
-.article-body p { margin: 0 0 1.3rem; color: #d7d3ca; }
-.article-body strong { color: var(--bone); font-weight: 700; }
-.article-body em { color: var(--bone); }
+.article-body p { margin: 0 0 1.3rem; color: var(--fg-soft); }
+.article-body strong { color: var(--fg); font-weight: 700; }
+.article-body em { color: var(--fg); }
 
 .article-body a {
-  color: var(--accent);
+  color: var(--accent-ink);
   text-decoration: none;
   border-bottom: 1px solid var(--accent-soft);
   transition: border-color 0.25s;
 }
-.article-body a:hover { border-color: var(--accent); }
+.article-body a:hover { border-color: var(--accent-ink); }
 
-.article-body ul, .article-body ol { margin: 0 0 1.4rem; padding-left: 1.3rem; color: #d7d3ca; }
+.article-body ul, .article-body ol { margin: 0 0 1.4rem; padding-left: 1.3rem; color: var(--fg-soft); }
 .article-body li { margin-bottom: 0.55rem; }
-.article-body li::marker { color: var(--accent); }
+.article-body li::marker { color: var(--accent-ink); }
 
 .article-body blockquote {
   border-left: 2px solid var(--accent);
   margin: 1.8rem 0;
   padding: 0.2rem 0 0.2rem 1.4rem;
-  color: var(--bone);
+  color: var(--fg);
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 1.3rem;
@@ -1771,9 +1910,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .article-body code {
-  font-family: var(--font-mono);
+  font-family: var(--font-code);
   font-size: 0.85em;
-  background: var(--ink-2);
+  background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 0.1rem 0.4rem;
@@ -1802,13 +1941,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--bone-dim);
+  color: var(--fg-dim);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   transition: border-color 0.3s, color 0.3s, transform 0.3s;
 }
 
-.article-share a:hover, .article-share button:hover { border-color: var(--accent); color: var(--bone); transform: translateY(-2px); }
+.article-share a:hover, .article-share button:hover { border-color: var(--accent-ink); color: var(--fg); transform: translateY(-2px); }
 
 /* related */
 .related { padding: clamp(4rem, 9vw, 7rem) var(--gutter) 0; }

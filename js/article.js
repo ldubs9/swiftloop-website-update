@@ -184,7 +184,7 @@
   function fail(title, msg) {
     document.getElementById("artTitle").innerHTML = '<span class="line-mask"><span>' + esc(title) + "</span></span>";
     document.getElementById("artBody").innerHTML =
-      "<p style='color:var(--bone-dim)'>" + esc(msg) + ' Head back to the <a href="/journal" style="color:var(--accent)">journal</a>.</p>';
+      "<p style='color:var(--fg-dim)'>" + esc(msg) + ' Head back to the <a href="/journal" style="color:var(--accent-ink)">journal</a>.</p>';
   }
 
   /* ---------- load ---------- */
