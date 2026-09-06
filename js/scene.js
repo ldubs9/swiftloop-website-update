@@ -19,6 +19,7 @@ const THEMES = {
     sizeScale: 0.8,  // additive glow adds its own weight
     soft: 0.05,      // wide falloff: every particle is a little light source
     twinkle: 0.35,
+    hot: 0xff8a5c, // the rim of the hole runs hot; on ink it has to glow
     ring: { color: 0xff4d1f, opacity: 0.22 },
     // accent · mid · base, picked per particle by a stored roll
     palette: [0xff4d1f, 0x6b4a3a, 0xece8df],
@@ -32,6 +33,7 @@ const THEMES = {
     sizeScale: 0.72,
     soft: 0.4,       // near-solid dot with a one-pixel edge — a mark, not a mist
     twinkle: 0.16,   // ink cannot afford to flicker down to a third of itself
+    hot: 0xff4d1f, // on cream the accent at full strength is the bright end
     ring: { color: 0xc4380f, opacity: 0.5 },
     palette: [0xff4d1f, 0xb8360f, 0x14131a],
     mix: [0.34, 0.56], // a third of the loop is signal orange on cream
@@ -92,6 +94,18 @@ function initScene() {
   // the framing moves — the knot can grow without the dots turning to gravel.
   const DOT = 3.6;
 
+  // Cursor repulsion. R is the radius of the hole in normalised device units,
+  // where 1.0 is half the hero's height. PUSH is the FRACTION of the gap to the
+  // rim that each particle closes: at 1.0 everything inside R lands exactly on
+  // R and the hole is bare, below that the disc compresses into an annulus and
+  // keeps some grain in it. TRACK is how tightly the hole follows the pointer,
+  // deliberately much faster than the 0.04 the parallax uses — the drift of the
+  // whole knot should lag behind the cursor, the hole under it should not.
+  const REPEL_R = 0.34;
+  const REPEL_PUSH = 0.85;
+  const REPEL_TRACK = 0.2;
+  const REPEL_FADE = 0.07; // ramp in/out when the pointer enters or leaves
+
   const tanHalfFov = () => Math.tan((camera.fov * Math.PI) / 360);
   let baseZ = 12;
   let visH = 11;
@@ -109,6 +123,7 @@ function initScene() {
     points.position.y = lift;
     ring.position.y = lift;
     mat.uniforms.uSize.value = dotSize();
+    mat.uniforms.uAspect.value = camera.aspect;
     // the depth fade is expressed around wherever the camera ended up
     mat.uniforms.uNear.value = baseZ - KNOT_R;
     mat.uniforms.uFar.value = baseZ + KNOT_R;
@@ -168,6 +183,14 @@ function initScene() {
       uSoft: { value: THEMES[currentTheme()].soft },
       uTwinkle: { value: THEMES[currentTheme()].twinkle },
       uDepthFade: { value: THEMES[currentTheme()].depthFade },
+      // cursor repulsion, all in normalised device coords so the hole stays
+      // round and cursor-locked no matter how deep a given particle sits
+      uCursor: { value: new THREE.Vector2(0, 0) },
+      uCursorAmp: { value: 0 },
+      uAspect: { value: w / h },
+      uRepelR: { value: REPEL_R },
+      uRepelPush: { value: REPEL_PUSH },
+      uHot: { value: new THREE.Color(THEMES[currentTheme()].hot) },
     },
     vertexShader: `
       attribute float aSeed;
@@ -177,8 +200,14 @@ function initScene() {
       uniform float uTwinkle;
       uniform float uNear;
       uniform float uFar;
+      uniform vec2 uCursor;
+      uniform float uCursorAmp;
+      uniform float uAspect;
+      uniform float uRepelR;
+      uniform float uRepelPush;
       varying vec3 vColor;
       varying float vFade;
+      varying float vHot;
       void main() {
         vColor = color;
         vec3 p = position;
@@ -190,20 +219,49 @@ function initScene() {
         float twinkle = (1.0 - uTwinkle) + uTwinkle * sin(uTime * (1.0 + aSeed * 2.0) + aSeed * 50.0);
         float depthFade = 1.0 - smoothstep(uNear, uFar, -mv.z) * uDepthFade;
         vFade = twinkle * depthFade;
-        gl_PointSize = uSize * twinkle * (1.0 / -mv.z);
-        gl_Position = projectionMatrix * mv;
+
+        // Repulsion is done AFTER projection: the offset is added in clip space
+        // as a screen-space nudge (xy += ndcOffset * w). Doing it in world space
+        // would make the near side of the knot part far more than the far side
+        // and the hole would smear into an ellipse.
+        vec4 clip = projectionMatrix * mv;
+        float cw = max(clip.w, 1e-4);
+        vec2 ndc = clip.xy / cw;
+        // x is scaled by the aspect so the field is a circle on screen, not an ellipse
+        vec2 delta = (ndc - uCursor) * vec2(uAspect, 1.0);
+        float dist = length(delta);
+        // Each particle closes a fixed fraction of its own gap to the rim, so
+        // the disc inside R is mapped onto an annulus and genuinely opens. A
+        // plain falloff would move the whole inner disc by a similar amount,
+        // which slides the particles sideways instead of parting them. The gap
+        // goes to zero at R, so the field ends without a seam.
+        float gap = max(uRepelR - dist, 0.0);
+        vec2 dir = dist > 1e-4 ? delta / dist : vec2(0.0, 1.0);
+        clip.xy += (dir / vec2(uAspect, 1.0)) * gap * uRepelPush * uCursorAmp * cw;
+
+        // 1 for the particles thrown furthest, 0 at the rim — after the push
+        // those are the ones lining the inside of the hole
+        float amt = (gap / uRepelR) * uCursorAmp;
+        vHot = amt;
+        gl_PointSize = uSize * twinkle * (1.0 + amt * 0.7) * (1.0 / -mv.z);
+        gl_Position = clip;
       }
     `,
     fragmentShader: `
       uniform float uAlpha;
       uniform float uSoft;
+      uniform vec3 uHot;
       varying vec3 vColor;
       varying float vFade;
+      varying float vHot;
       void main() {
         float d = length(gl_PointCoord - 0.5);
         if (d > 0.5) discard;
-        float a = smoothstep(0.5, uSoft, d) * uAlpha * vFade;
-        gl_FragColor = vec4(vColor, a);
+        // displaced particles also charge up — the rim of the hole reads as
+        // energy rather than as a bald patch
+        vec3 col = mix(vColor, uHot, clamp(vHot * 0.8, 0.0, 1.0));
+        float a = smoothstep(0.5, uSoft, d) * uAlpha * vFade * (1.0 + vHot * 0.55);
+        gl_FragColor = vec4(col, clamp(a, 0.0, 1.0));
       }
     `,
   });
@@ -237,6 +295,7 @@ function initScene() {
     mat.uniforms.uSoft.value = th.soft;
     mat.uniforms.uTwinkle.value = th.twinkle;
     mat.needsUpdate = true;
+    mat.uniforms.uHot.value.setHex(th.hot);
     ringMat.color.setHex(th.ring.color);
     ringMat.opacity = th.ring.opacity;
     scene.fog.color.setHex(th.fog);
@@ -248,13 +307,40 @@ function initScene() {
     applyTheme(e.detail && e.detail.theme ? e.detail.theme : currentTheme());
   });
 
-  // --- pointer parallax (mouse only — a finger has no hover) ---
+  // --- pointer parallax + cursor repulsion (mouse only — a finger has no hover) ---
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+  // cursor is canvas-relative NDC; amp ramps the whole effect in and out
+  const cursor = { x: 0, y: 0, tx: 0, ty: 0, amp: 0, inside: false };
+
+  // getBoundingClientRect in a pointermove handler is a forced layout on every
+  // mouse event, so the rect is cached and only re-read once the page has
+  // actually moved underneath it
+  let rect = canvas.getBoundingClientRect();
+  let rectDirty = false;
+  const canvasRect = () => {
+    if (rectDirty) { rect = canvas.getBoundingClientRect(); rectDirty = false; }
+    return rect;
+  };
+
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType !== "mouse") return;
     mouse.tx = (e.clientX / window.innerWidth - 0.5) * 2;
     mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+
+    // Tracked against the canvas, not the window, and listened for on the
+    // window rather than the canvas: the headline sits on top of the hero, and
+    // a pointerleave from the canvas would kill the effect every time the
+    // cursor crossed the type it is supposed to be parting behind.
+    const r = canvasRect();
+    cursor.tx = ((e.clientX - r.left) / r.width) * 2 - 1;
+    cursor.ty = -(((e.clientY - r.top) / r.height) * 2 - 1);
+    cursor.inside =
+      e.clientX >= r.left && e.clientX <= r.right &&
+      e.clientY >= r.top && e.clientY <= r.bottom;
   }, { passive: true });
+
+  // leaving the document entirely closes the hole
+  document.addEventListener("pointerleave", () => { cursor.inside = false; });
 
   // --- drag to spin, on every input ---
   // Touch is the awkward case: the canvas fills the hero, so claiming every
@@ -322,7 +408,7 @@ function initScene() {
   canvas.addEventListener("lostpointercapture", end);
 
   let scrollY = 0;
-  window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
+  window.addEventListener("scroll", () => { scrollY = window.scrollY; rectDirty = true; }, { passive: true });
 
   const resize = () => {
     const next = size();
@@ -333,6 +419,7 @@ function initScene() {
     camera.updateProjectionMatrix();
     frame();
     renderer.setSize(w, h, false);
+    rectDirty = true;
   };
 
   if (typeof ResizeObserver !== "undefined") {
@@ -353,6 +440,12 @@ function initScene() {
 
     mouse.x += (mouse.tx - mouse.x) * 0.04;
     mouse.y += (mouse.ty - mouse.y) * 0.04;
+
+    cursor.x += (cursor.tx - cursor.x) * REPEL_TRACK;
+    cursor.y += (cursor.ty - cursor.y) * REPEL_TRACK;
+    cursor.amp += ((cursor.inside ? 1 : 0) - cursor.amp) * REPEL_FADE;
+    mat.uniforms.uCursor.value.set(cursor.x, cursor.y);
+    mat.uniforms.uCursorAmp.value = cursor.amp;
 
     // a released drag keeps its momentum and coasts back to the idle spin
     if (!drag.spinning) {

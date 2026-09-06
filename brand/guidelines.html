@@ -1,487 +1,607 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SwiftLoop — Brand Guidelines</title>
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <meta name="description" content="SwiftLoop brand guidelines — identity, colour, typography, voice, motion and applications." />
+  <title>SwiftLoop — Brand System V2.0</title>
+  <link rel="icon" href="logo/swiftloop-ring.svg" />
   <style>
+    @font-face {
+      font-family: "SwiftLoop Display";
+      src: url("../fonts/mirava-regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SwiftLoop Body";
+      src: url("../fonts/oxanium-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SwiftLoop Label";
+      src: url("../fonts/doto-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
     :root {
-      --ink: #0a0a0c;
-      --ink-2: #101014;
-      --ink-3: #17171d;
+      --surface: #ece8df;
+      --surface-2: #e4dfd3;
+      --surface-3: #dbd5c6;
+      --fg: #14131a;
+      --fg-soft: #3c3931;
+      --fg-dim: #5c574a;
+      --label-dim: #262420;
+      --line: rgba(20, 19, 26, 0.14);
+      --line-soft: rgba(20, 19, 26, 0.07);
+      --accent: #ff4d1f;
+      --accent-ink-source: #c4380f;
+      --accent-ink: #b6330e;
+      --accent-soft: rgba(255, 77, 31, 0.2);
+      --on-accent: #1a0d07;
+      --inverted-surface: #0a0a0c;
+      --inverted-fg: #ece8df;
+      --inverted-dim: #c1bfb9;
+      --grain-opacity: 0.035;
+      --logo: url("logo/swiftloop-wordmark-on-light.svg");
+      --font-display: "SwiftLoop Display", "Mirava", "Arial Black", sans-serif;
+      --font-body: "SwiftLoop Body", "Oxanium", "Helvetica Neue", sans-serif;
+      --font-label: "SwiftLoop Label", "Doto", sans-serif;
+      --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      --gutter: clamp(1.25rem, 4vw, 4rem);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-theme="dark"] {
+      --surface: #0a0a0c;
+      --surface-2: #101014;
+      --surface-3: #17171d;
+      --fg: #ece8df;
+      --fg-soft: #d7d3ca;
+      --fg-dim: #97948b;
+      --label-dim: #c1bfb9;
       --line: rgba(236, 232, 223, 0.12);
       --line-soft: rgba(236, 232, 223, 0.07);
-      --bone: #ece8df;
-      --bone-dim: #97948b;
-      --accent: #ff4d1f;
+      --accent-ink: #ff5c31;
       --accent-soft: rgba(255, 77, 31, 0.14);
-      --font-display: "Clash Display", "Arial Black", sans-serif;
-      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
-      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
-      --gutter: clamp(1.25rem, 4vw, 4rem);
+      --inverted-surface: #ece8df;
+      --inverted-fg: #14131a;
+      --inverted-dim: #5c574a;
+      --grain-opacity: 0.05;
+      --logo: url("logo/swiftloop-wordmark-primary.svg");
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      background: var(--ink);
-      color: var(--bone);
+      background: var(--surface);
+      color: var(--fg);
       font-family: var(--font-body);
       font-size: 1.0625rem;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
     }
-    ::selection { background: var(--accent); color: var(--ink); }
-    .mono {
-      font-family: var(--font-mono);
-      font-size: 0.6875rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
+    ::selection { background: var(--accent); color: var(--on-accent); }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; font: inherit; }
+    img, svg { display: block; max-width: 100%; }
+    :where(a, button):focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+
+    .grain {
+      position: fixed;
+      inset: -50%;
+      z-index: 100;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      opacity: var(--grain-opacity);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 0.9s steps(4) infinite;
+    }
+    @keyframes grain {
+      0% { transform: translate(0, 0); }
+      33% { transform: translate(-2%, 2%); }
+      66% { transform: translate(2%, -2%); }
+      100% { transform: translate(-1%, -1%); }
+    }
+
+    .label {
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
       text-transform: uppercase;
     }
-    .accent { color: var(--accent); }
-    .dim { color: var(--bone-dim); }
+    .dim { color: var(--fg-dim); }
+    .accent { color: var(--accent-ink); }
+    .outline { color: transparent; -webkit-text-stroke: 1.4px currentColor; }
 
-    /* cover */
-    .cover {
-      min-height: 90vh;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
-      padding: var(--gutter);
+      gap: 1.5rem;
+      min-height: 76px;
+      padding: 1rem var(--gutter);
       border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 82%, transparent);
+      backdrop-filter: blur(16px);
     }
-    .cover-top { display: flex; justify-content: space-between; color: var(--bone-dim); }
-    .cover h1 {
+    .topbar-logo {
+      width: 7.6rem;
+      aspect-ratio: 5228 / 1000;
+      background: var(--logo) center / contain no-repeat;
+      overflow: hidden;
+      text-indent: -9999px;
+      flex: none;
+    }
+    .topbar-links { display: flex; align-items: center; gap: clamp(0.8rem, 2vw, 2rem); }
+    .topbar-links a { color: var(--label-dim); transition: color 0.25s; }
+    .topbar-links a:hover { color: var(--fg); }
+    .theme-toggle {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .theme-toggle:hover { background: var(--surface-2); border-color: var(--fg-dim); }
+    .theme-toggle svg { width: 17px; height: 17px; }
+
+    .cover {
+      min-height: calc(100svh - 76px);
+      padding: clamp(2rem, 5vw, 4rem) var(--gutter) clamp(3rem, 7vw, 6rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 0.34fr);
+      grid-template-rows: auto 1fr auto;
+      gap: 2rem;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::after {
+      content: "";
+      position: absolute;
+      width: clamp(16rem, 30vw, 32rem);
+      aspect-ratio: 1;
+      right: -8vw;
+      bottom: -12vw;
+      border: clamp(2rem, 4vw, 4.5rem) solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .cover-meta { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--label-dim); }
+    .cover-title {
+      align-self: center;
       font-family: var(--font-display);
       font-weight: 600;
-      font-size: clamp(3rem, 11vw, 9rem);
-      line-height: 0.96;
-      letter-spacing: -0.03em;
+      font-size: clamp(3.3rem, 9.7vw, 9.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.035em;
       text-transform: uppercase;
+      max-width: 8.8ch;
+      position: relative;
+      z-index: 1;
     }
-    .cover h1 .outline { color: transparent; -webkit-text-stroke: 1.5px var(--bone); }
-    .cover-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
-    .cover-foot p { color: var(--bone-dim); max-width: 44ch; }
+    .cover-title .outline { -webkit-text-stroke-color: var(--fg); }
+    .cover-rail {
+      align-self: center;
+      border-left: 1px solid var(--line);
+      padding-left: clamp(1.25rem, 3vw, 2.5rem);
+      position: relative;
+      z-index: 1;
+    }
+    .cover-rail p { color: var(--fg-dim); max-width: 30ch; margin: 1rem 0 2rem; }
+    .pulse { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-ink); }
+    .pulse::before { content: ""; width: 0.55rem; aspect-ratio: 1; border-radius: 50%; background: var(--accent); }
+    .cover-foot { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; position: relative; z-index: 1; }
+    .cover-foot p { max-width: 54ch; color: var(--fg-dim); }
+    .cover-foot strong { color: var(--fg); font-weight: 500; }
 
-    /* sections */
-    .section { padding: clamp(4rem, 10vh, 7rem) var(--gutter); border-bottom: 1px solid var(--line); }
+    .section {
+      padding: clamp(5rem, 11vh, 8rem) var(--gutter);
+      border-bottom: 1px solid var(--line);
+    }
     .section-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: clamp(2rem, 5vw, 3.5rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 0.34fr);
+      gap: 2rem;
+      align-items: end;
+      margin-bottom: clamp(2.5rem, 6vw, 5rem);
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--line);
     }
     .section-title {
       font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5.8vw, 5.2rem);
       font-weight: 600;
-      font-size: clamp(1.8rem, 4.5vw, 3.4rem);
-      letter-spacing: -0.02em;
-      line-height: 1.05;
+      letter-spacing: -0.025em;
+      line-height: 0.98;
+      text-transform: uppercase;
     }
-    .section-kicker { color: var(--bone-dim); }
-    .section-kicker::before { content: "◦ "; color: var(--accent); }
-    .lede { color: var(--bone-dim); max-width: 62ch; margin-bottom: 2.5rem; }
-    .lede strong { color: var(--bone); font-weight: 500; }
+    .section-intro { color: var(--fg-dim); max-width: 46ch; }
+    .section-intro strong { color: var(--fg); font-weight: 500; }
 
-    /* grids and tiles */
-    .grid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-    .grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .tile { background: var(--ink-2); padding: clamp(1.4rem, 3vw, 2.2rem); }
-    .tile h3 {
-      font-family: var(--font-display);
-      font-weight: 600;
-      font-size: 1.25rem;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.5rem;
+    .brand-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: minmax(230px, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
     }
-    .tile p { color: var(--bone-dim); font-size: 0.95rem; }
-    .tile .mono { display: block; color: var(--accent); margin-bottom: 0.9rem; }
-
-    /* logo showcase */
-    .logo-stage {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 220px;
-      padding: 2rem;
-    }
-    .logo-stage.on-bone { background: var(--bone); }
-    .logo-stage.on-accent { background: var(--accent); }
-    .wordmark {
-      font-family: var(--font-display);
-      font-weight: 600;
-      font-size: 2.6rem;
-      letter-spacing: -0.02em;
-      color: var(--bone);
-    }
-    .wordmark em { font-style: normal; color: var(--accent); }
-    .wordmark.inverse { color: var(--ink); }
-    .wordmark.solid-bone em { color: var(--bone); }
-    .wordmark.solid-ink, .wordmark.solid-ink em { color: var(--ink); }
-    .tile-label {
-      border-top: 1px solid var(--line);
-      padding: 0.9rem clamp(1.4rem, 3vw, 2.2rem);
-      display: flex;
-      justify-content: space-between;
-      color: var(--bone-dim);
-      background: var(--ink-2);
-    }
-
-    .stacked-mark { text-align: center; }
-    .stacked-mark .wordmark { font-size: 1.6rem; display: block; margin-top: 1rem; }
-
-    /* color swatches */
-    .swatch { min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.4rem; }
-    .swatch .name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; }
-    .swatch .vals { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em; opacity: 0.75; margin-top: 0.4rem; line-height: 1.8; text-transform: uppercase; }
-
-    /* type specimens */
-    .specimen { border-top: 1px solid var(--line); padding: 2rem 0; display: grid; grid-template-columns: 220px 1fr; gap: 2rem; align-items: baseline; }
-    .specimen:last-child { border-bottom: 1px solid var(--line); }
-    .specimen .meta { color: var(--bone-dim); }
-    .specimen .meta b { display: block; color: var(--bone); font-weight: 500; font-family: var(--font-body); font-size: 0.95rem; text-transform: none; letter-spacing: 0; margin-bottom: 0.3rem; }
-    .spec-display { font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 6vw, 4.5rem); letter-spacing: -0.03em; line-height: 1; text-transform: uppercase; }
-    .spec-body { font-family: var(--font-body); font-size: 1.15rem; max-width: 56ch; }
-    .spec-mono { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone-dim); }
-
-    /* do / don't */
-    .rule { display: flex; gap: 0.8rem; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid var(--line-soft); color: var(--bone-dim); font-size: 0.97rem; }
-    .rule i { font-style: normal; font-family: var(--font-mono); font-size: 0.7rem; flex-shrink: 0; }
-    .rule.do i { color: var(--accent); }
-    .rule.dont i { color: #d6453a; }
-    .rule strong { color: var(--bone); font-weight: 500; }
-
-    table.spec-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
-    table.spec-table th, table.spec-table td { text-align: left; padding: 0.7rem 1rem 0.7rem 0; border-bottom: 1px solid var(--line-soft); }
-    table.spec-table th { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bone-dim); font-weight: 500; }
-    table.spec-table td { color: var(--bone-dim); }
-    table.spec-table td:first-child { color: var(--bone); }
-
-    .voice-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 1rem; }
-    .voice-pair > div { background: var(--ink-2); padding: 1.6rem; }
-    .voice-pair .mono { display: block; margin-bottom: 0.8rem; }
-    .voice-pair p { font-size: 1rem; }
-
-    footer { padding: 2rem var(--gutter); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: var(--bone-dim); }
-
-    .clearspace-demo {
+    .board-cell {
+      background: var(--surface-2);
+      padding: clamp(1.3rem, 2.4vw, 2rem);
       position: relative;
-      display: inline-block;
-      padding: 2.6rem;
-      border: 1px dashed rgba(255, 77, 31, 0.5);
+      overflow: hidden;
+      min-height: 230px;
     }
-    .clearspace-demo::after {
-      content: "x = cap height of 'S'";
-      position: absolute;
-      bottom: -1.7rem;
-      left: 0;
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
+    .board-cell--dark { background: #0a0a0c; color: #ece8df; }
+    .board-cell--orange { background: var(--accent); color: var(--on-accent); }
+    .board-cell .cell-index { position: absolute; right: 1.2rem; top: 1rem; opacity: 0.62; }
+    .board-cell h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.7rem, 3vw, 3.2rem);
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+      max-width: 10ch;
+    }
+    .board-cell p { font-size: 0.92rem; color: var(--fg-dim); max-width: 32ch; }
+    .board-cell--dark p { color: #97948b; }
+    .cell-stack { height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; }
+    .board-logo { width: min(100%, 12rem); margin: auto; }
+    .board-quote { font-family: var(--font-display); font-size: clamp(2.2rem, 4vw, 4rem); font-weight: 600; line-height: 0.95; letter-spacing: -0.03em; text-transform: uppercase; }
+    .board-swatch { display: grid; grid-template-columns: repeat(4, 1fr); height: 78px; margin-top: auto; border: 1px solid currentColor; }
+    .board-swatch i { display: block; }
+    .type-lines span { display: block; }
+    .type-lines .t-display { font-family: var(--font-display); font-size: 2.5rem; line-height: 1; text-transform: uppercase; }
+    .type-lines .t-body { font-family: var(--font-body); font-size: 1rem; margin-top: 1rem; }
+    .type-lines .t-label { font-family: var(--font-label); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1rem; }
+    .ring-construction { position: absolute; width: 180px; aspect-ratio: 1; right: -34px; bottom: -34px; }
+    .ring-construction circle:first-child { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; }
+    .mini-browser { border: 1px solid var(--line); margin-top: auto; background: var(--surface); }
+    .mini-browser-top { height: 24px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 4px; padding: 0 8px; }
+    .mini-browser-top i { width: 5px; aspect-ratio: 1; border-radius: 50%; background: var(--fg-dim); opacity: 0.45; }
+    .mini-browser-body { padding: 1rem; }
+    .mini-browser-body strong { font-family: var(--font-display); font-size: 1.5rem; text-transform: uppercase; }
+    .mini-browser-body span { color: var(--accent-ink); }
+    .mini-card { width: 78%; aspect-ratio: 85 / 55; background: #0a0a0c; color: #ece8df; padding: 1rem; margin: auto; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 16px 16px 0 var(--accent-soft); }
+    .mini-card img { width: 46%; }
+    .mini-card small { color: #c1bfb9; }
+
+    .foundation-grid, .rule-grid, .application-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .info-card { background: var(--surface-2); padding: clamp(1.4rem, 2.8vw, 2.4rem); min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; }
+    .info-card h3 { font-family: var(--font-display); font-size: 1.45rem; line-height: 1.05; font-weight: 600; }
+    .info-card p { color: var(--fg-dim); font-size: 0.95rem; }
+
+    .logo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .logo-tile { min-height: 310px; display: flex; flex-direction: column; }
+    .logo-stage { flex: 1; display: grid; place-items: center; padding: clamp(2rem, 6vw, 5rem); background: #ece8df; }
+    .logo-stage.dark { background: #0a0a0c; }
+    .logo-stage.orange { background: #ff4d1f; }
+    .logo-stage img { width: min(100%, 18rem); }
+    .logo-stage .ring { width: 6rem; }
+    .tile-meta { display: flex; justify-content: space-between; gap: 1rem; padding: 0.9rem 1rem; background: var(--surface-2); border-top: 1px solid var(--line); color: var(--label-dim); }
+
+    .colour-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); }
+    .swatch { min-height: 260px; padding: 1.3rem; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--line); }
+    .swatch:last-child { border-right: 0; }
+    .swatch h3 { font-family: var(--font-display); font-size: 1.45rem; text-transform: uppercase; }
+    .swatch p { font-family: var(--font-code); font-size: 0.74rem; line-height: 1.7; }
+    .swatch--cream { background: #ece8df; color: #14131a; }
+    .swatch--ink { background: #14131a; color: #ece8df; }
+    .swatch--dark { background: #0a0a0c; color: #ece8df; }
+    .swatch--orange { background: #ff4d1f; color: #1a0d07; }
+    .contrast-note { margin-top: 1.5rem; padding: 1.2rem 1.4rem; border: 1px solid var(--line); color: var(--fg-dim); }
+    .contrast-note strong { color: var(--fg); font-weight: 500; }
+
+    .specimen { display: grid; grid-template-columns: minmax(190px, 0.28fr) 1fr; gap: 2rem; padding: clamp(2rem, 4vw, 3.5rem) 0; border-top: 1px solid var(--line); align-items: start; }
+    .specimen:last-child { border-bottom: 1px solid var(--line); }
+    .specimen-meta { color: var(--label-dim); }
+    .specimen-meta b { display: block; color: var(--fg); font-family: var(--font-body); font-size: 1rem; font-weight: 600; letter-spacing: 0; text-transform: none; margin-bottom: 0.35rem; }
+    .display-sample { font-family: var(--font-display); font-size: clamp(2.7rem, 7vw, 6.8rem); font-weight: 600; line-height: 0.92; letter-spacing: -0.035em; text-transform: uppercase; }
+    .display-sample .outline { -webkit-text-stroke-color: var(--fg); }
+    .body-sample { max-width: 58ch; font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--fg-dim); }
+    .body-sample strong { color: var(--fg); font-weight: 500; }
+    .label-sample { font-family: var(--font-label); font-size: clamp(0.82rem, 1.3vw, 1rem); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; line-height: 2; }
+
+    .token-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-top: 2rem; }
+    .token-table th, .token-table td { padding: 0.9rem 0.8rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+    .token-table th { font-family: var(--font-label); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--label-dim); }
+    .token-table td { color: var(--fg-dim); }
+    .token-table td:first-child { color: var(--fg); font-family: var(--font-code); font-size: 0.84rem; }
+
+    .rule-list { list-style: none; }
+    .rule-list li { display: flex; gap: 0.8rem; align-items: baseline; padding: 0.8rem 0; border-bottom: 1px solid var(--line-soft); color: var(--fg-dim); }
+    .rule-list b { color: var(--fg); font-weight: 500; }
+    .rule-list .yes, .rule-list .no { flex: none; font-family: var(--font-label); font-weight: 700; letter-spacing: 0.08em; font-size: 0.7rem; }
+    .rule-list .yes { color: var(--accent-ink); }
+    .rule-list .no { color: #a22d10; }
+
+    .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .voice-panel { background: var(--surface-2); padding: clamp(1.5rem, 3vw, 2.5rem); }
+    .voice-panel blockquote { font-family: var(--font-display); font-size: clamp(1.7rem, 3vw, 3rem); line-height: 1.05; margin: 2rem 0; }
+    .voice-panel p { color: var(--fg-dim); }
+
+    .application-card { background: var(--surface-2); min-height: 330px; display: flex; flex-direction: column; }
+    .application-visual { flex: 1; min-height: 230px; padding: 2rem; display: grid; place-items: center; overflow: hidden; position: relative; }
+    .application-visual.dark { background: #0a0a0c; color: #ece8df; }
+    .application-visual.orange { background: #ff4d1f; color: #1a0d07; }
+    .application-copy { padding: 1.2rem 1.4rem; border-top: 1px solid var(--line); }
+    .application-copy h3 { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 0.25rem; }
+    .application-copy p { color: var(--fg-dim); font-size: 0.9rem; }
+    .document-mini { width: 74%; aspect-ratio: 210 / 297; background: #ece8df; color: #14131a; box-shadow: 0 18px 44px rgba(0,0,0,0.22); }
+    .document-mini header { height: 27%; background: #0a0a0c; padding: 10%; }
+    .document-mini header img { width: 66%; }
+    .document-mini div { padding: 10%; }
+    .document-mini i { display: block; height: 1px; background: rgba(20,19,26,.18); margin-bottom: 10%; }
+    .ui-mini { width: 100%; border: 1px solid rgba(236,232,223,.16); }
+    .ui-mini div { padding: 0.7rem; border-bottom: 1px solid rgba(236,232,223,.12); display: flex; justify-content: space-between; }
+    .ui-mini div:last-child { border-bottom: 0; }
+    .ui-mini span { color: #c1bfb9; }
+    .ui-mini b { color: #ff5c31; font-weight: 500; }
+
+    .downloads { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.78rem 1.25rem;
+      border: 1px solid var(--fg);
+      border-radius: 99px;
+      background: var(--fg);
+      color: var(--surface);
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--bone-dim);
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
     }
+    .button:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .button.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+    .button.ghost:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 
-    @media (max-width: 860px) {
-      .grid-2, .grid-3, .voice-pair { grid-template-columns: 1fr; }
-      .specimen { grid-template-columns: 1fr; gap: 0.8rem; }
-      .section-head { flex-direction: column; gap: 0.6rem; }
+    footer { padding: 2rem var(--gutter); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--label-dim); }
+
+    @media (max-width: 960px) {
+      .topbar-links a { display: none; }
+      .cover, .section-head { grid-template-columns: 1fr; }
+      .cover-rail { border-left: 0; border-top: 1px solid var(--line); padding: 1.4rem 0 0; }
+      .brand-board, .foundation-grid, .rule-grid, .application-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .colour-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .swatch:nth-child(2) { border-right: 0; }
+      .swatch:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 640px) {
+      .topbar { min-height: 66px; }
+      .cover { min-height: calc(100svh - 66px); }
+      .cover-meta, .cover-foot { flex-direction: column; align-items: flex-start; }
+      .brand-board, .foundation-grid, .rule-grid, .application-grid, .logo-grid, .colour-grid, .voice-grid { grid-template-columns: 1fr; }
+      .swatch { border-right: 0; border-bottom: 1px solid var(--line); }
+      .swatch:last-child { border-bottom: 0; }
+      .specimen { grid-template-columns: 1fr; }
+      .outline { -webkit-text-stroke-width: 1px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     }
     @media print {
-      body { background: #0a0a0c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .topbar, .grain, .downloads { display: none !important; }
+      body { background: #ece8df !important; color: #14131a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section, .cover { break-inside: avoid; }
       @page { margin: 0; }
     }
   </style>
 </head>
 <body>
+  <div class="grain" aria-hidden="true"></div>
 
-  <!-- COVER -->
-  <header class="cover">
-    <div class="cover-top mono">
-      <span>SwiftLoop Studio — Brand Guidelines</span>
-      <span>V1.0 / 2026</span>
-    </div>
-    <h1>
-      Brand<br />
-      <span class="outline">Guide</span>lines<span class="accent">.</span>
-    </h1>
-    <div class="cover-foot">
-      <p>The complete identity system for SwiftLoop — a web-design and AI-automation studio in Dubai. This document governs every surface the brand touches: web, print, proposals, invoices and product UI.</p>
-      <span class="mono dim">Dubai / Remote — GMT+4</span>
-    </div>
+  <header class="topbar">
+    <a class="topbar-logo" href="#top" aria-label="SwiftLoop brand guidelines — top">SwiftLoop</a>
+    <nav class="topbar-links label" aria-label="Brand guideline sections">
+      <a href="#system">System</a>
+      <a href="#logo">Logo</a>
+      <a href="#colour">Colour</a>
+      <a href="#type">Type</a>
+      <a href="#voice">Voice</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.3 4.3l1.5 1.5M18.2 18.2l1.5 1.5M2.5 12h2M19.5 12h2M4.3 19.7l1.5-1.5M18.2 5.8l1.5-1.5"/></svg>
+      </button>
+    </nav>
   </header>
 
-  <!-- 01 BRAND CORE -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Brand core</h2>
-      <span class="section-kicker mono">01 / Foundation</span>
-    </div>
-    <p class="lede"><strong>Kinetic precision.</strong> SwiftLoop sits at the intersection of hand-crafted design and machine-run systems. The identity expresses that duality everywhere: ink canvas, bone type, one signal-orange accent, and monospaced telemetry. Designed by hand, run by machine.</p>
-    <div class="grid grid-3">
-      <div class="tile">
-        <span class="mono">Positioning</span>
-        <h3>Award-calibre sites, self-running systems</h3>
-        <p>We build websites people remember and wire them to AI workflows that never sleep. Premium craft, attached to a retainer by default — the system compounds.</p>
+  <main id="top">
+    <section class="cover">
+      <div class="cover-meta label">
+        <span>SwiftLoop / Brand system</span>
+        <span>V2.0 / September 2026</span>
       </div>
-      <div class="tile">
-        <span class="mono">Personality</span>
-        <h3>Precise. Confident. Quietly technical.</h3>
-        <p>Never loud, never cheap. The brand speaks like an engineer who designs — short declarative lines, real numbers, no filler adjectives.</p>
+      <h1 class="cover-title">Kinetic<br><span class="accent">precision.</span><br><span class="outline">On loop.</span></h1>
+      <aside class="cover-rail">
+        <span class="pulse label">Reference system / live</span>
+        <p>A complete identity system for a web-design and AI-automation studio built in Dubai and designed to move.</p>
+        <span class="label dim">25.16°N / 55.20°E<br>EST 2021 / GMT+4</span>
+      </aside>
+      <div class="cover-foot">
+        <p><strong>Websites that win clients. AI that runs the rest.</strong> Every surface pairs human craft with machine precision: warm cream, dark ink, one signal, and visible system logic.</p>
+        <span class="label dim">Designed by hand. Run by machine.</span>
       </div>
-      <div class="tile">
-        <span class="mono">The loop</span>
-        <h3>Map → Design → Automate → Iterate</h3>
-        <p>The four-phase process is a brand asset. The circle / ring motif in the logo mark is the loop made visible — closed, continuous, compounding.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 02 LOGO -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Logo system</h2>
-      <span class="section-kicker mono">02 / Identity marks</span>
-    </div>
-    <p class="lede">The identity has two components: the <strong>wordmark</strong> (primary) and the <strong>loop ring</strong> (symbol). The wordmark is a single Clash Display Semibold setting — "Swift" in bone, "Loop" and the terminal period in signal orange. The period is non-negotiable: it is the full stop of a confident sentence.</p>
+    <section class="section" id="system">
+      <div class="section-head">
+        <div>
+          <span class="label accent">01 / System at a glance</span>
+          <h2 class="section-title">One brand world.<br>Nine signals.</h2>
+        </div>
+        <p class="section-intro">The system is intentionally narrow. <strong>One dominant statement, one saturated colour, one recurring loop.</strong> The restraint makes every application recognisable.</p>
+      </div>
 
-    <div class="grid grid-2">
-      <div>
-        <div class="logo-stage" style="background: var(--ink-2);">
-          <span class="wordmark">Swift<em>Loop</em><em>.</em></span>
-        </div>
-        <div class="tile-label mono"><span>Primary wordmark</span><span>On ink — default</span></div>
+      <div class="brand-board" aria-label="SwiftLoop brand system overview">
+        <article class="board-cell board-cell--dark"><span class="cell-index label">01</span><div class="cell-stack"><span class="label" style="color:#c1bfb9">Primary mark</span><img class="board-logo" src="logo/swiftloop-wordmark-primary.svg" alt="SwiftLoop primary wordmark" /></div></article>
+        <article class="board-cell"><span class="cell-index label">02</span><div class="cell-stack"><span class="label accent">Brand promise</span><div class="board-quote">Win clients<span class="accent">.</span><br><span class="outline" style="-webkit-text-stroke-color:var(--fg)">Run the rest.</span></div></div></article>
+        <article class="board-cell board-cell--orange"><span class="cell-index label">03</span><div class="cell-stack"><span class="label">Signal / action</span><h3>One accent. No noise.</h3><span class="label">#FF4D1F / Signal Orange</span></div></article>
+        <article class="board-cell"><span class="cell-index label">04</span><div class="cell-stack"><span class="label accent">Palette</span><h3>Cream. Ink. Signal.</h3><div class="board-swatch"><i style="background:#ece8df"></i><i style="background:#14131a"></i><i style="background:#0a0a0c"></i><i style="background:#ff4d1f"></i></div></div></article>
+        <article class="board-cell board-cell--dark"><span class="cell-index label">05</span><div class="cell-stack"><span class="label" style="color:#ff5c31">Three voices</span><div class="type-lines"><span class="t-display">Mirava</span><span class="t-body">Oxanium carries the argument.</span><span class="t-label">Doto reports the signal</span></div></div></article>
+        <article class="board-cell"><span class="cell-index label">06</span><div class="cell-stack"><span class="label accent">The loop</span><h3>Map. Design. Automate. Iterate.</h3></div><svg class="ring-construction" viewBox="0 0 200 200" fill="none" aria-hidden="true"><circle cx="100" cy="100" r="90"/><circle cx="100" cy="100" r="66" stroke="#ff4d1f" stroke-width="24"/></svg></article>
+        <article class="board-cell"><span class="cell-index label">07</span><div class="cell-stack"><span class="label accent">Digital surface</span><div class="mini-browser"><div class="mini-browser-top"><i></i><i></i><i></i></div><div class="mini-browser-body"><strong>Built to <span>move.</span></strong><p>Hairlines, telemetry, precise action.</p></div></div></div></article>
+        <article class="board-cell board-cell--dark"><span class="cell-index label">08</span><div class="cell-stack"><span class="label" style="color:#c1bfb9">Print surface</span><div class="mini-card"><img src="logo/swiftloop-wordmark-primary.svg" alt="" /><small class="label">Dubai / Remote<br>25.16°N</small></div></div></article>
+        <article class="board-cell"><span class="cell-index label">09</span><div class="cell-stack"><span class="label accent">Voice</span><h3>Short. Specific. Measured.</h3><p>Outcome first. Mechanism second. Real numbers when the evidence exists. Full stops, never hype.</p></div></article>
       </div>
-      <div>
-        <div class="logo-stage on-bone">
-          <span class="wordmark inverse">Swift<em>Loop</em><em>.</em></span>
-        </div>
-        <div class="tile-label mono"><span>Inverse wordmark</span><span>On bone / light</span></div>
-      </div>
-      <div>
-        <div class="logo-stage" style="background: var(--ink-2);">
-          <span class="wordmark solid-bone">Swift<em>Loop</em><em>.</em></span>
-        </div>
-        <div class="tile-label mono"><span>Monochrome bone</span><span>1-colour print, engraving</span></div>
-      </div>
-      <div>
-        <div class="logo-stage on-accent">
-          <span class="wordmark solid-ink">Swift<em>Loop</em><em>.</em></span>
-        </div>
-        <div class="tile-label mono"><span>Monochrome ink</span><span>On accent fields only</span></div>
-      </div>
-      <div>
-        <div class="logo-stage" style="background: var(--ink-2);">
-          <svg width="96" height="96" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="SwiftLoop ring">
-            <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
-          </svg>
-        </div>
-        <div class="tile-label mono"><span>The loop ring</span><span>Favicon, avatar, stamp</span></div>
-      </div>
-      <div>
-        <div class="logo-stage" style="background: var(--ink-2);">
-          <div class="stacked-mark">
-            <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin: 0 auto;">
-              <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
-            </svg>
-            <span class="wordmark">Swift<em>Loop</em><em>.</em></span>
-          </div>
-        </div>
-        <div class="tile-label mono"><span>Stacked lockup</span><span>Square formats, covers</span></div>
-      </div>
-    </div>
+    </section>
 
-    <div style="margin-top: 3rem; display: flex; gap: 3rem; flex-wrap: wrap; align-items: flex-start;">
-      <div>
-        <span class="mono accent" style="display:block; margin-bottom: 1.4rem;">Clear space</span>
-        <div class="clearspace-demo">
-          <span class="wordmark" style="font-size: 1.8rem;">Swift<em>Loop</em><em>.</em></span>
-        </div>
+    <section class="section">
+      <div class="section-head">
+        <div><span class="label accent">02 / Foundation</span><h2 class="section-title">What the brand<br>stands for.</h2></div>
+        <p class="section-intro">SwiftLoop sits between a design studio and an automation operator. The identity should always show <strong>craft and system</strong> in the same frame.</p>
       </div>
-      <div style="flex: 1; min-width: 280px; margin-top: 0.2rem;">
-        <span class="mono accent" style="display:block; margin-bottom: 1rem;">Construction rules</span>
-        <div class="rule do"><i>● DO</i><span>Keep clear space of at least the cap-height of the "S" on all sides.</span></div>
-        <div class="rule do"><i>● DO</i><span>Minimum size — wordmark: <strong>90 px / 24 mm</strong> wide. Ring: <strong>16 px / 5 mm</strong>.</span></div>
-        <div class="rule do"><i>● DO</i><span>Ring stroke weight is <strong>14 % of the viewbox</strong> (14 units on a 100-unit grid). Never thin it.</span></div>
-        <div class="rule dont"><i>✕ DON'T</i><span>Recolour "Swift", change the orange, add gradients, shadows or outlines.</span></div>
-        <div class="rule dont"><i>✕ DON'T</i><span>Set the wordmark in any typeface other than Clash Display Semibold.</span></div>
-        <div class="rule dont"><i>✕ DON'T</i><span>Drop the terminal period, stretch, rotate, or place on busy photography without a scrim.</span></div>
+      <div class="foundation-grid">
+        <article class="info-card"><span class="label accent">Positioning</span><div><h3>Web design with an operational engine.</h3><p>Premium websites connected to AI workflows that qualify, follow up, book, invoice, support and report.</p></div></article>
+        <article class="info-card"><span class="label accent">Personality</span><div><h3>Precise. Confident. Quietly technical.</h3><p>Editorial enough to feel crafted, technical enough to feel capable, restrained enough to feel premium.</p></div></article>
+        <article class="info-card"><span class="label accent">Core metaphor</span><div><h3>A loop that compounds.</h3><p>Map, Design, Automate and Iterate are not a linear handoff. The ring closes, learns and runs again.</p></div></article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 03 COLOR -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Colour</h2>
-      <span class="section-kicker mono">03 / Palette</span>
-    </div>
-    <p class="lede">The palette is deliberately narrow: three inks, two bones, one signal. <strong>Signal Orange is the only saturated colour in the system</strong> — it marks action, motion and the loop itself. If everything is orange, nothing is. Target ratio on any layout: ~80 % ink, ~15 % bone, ~5 % orange.</p>
-    <div class="grid grid-3">
-      <div class="swatch" style="background:#0a0a0c;">
-        <span class="name">Ink</span>
-        <span class="vals">HEX #0A0A0C · RGB 10 10 12<br/>CMYK 17 17 0 95 · canvas / primary bg</span>
+    <section class="section" id="logo">
+      <div class="section-head">
+        <div><span class="label accent">03 / Logo</span><h2 class="section-title">The mark<br>stays exact.</h2></div>
+        <p class="section-intro">Use the supplied vector assets. <strong>Never re-typeset the wordmark.</strong> The orange terminal period is the full stop of a confident statement.</p>
       </div>
-      <div class="swatch" style="background:#101014;">
-        <span class="name">Ink 2</span>
-        <span class="vals">HEX #101014 · RGB 16 16 20<br/>CMYK 20 20 0 92 · raised surfaces</span>
+      <div class="logo-grid">
+        <article class="logo-tile"><div class="logo-stage"><img src="logo/swiftloop-wordmark-on-light.svg" alt="SwiftLoop wordmark for light backgrounds" /></div><div class="tile-meta label"><span>Primary / light</span><span>Cream field</span></div></article>
+        <article class="logo-tile"><div class="logo-stage dark"><img src="logo/swiftloop-wordmark-primary.svg" alt="SwiftLoop wordmark for dark backgrounds" /></div><div class="tile-meta label"><span>Primary / dark</span><span>Ink field</span></div></article>
+        <article class="logo-tile"><div class="logo-stage orange"><img src="logo/swiftloop-wordmark-mono-ink.svg" alt="Monochrome SwiftLoop wordmark on Signal Orange" /></div><div class="tile-meta label"><span>Monochrome / ink</span><span>Orange field only</span></div></article>
+        <article class="logo-tile"><div class="logo-stage dark"><img class="ring" src="logo/swiftloop-ring.svg" alt="SwiftLoop ring mark" /></div><div class="tile-meta label"><span>Loop ring</span><span>Icon / stamp / signal</span></div></article>
       </div>
-      <div class="swatch" style="background:#17171d;">
-        <span class="name">Ink 3</span>
-        <span class="vals">HEX #17171D · RGB 23 23 29<br/>CMYK 21 21 0 89 · hover states</span>
-      </div>
-      <div class="swatch" style="background:#ece8df; color:#0a0a0c;">
-        <span class="name">Bone</span>
-        <span class="vals" style="opacity:.65;">HEX #ECE8DF · RGB 236 232 223<br/>CMYK 0 2 6 7 · type / light surfaces</span>
-      </div>
-      <div class="swatch" style="background:#97948b; color:#0a0a0c;">
-        <span class="name">Bone Dim</span>
-        <span class="vals" style="opacity:.7;">HEX #97948B · RGB 151 148 139<br/>CMYK 0 2 8 41 · secondary type</span>
-      </div>
-      <div class="swatch" style="background:#ff4d1f; color:#0a0a0c;">
-        <span class="name">Signal Orange</span>
-        <span class="vals" style="opacity:.75;">HEX #FF4D1F · RGB 255 77 31<br/>CMYK 0 70 88 0 · PMS 1655 C · accent only</span>
-      </div>
-    </div>
-    <div style="margin-top: 2rem;">
-      <table class="spec-table">
-        <tr><th>Functional token</th><th>Value</th><th>Use</th></tr>
-        <tr><td>--line</td><td>rgba(236, 232, 223, 0.12)</td><td>Hairline rules, borders, dividers</td></tr>
-        <tr><td>--line-soft</td><td>rgba(236, 232, 223, 0.07)</td><td>Subtle borders on media and footers</td></tr>
-        <tr><td>--accent-soft</td><td>rgba(255, 77, 31, 0.14)</td><td>Orange glows, radial CTA washes</td></tr>
+      <table class="token-table">
+        <thead><tr><th>Rule</th><th>Digital</th><th>Print</th><th>Instruction</th></tr></thead>
+        <tbody>
+          <tr><td>minimum.wordmark</td><td>90px wide</td><td>24mm wide</td><td>Below this size, use the ring.</td></tr>
+          <tr><td>minimum.ring</td><td>16px</td><td>5mm</td><td>Keep the 14-unit stroke on the 100-unit grid.</td></tr>
+          <tr><td>clearSpace</td><td colspan="2">1 × cap-height of “S”</td><td>On every side, measured from the outermost mark.</td></tr>
+          <tr><td>forbidden</td><td colspan="3">Do not stretch, rotate, recolour, shadow, outline, separate, or remove the orange period.</td></tr>
+        </tbody>
       </table>
-    </div>
-  </section>
+    </section>
 
-  <!-- 04 TYPOGRAPHY -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Typography</h2>
-      <span class="section-kicker mono">04 / Type system</span>
-    </div>
-    <p class="lede">Three voices, strictly cast. <strong>Clash Display</strong> shouts the headlines, <strong>Satoshi</strong> carries the argument, <strong>JetBrains Mono</strong> whispers the telemetry — labels, coordinates, metadata, numbers. Never let them swap roles.</p>
+    <section class="section" id="colour">
+      <div class="section-head">
+        <div><span class="label accent">04 / Colour</span><h2 class="section-title">Cream. Ink.<br>Signal.</h2></div>
+        <p class="section-intro">Light mode is the default expression. Dark mode is the deliberate inverse. <strong>Signal Orange remains the only saturated colour.</strong></p>
+      </div>
+      <div class="colour-grid">
+        <article class="swatch swatch--cream"><h3>Cream</h3><p>#ECE8DF<br>RGB 236 232 223<br>Default canvas</p></article>
+        <article class="swatch swatch--ink"><h3>Interface Ink</h3><p>#14131A<br>RGB 20 19 26<br>Primary foreground</p></article>
+        <article class="swatch swatch--dark"><h3>Logo Ink</h3><p>#0A0A0C<br>RGB 10 10 12<br>Dark canvas / logo</p></article>
+        <article class="swatch swatch--orange"><h3>Signal Orange</h3><p>#FF4D1F<br>RGB 255 77 31<br>Fills / ring / full stops</p></article>
+      </div>
+      <p class="contrast-note"><strong>Accessibility correction.</strong> The website's source Accent Ink `#C4380F` measures about 4.38:1 on Cream, just below WCAG AA for normal text. Use `#B6330E` (about 4.95:1) for small orange text; reserve `#C4380F` and raw Signal Orange `#FF4D1F` for large/bold display or non-text accents. On Ink, small accent text uses `#FF5C31`.</p>
+    </section>
 
-    <div class="specimen">
-      <div class="meta mono"><b>Clash Display</b>Semibold 600 / Medium 500<br/>Display, H1–H3, wordmark<br/>Tracking −0.02 to −0.03 em<br/>Leading 0.96–1.05 · often UPPERCASE</div>
-      <div class="spec-display">Design in motion<span class="accent">.</span><br/><span style="color:transparent; -webkit-text-stroke: 1.5px var(--bone);">Systems on</span> loop<span class="accent">.</span></div>
-    </div>
-    <div class="specimen">
-      <div class="meta mono"><b>Satoshi</b>Regular 400 / Medium 500 / Bold 700<br/>Body copy, UI, paragraphs<br/>Size 17 px base · leading 1.6</div>
-      <div class="spec-body">SwiftLoop builds award-calibre websites and wires them to AI workflows that never sleep — so your brand performs while you don't have to. Emphasis is set in Medium 500, <span class="dim">secondary copy in Bone Dim.</span></div>
-    </div>
-    <div class="specimen">
-      <div class="meta mono"><b>JetBrains Mono</b>Regular 400 / Medium 500<br/>Labels, metadata, numerics<br/>11 px · tracking +0.14 em · UPPERCASE</div>
-      <div class="spec-mono">EST 2021 — LAT 25.16°N — LON 55.20°E — STATUS <span class="accent">● OPEN</span><br/>PHASE 01 / MAP — SERVICES / 01—04 — ◦ FEATURED / LIVE CLIENT WORK</div>
-    </div>
+    <section class="section" id="type">
+      <div class="section-head">
+        <div><span class="label accent">05 / Typography</span><h2 class="section-title">Three voices.<br>Strict roles.</h2></div>
+        <p class="section-intro">The current website uses three self-hosted faces. <strong>Mirava leads, Oxanium explains, Doto reports.</strong> They do not trade jobs.</p>
+      </div>
+      <article class="specimen"><div class="specimen-meta label"><b>Mirava</b>Display / 400–700<br>Tracking −0.02 to −0.03em<br>Leading 0.96–1.05</div><div class="display-sample">Websites that<br><span class="accent">win clients.</span><br><span class="outline">AI that runs</span><br>the rest.</div></article>
+      <article class="specimen"><div class="specimen-meta label"><b>Oxanium</b>Body / 200–800<br>17px base<br>Leading 1.55–1.65</div><p class="body-sample">SwiftLoop designs <strong>websites that turn attention into enquiries</strong> and automates the work behind them—lead follow-up, bookings, invoices and support. The voice is technological without becoming synthetic.</p></article>
+      <article class="specimen"><div class="specimen-meta label"><b>Doto</b>Label / 100–900<br>0.72rem / 600<br>Tracking +0.12em</div><div class="label-sample">EST 2021 / 25.16°N / 55.20°E<br>STATUS <span class="accent">● OPEN</span><br>PHASE 01 / MAP → PHASE 04 / ITERATE</div></article>
+    </section>
 
-    <div style="margin-top: 2.5rem;">
-      <span class="mono accent" style="display:block; margin-bottom: 1rem;">Signature typographic devices</span>
-      <div class="rule do"><i>● DO</i><span><strong>Outline type:</strong> transparent fill with a 1.5 px bone stroke — used for the second beat of a two-line headline.</span></div>
-      <div class="rule do"><i>● DO</i><span><strong>Orange full stops:</strong> headlines that make a claim end with a Signal Orange period.</span></div>
-      <div class="rule do"><i>● DO</i><span><strong>Mono kickers:</strong> sections are introduced with a "◦" prefix in orange and a mono label in Bone Dim.</span></div>
-      <div class="rule dont"><i>✕ DON'T</i><span>Use Clash Display below 18 px, use mono for body paragraphs, or set body copy in all-caps.</span></div>
-    </div>
-  </section>
+    <section class="section">
+      <div class="section-head">
+        <div><span class="label accent">06 / Graphic language</span><h2 class="section-title">Structure<br>you can see.</h2></div>
+        <p class="section-intro">The system looks engineered because its logic stays visible: hairlines, coordinates, counters, states, and the loop itself.</p>
+      </div>
+      <div class="rule-grid">
+        <article class="info-card"><span class="label accent">Hairlines</span><div><h3>One-pixel structure.</h3><p>Separate sections and states with low-opacity rules. Avoid generic card shadows and soft floating boxes.</p></div></article>
+        <article class="info-card"><span class="label accent">Outline type</span><div><h3>Second beat only.</h3><p>Use a 1–1.5px outline for the supporting half of a headline. Never outline paragraphs or the logo.</p></div></article>
+        <article class="info-card"><span class="label accent">Telemetry</span><div><h3>Real data as texture.</h3><p>Use truthful coordinates, dates, phases and system states. Never invent statistics for decoration.</p></div></article>
+        <article class="info-card"><span class="label accent">Pills</span><div><h3>Actions, not containers.</h3><p>Use 99px radii for buttons, status chips and segmented controls. Content panels stay square or nearly square.</p></div></article>
+        <article class="info-card"><span class="label accent">Grain</span><div><h3>Subtle and tactile.</h3><p>Fractal noise at 3.5% on light surfaces and 5% on dark surfaces. It should be felt before it is seen.</p></div></article>
+        <article class="info-card"><span class="label accent">Motion</span><div><h3>Swift and decisive.</h3><p>Use `cubic-bezier(0.22, 1, 0.36, 1)`, masked reveals and directional fills. No bounce or idle floating.</p></div></article>
+      </div>
+    </section>
 
-  <!-- 05 GRAPHIC LANGUAGE -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Graphic language</h2>
-      <span class="section-kicker mono">05 / Texture &amp; motion</span>
-    </div>
-    <div class="grid grid-3">
-      <div class="tile">
-        <span class="mono">Hairlines</span>
-        <h3>1 px rules everywhere</h3>
-        <p>Sections, tables and cards are separated by 1 px hairlines at 12 % bone — never solid boxes or drop shadows. The grid shows itself.</p>
+    <section class="section" id="voice">
+      <div class="section-head">
+        <div><span class="label accent">07 / Voice</span><h2 class="section-title">Outcome first.<br>Mechanism second.</h2></div>
+        <p class="section-intro">Write like an engineer who designs: <strong>short, specific, measured.</strong> Claims require evidence. Full stops do more work than exclamation marks.</p>
       </div>
-      <div class="tile">
-        <span class="mono">Grain</span>
-        <h3>5 % film grain</h3>
-        <p>A fractal-noise grain overlay at 5 % opacity sits on top of digital surfaces. It keeps the dark canvas analogue and alive.</p>
+      <div class="voice-grid">
+        <article class="voice-panel"><span class="label accent">Use</span><blockquote>“Ship in weeks, not quarters.”</blockquote><ul class="rule-list"><li><span class="yes">DO</span><span>Lead with the business outcome.</span></li><li><span class="yes">DO</span><span>Name the system that produces it.</span></li><li><span class="yes">DO</span><span>Use real numbers when verified.</span></li><li><span class="yes">DO</span><span>Keep sentences short and declarative.</span></li></ul></article>
+        <article class="voice-panel"><span class="label" style="color:#a22d10">Avoid</span><blockquote>“Cutting-edge solutions for everyone!”</blockquote><ul class="rule-list"><li><span class="no">NO</span><span>Cheap, budget or basic positioning.</span></li><li><span class="no">NO</span><span>Generic AI and innovation buzzwords.</span></li><li><span class="no">NO</span><span>Unverified awards, results or metrics.</span></li><li><span class="no">NO</span><span>Breathless punctuation or hype.</span></li></ul></article>
       </div>
-      <div class="tile">
-        <span class="mono">Pills</span>
-        <h3>Fully-rounded chips</h3>
-        <p>Buttons and tags use 99 px radius pills with mono uppercase labels. Primary = bone fill; ghost = 1 px line; hover floods orange.</p>
-      </div>
-      <div class="tile">
-        <span class="mono">Telemetry</span>
-        <h3>Coordinates &amp; counters</h3>
-        <p>Real data as decoration: latitudes, timestamps, phase numbers, percentages. The brand proves it measures things.</p>
-      </div>
-      <div class="tile">
-        <span class="mono">Motion</span>
-        <h3>Masked reveals</h3>
-        <p>Type enters through line-masks; eases use cubic-bezier(0.22, 1, 0.36, 1). Motion is swift and decisive — no bounces, no floaty drift.</p>
-      </div>
-      <div class="tile">
-        <span class="mono">The ring</span>
-        <h3>Circular geometry</h3>
-        <p>Circles recur: the ring mark, round close buttons, the "◦" separator, radial orange glows behind CTAs. Every circle is the loop.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 06 VOICE -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Voice &amp; tone</h2>
-      <span class="section-kicker mono">06 / Language</span>
-    </div>
-    <p class="lede">Write like the type is set: short, declarative, kinetic. Claims come with numbers. The em-dash and the period do the heavy lifting — exclamation marks never appear.</p>
-    <div class="voice-pair">
-      <div>
-        <span class="mono accent">● We say</span>
-        <p>"Ship in weeks, not quarters."<br/>"Designed by hand, run by machine."<br/>"Tell us what eats your team's week. We'll show you the system that gives it back."</p>
+    <section class="section">
+      <div class="section-head">
+        <div><span class="label accent">08 / Applications</span><h2 class="section-title">One system.<br>Every surface.</h2></div>
+        <p class="section-intro">Web, documents and print should feel related without becoming identical. Each application keeps the same type roles, palette, hairlines and signal logic.</p>
       </div>
-      <div>
-        <span class="mono" style="color:#d6453a;">✕ We never say</span>
-        <p>"Affordable websites for every budget!"<br/>"We're passionate about leveraging cutting-edge synergies."<br/>"Cheap, fast and reliable!!!"</p>
+      <div class="application-grid">
+        <article class="application-card"><div class="application-visual dark"><div class="ui-mini label"><div><span>PHASE 01</span><b>MAP</b></div><div><span>PHASE 02</span><b>DESIGN</b></div><div><span>PHASE 03</span><b>AUTOMATE</b></div><div><span>PHASE 04</span><b>ITERATE</b></div></div></div><div class="application-copy"><h3>Digital UI</h3><p>Light-first surfaces with dark inverse moments, Doto states and directional orange interaction.</p></div></article>
+        <article class="application-card"><div class="application-visual"><div class="document-mini"><header><img src="logo/swiftloop-wordmark-primary.svg" alt="" /></header><div><i></i><i></i><i></i><i></i></div></div></div><div class="application-copy"><h3>Commercial documents</h3><p>A4 cream field, ink header, compact telemetry and decisive total blocks.</p></div></article>
+        <article class="application-card"><div class="application-visual orange"><div class="mini-card" style="box-shadow:none"><img src="logo/swiftloop-wordmark-primary.svg" alt="" /><small class="label">Luca Wiegand / Founder<br>Dubai / GMT+4</small></div></div><div class="application-copy"><h3>Business cards</h3><p>85 × 55mm. One dark face, one cream face, orange edge paint optional.</p></div></article>
       </div>
-    </div>
-    <div style="margin-top: 2rem;">
-      <div class="rule do"><i>● DO</i><span>Lead with the outcome, attach the mechanism: <strong>"3.4× average conversion lift — measured, not promised."</strong></span></div>
-      <div class="rule do"><i>● DO</i><span>Premium posture in commercial documents: builds are quoted at <strong>AED 4,000–7,000+</strong>, always with a care retainer attached by default. Removing the retainer is presented as a downgrade, never a discount.</span></div>
-      <div class="rule do"><i>● DO</i><span>Referral language: every client is told plainly — <strong>one month of retainer free for any introduction that closes.</strong></span></div>
-      <div class="rule dont"><i>✕ DON'T</i><span>Use "cheap", "budget", "basic" or apologise for pricing. SwiftLoop serves luxury and premium clients; the language must match.</span></div>
-    </div>
-  </section>
+      <div class="downloads">
+        <a class="button" href="design-tokens.json" download>Download tokens ↘</a>
+        <a class="button ghost" href="BRAND-GUIDELINES.md">LLM-ready guide ↗</a>
+        <a class="button ghost" href="invoice-generator.html">Invoice generator ↗</a>
+        <a class="button ghost" href="business-card-v2.html">Business card V2 ↗</a>
+      </div>
+    </section>
+  </main>
 
-  <!-- 07 APPLICATIONS -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Applications</h2>
-      <span class="section-kicker mono">07 / In use</span>
-    </div>
-    <div class="grid grid-3">
-      <div class="tile">
-        <span class="mono">Web</span>
-        <h3>swiftloop.tech</h3>
-        <p>Ink canvas, WebGL hero, grain overlay, hairline sections. The site is the reference implementation of this document.</p>
-      </div>
-      <div class="tile">
-        <span class="mono">Documents</span>
-        <h3>Quotes &amp; invoices</h3>
-        <p>A4, ink header band with the wordmark, mono metadata row, hairline tables, orange totals. See the SwiftLoop invoice generator.</p>
-      </div>
-      <div class="tile">
-        <span class="mono">Print</span>
-        <h3>Business cards</h3>
-        <p>85 × 55 mm. Ink front with ring + wordmark; bone back with contact telemetry. Soft-touch matte stock, optional orange edge paint.</p>
-      </div>
-    </div>
-  </section>
-
-  <footer class="mono">
-    <span>© 2026 SwiftLoop Studio — Brand Guidelines V1.0</span>
-    <span>info@swiftloop.tech · WA +971 50 972 5199 · Dubai / GMT+4</span>
+  <footer class="label">
+    <span>© 2026 SwiftLoop / Brand system V2.0</span>
+    <span>info@swiftloop.tech / +971 50 972 5199 / Dubai GMT+4</span>
   </footer>
 
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var toggle = document.getElementById("themeToggle");
+      var saved = null;
+      try { saved = localStorage.getItem("sl-brand-theme"); } catch (error) {}
+      if (saved === "dark") root.setAttribute("data-theme", "dark");
+
+      function syncToggle() {
+        var dark = root.getAttribute("data-theme") === "dark";
+        toggle.setAttribute("aria-pressed", String(dark));
+        toggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+      }
+
+      toggle.addEventListener("click", function () {
+        var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("sl-brand-theme", next); } catch (error) {}
+        syncToggle();
+      });
+
+      syncToggle();
+    })();
+  </script>
 </body>
 </html>

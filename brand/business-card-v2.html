@@ -4,22 +4,54 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SwiftLoop — Business Card V2 · Luca Wiegand</title>
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='38' fill='none' stroke='%23ff4d1f' stroke-width='14'/%3E%3C/svg%3E" />
+  <link rel="preload" href="../fonts/mirava-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/oxanium-variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/doto-variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="logo/swiftloop-ring.svg" />
   <style>
+    @font-face {
+      font-family: "SwiftLoop Display";
+      src: url("../fonts/mirava-regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SwiftLoop Body";
+      src: url("../fonts/oxanium-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SwiftLoop Label";
+      src: url("../fonts/doto-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
     :root {
+      --surface: #ece8df;
+      --surface-2: #e4dfd3;
+      --surface-3: #dbd5c6;
+      --fg: #14131a;
+      --fg-dim: #5c574a;
+      --label-dim: #262420;
       --ink: #0a0a0c;
       --ink-2: #101014;
-      --line: rgba(236, 232, 223, 0.12);
+      --line: rgba(20, 19, 26, 0.14);
+      --line-dark: rgba(236, 232, 223, 0.12);
       --bone: #ece8df;
-      --bone-dim: #97948b;
+      --bone-dim: #c1bfb9;
       --accent: #ff4d1f;
-      --font-display: "Clash Display", "Arial Black", sans-serif;
-      --font-body: "Satoshi", "Helvetica Neue", sans-serif;
-      --font-mono: "JetBrains Mono", "SFMono-Regular", monospace;
-      --bleed: 0mm; /* toggled to 3mm via body.has-bleed */
+      --accent-ink-source: #c4380f;
+      --accent-ink: #b6330e;
+      --on-accent: #1a0d07;
+      --font-display: "SwiftLoop Display", "Mirava", "Arial Black", sans-serif;
+      --font-body: "SwiftLoop Body", "Oxanium", "Helvetica Neue", sans-serif;
+      --font-mono: "SwiftLoop Label", "Doto", sans-serif;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --bleed: 0mm;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -155,13 +187,169 @@
       }
       body.has-bleed .card-inner::after { display: none; }
     }
+
+    /* ---- V2.1 / current website alignment ---- */
+    body {
+      background-color: var(--surface);
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      color: var(--fg);
+      align-items: stretch;
+      padding: clamp(2rem, 5vw, 4.5rem) clamp(1rem, 4vw, 4rem) 5rem;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.025;
+      z-index: 20;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    ::selection { background: var(--accent); color: var(--on-accent); }
+    :where(button, input):focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+    .mono { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; }
+
+    .head {
+      width: min(100%, 1160px);
+      margin: 0 auto 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      text-align: left;
+    }
+    .head .logo {
+      width: 8.6rem;
+      aspect-ratio: 5228 / 1000;
+      background: url("logo/swiftloop-wordmark-on-light.svg") center / contain no-repeat;
+      overflow: hidden;
+      text-indent: -9999px;
+      flex: none;
+    }
+    .head p { color: var(--label-dim); margin: 0; text-align: right; }
+    .controls {
+      width: min(100%, 1160px);
+      justify-content: flex-start;
+      margin: 0 auto clamp(2.5rem, 6vw, 5rem);
+      padding: 1rem 0;
+      border-block: 1px solid var(--line);
+    }
+    .btn {
+      color: var(--surface);
+      background: var(--fg);
+      font-weight: 600;
+      transition: background 0.25s, color 0.25s, transform 0.35s var(--ease-out);
+    }
+    .btn:hover { background: var(--accent); color: var(--on-accent); transform: translateY(-1px); }
+    .check { color: var(--label-dim); }
+    .check input { width: 16px; height: 16px; }
+
+    .sheet { width: min(100%, 1160px); margin-inline: auto; justify-content: flex-start; gap: clamp(2rem, 5vw, 5rem); }
+    .card-slot { text-align: left; }
+    .card-slot > .mono { color: var(--label-dim); margin-bottom: 0.8rem; }
+    .card {
+      box-shadow: 0 26px 70px rgba(20, 19, 26, 0.18), 0 0 0 1px rgba(20, 19, 26, 0.08);
+      border-radius: 1mm;
+    }
+
+    .card--front { background: var(--ink); color: var(--bone); }
+    .card--front::before {
+      content: "SL / DUBAI / 25.16°N";
+      position: absolute;
+      left: calc(var(--bleed) + 5mm);
+      top: calc(var(--bleed) + 5mm);
+      color: var(--bone-dim);
+      font-family: var(--font-mono);
+      font-size: 4.2pt;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      z-index: 2;
+    }
+    .card--front .ring-bg {
+      left: auto;
+      right: -12mm;
+      top: -12mm;
+      transform: none;
+      width: 52mm;
+      height: 52mm;
+      opacity: 0.16;
+    }
+    .card--front .card-inner { justify-content: flex-end; }
+    .front-center {
+      left: 5mm;
+      right: 5mm;
+      top: auto;
+      bottom: 18mm;
+      transform: none;
+      width: auto;
+      text-align: left;
+    }
+    .front-wordmark { width: 34mm; height: auto; }
+    .front-tag { max-width: 45mm; color: var(--bone-dim); margin-top: 2.2mm; font-size: 4.2pt; font-weight: 600; line-height: 1.55; }
+    .front-foot { align-items: flex-end; }
+    .front-foot .qr { width: 9mm; height: 9mm; color: var(--ink); background: var(--bone); padding: 1.1mm; }
+    .front-foot .url { color: var(--bone); font-size: 4.8pt; font-weight: 600; }
+
+    .card--back { background: var(--bone); color: var(--fg); }
+    .card--back::before {
+      content: "";
+      position: absolute;
+      width: 48mm;
+      height: 48mm;
+      right: -24mm;
+      bottom: -24mm;
+      border: 7mm solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.1;
+    }
+    .back-name { color: var(--fg); font-size: 15pt; letter-spacing: -0.03em; position: relative; }
+    .back-role { color: var(--label-dim); font-size: 4.4pt; font-weight: 600; }
+    .back-contact { color: var(--fg-dim); font-size: 5pt; font-weight: 500; }
+    .back-contact b { color: var(--fg); font-weight: 600; }
+    .back-contact .o { color: var(--accent-ink); font-weight: 700; }
+    .back-rule { background: var(--accent); height: 0.35mm; width: 14mm; }
+    .back-ring { width: 8mm; height: 8mm; position: relative; }
+
+    .spec {
+      width: min(100%, 1160px);
+      max-width: 900px;
+      margin: clamp(3rem, 7vw, 6rem) 0 0 max(0px, calc((100% - 1160px) / 2));
+      padding-top: 1.2rem;
+      border-top-color: var(--line);
+      color: var(--fg-dim);
+      display: block;
+    }
+    .spec b { color: var(--fg); font-weight: 600; }
+
+    @media (max-width: 900px) {
+      .head { align-items: flex-start; }
+      .sheet { justify-content: center; }
+      .spec { max-width: none; margin-left: 0; }
+    }
+    @media (max-width: 560px) {
+      body { align-items: center; }
+      .head { flex-direction: column; }
+      .head p { text-align: left; }
+      .controls { justify-content: flex-start; }
+      .card { transform: scale(0.88); transform-origin: top center; margin-bottom: -7mm; }
+    }
+    @media print {
+      body { padding: 0; background: none; display: block; }
+      body::before { display: none; }
+      .card { box-shadow: none; transform: none; margin: 0; }
+    }
   </style>
 </head>
 <body>
 
   <div class="head">
     <div class="logo">Swift<em>Loop</em><em>.</em></div>
-    <p class="mono">Business card V2 — centred — Luca Wiegand · 85 × 55 mm</p>
+    <p class="mono">Business card V2.1 / Luca Wiegand / 85 × 55 mm</p>
   </div>
 
   <div class="controls">
@@ -171,17 +359,17 @@
 
   <div class="sheet">
 
-    <!-- FRONT — centred -->
+    <!-- FRONT — brand promise -->
     <div class="card-slot">
-      <span class="mono">Front — ink, centred</span>
+      <span class="mono">Front / Ink / Brand promise</span>
       <div class="card card--front">
         <svg class="ring-bg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="38" fill="none" stroke="#ff4d1f" stroke-width="14"/>
         </svg>
         <div class="card-inner">
           <div class="front-center">
-            <div class="front-wordmark">Swift<em>Loop</em><em>.</em></div>
-            <div class="front-tag">Web design × AI workflow automation</div>
+            <img class="front-wordmark" src="logo/swiftloop-wordmark-primary.svg" alt="SwiftLoop" />
+            <div class="front-tag">Websites that win clients · AI that runs the rest</div>
           </div>
           <div class="front-foot">
             <svg class="qr" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-label="QR code — swiftloop.tech"><path d="M0 0h7v1H0zM9 0h1v1H9zM13 0h1v1H13zM18 0h7v1H18zM0 1h1v1H0zM6 1h1v1H6zM9 1h3v1H9zM13 1h3v1H13zM18 1h1v1H18zM24 1h1v1H24zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h1v1H8zM10 2h1v1H10zM15 2h1v1H15zM18 2h1v1H18zM20 2h3v1H20zM24 2h1v1H24zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h1v1H8zM11 3h6v1H11zM18 3h1v1H18zM20 3h3v1H20zM24 3h1v1H24zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h1v1H8zM10 4h2v1H10zM14 4h1v1H14zM16 4h1v1H16zM18 4h1v1H18zM20 4h3v1H20zM24 4h1v1H24zM0 5h1v1H0zM6 5h1v1H6zM8 5h1v1H8zM14 5h3v1H14zM18 5h1v1H18zM24 5h1v1H24zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14 6h1v1H14zM16 6h1v1H16zM18 6h7v1H18zM8 7h3v1H8zM16 7h1v1H16zM0 8h1v1H0zM2 8h5v1H2zM9 8h1v1H9zM12 8h3v1H12zM18 8h5v1H18zM0 9h3v1H0zM7 9h1v1H7zM10 9h2v1H10zM16 9h2v1H16zM19 9h1v1H19zM23 9h1v1H23zM0 10h1v1H0zM3 10h5v1H3zM10 10h1v1H10zM14 10h8v1H14zM23 10h2v1H23zM0 11h1v1H0zM2 11h4v1H2zM7 11h1v1H7zM10 11h2v1H10zM14 11h1v1H14zM16 11h2v1H16zM24 11h1v1H24zM2 12h1v1H2zM5 12h5v1H5zM11 12h1v1H11zM13 12h2v1H13zM17 12h4v1H17zM22 12h3v1H22zM0 13h2v1H0zM4 13h1v1H4zM7 13h2v1H7zM10 13h1v1H10zM12 13h1v1H12zM16 13h1v1H16zM19 13h1v1H19zM21 13h1v1H21zM23 13h1v1H23zM0 14h1v1H0zM2 14h1v1H2zM6 14h1v1H6zM10 14h1v1H10zM13 14h1v1H13zM15 14h1v1H15zM19 14h3v1H19zM23 14h2v1H23zM0 15h1v1H0zM5 15h1v1H5zM7 15h1v1H7zM12 15h1v1H12zM14 15h7v1H14zM24 15h1v1H24zM0 16h1v1H0zM3 16h1v1H3zM5 16h2v1H5zM8 16h3v1H8zM12 16h3v1H12zM16 16h5v1H16zM22 16h1v1H22zM8 17h3v1H8zM13 17h1v1H13zM15 17h2v1H15zM20 17h2v1H20zM0 18h7v1H0zM9 18h1v1H9zM11 18h2v1H11zM16 18h1v1H16zM18 18h1v1H18zM20 18h1v1H20zM22 18h3v1H22zM0 19h1v1H0zM6 19h1v1H6zM8 19h1v1H8zM10 19h2v1H10zM16 19h1v1H16zM20 19h2v1H20zM0 20h1v1H0zM2 20h3v1H2zM6 20h1v1H6zM8 20h4v1H8zM15 20h6v1H15zM22 20h3v1H22zM0 21h1v1H0zM2 21h3v1H2zM6 21h1v1H6zM8 21h2v1H8zM12 21h2v1H12zM15 21h1v1H15zM17 21h2v1H17zM20 21h5v1H20zM0 22h1v1H0zM2 22h3v1H2zM6 22h1v1H6zM8 22h3v1H8zM13 22h2v1H13zM21 22h2v1H21zM24 22h1v1H24zM0 23h1v1H0zM6 23h1v1H6zM9 23h1v1H9zM12 23h2v1H12zM16 23h6v1H16zM24 23h1v1H24zM0 24h7v1H0zM8 24h1v1H8zM12 24h1v1H12zM14 24h1v1H14zM19 24h6v1H19z" fill="currentColor"/></svg>
@@ -191,9 +379,9 @@
       </div>
     </div>
 
-    <!-- BACK — unchanged from V1 -->
+    <!-- BACK — contact telemetry -->
     <div class="card-slot">
-      <span class="mono">Back — bone</span>
+      <span class="mono">Back / Cream / Contact telemetry</span>
       <div class="card card--back">
         <div class="card-inner">
           <div>

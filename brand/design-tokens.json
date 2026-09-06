@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "SwiftLoop",
+  "version": "2.0.0",
+  "sourceOfTruth": "css/style.css",
+  "updated": "2026-09-04",
+  "strategy": {
+    "positioning": "Dubai web design, development, and AI automation studio",
+    "brandIdea": "Kinetic precision",
+    "promise": "Websites that win clients. AI that runs the rest.",
+    "signature": "Designed by hand. Run by machine.",
+    "process": ["Map", "Design", "Automate", "Iterate"],
+    "personality": ["precise", "confident", "technical", "editorial", "measured"],
+    "avoid": ["generic SaaS gradients", "cheap neon", "decorative glassmorphism", "corporate filler", "exclamation marks"]
+  },
+  "colors": {
+    "core": {
+      "cream": "#ECE8DF",
+      "signalOrange": "#FF4D1F",
+      "logoInk": "#0A0A0C",
+      "interfaceInk": "#14131A",
+      "sourceAccentText": "#C4380F",
+      "accessibleAccentText": "#B6330E"
+    },
+    "light": {
+      "surface": "#ECE8DF",
+      "surface2": "#E4DFD3",
+      "surface3": "#DBD5C6",
+      "foreground": "#14131A",
+      "foregroundSoft": "#3C3931",
+      "foregroundDim": "#5C574A",
+      "labelDim": "#262420",
+      "line": "rgba(20, 19, 26, 0.14)",
+      "lineSoft": "rgba(20, 19, 26, 0.07)",
+      "accentFill": "#FF4D1F",
+      "accentText": "#B6330E",
+      "accentTextSource": "#C4380F",
+      "accentTextRule": "#B6330E for normal text; #C4380F only at WCAG large/bold sizes",
+      "accentOnForeground": "#FF7A4D",
+      "accentSoft": "rgba(255, 77, 31, 0.20)",
+      "onAccent": "#1A0D07"
+    },
+    "dark": {
+      "surface": "#0A0A0C",
+      "surface2": "#101014",
+      "surface3": "#17171D",
+      "foreground": "#ECE8DF",
+      "foregroundSoft": "#D7D3CA",
+      "foregroundDim": "#97948B",
+      "labelDim": "#C1BFB9",
+      "line": "rgba(236, 232, 223, 0.12)",
+      "lineSoft": "rgba(236, 232, 223, 0.07)",
+      "accentFill": "#FF4D1F",
+      "accentText": "#FF5C31",
+      "accentOnForeground": "#B83512",
+      "accentSoft": "rgba(255, 77, 31, 0.14)",
+      "onAccent": "#1A0D07"
+    }
+  },
+  "typography": {
+    "display": {
+      "family": "Mirava",
+      "cssFamily": "SwiftLoop Display",
+      "file": "fonts/mirava-regular.woff2",
+      "weights": "400–700",
+      "use": "Hero statements, major section headings, names, and document titles",
+      "rules": ["Uppercase for campaign-scale display", "Tracking -0.02em to -0.03em", "Leading 0.96 to 1.05", "Outline only the secondary beat of a headline"]
+    },
+    "body": {
+      "family": "Oxanium",
+      "cssFamily": "SwiftLoop Body",
+      "file": "fonts/oxanium-variable.woff2",
+      "weights": "200–800",
+      "use": "Body copy, form controls, tables, descriptions, and UI",
+      "rules": ["Base size 17px on web", "Body leading 1.55 to 1.65", "Use 500 to emphasize outcomes"]
+    },
+    "label": {
+      "family": "Doto",
+      "cssFamily": "SwiftLoop Label",
+      "file": "fonts/doto-variable.woff2",
+      "weights": "100–900",
+      "use": "Telemetry, navigation, metadata, coordinates, phases, labels, and buttons",
+      "rules": ["Default 0.72rem", "Weight 600", "Tracking 0.12em", "Uppercase", "Never use for paragraphs or source code"]
+    },
+    "code": {
+      "family": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+      "use": "Literal code and machine-readable values only"
+    }
+  },
+  "layout": {
+    "gutter": "clamp(1.25rem, 4vw, 4rem)",
+    "sectionPadding": "clamp(5rem, 12vh, 9rem) var(--gutter)",
+    "grid": "Visible one-pixel structure with generous negative space",
+    "radii": {
+      "controls": "99px",
+      "cards": "0–8px",
+      "focus": "3px"
+    },
+    "rules": ["Use 1px hairlines instead of drop shadows", "Let one large statement dominate each composition", "Keep layouts asymmetric but grid-aligned", "Use orange on roughly five percent of a typical surface"]
+  },
+  "motion": {
+    "easeOut": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "durations": ["250ms controls", "350–450ms transitions", "600–800ms reveals"],
+    "rules": ["Use masked reveals and directional fills", "No bounce or idle floating", "Respect prefers-reduced-motion"]
+  },
+  "graphicLanguage": {
+    "motifs": ["loop ring", "orange full stop", "outline typography", "telemetry", "coordinates", "hairline grids", "film grain"],
+    "ring": {
+      "viewBox": "0 0 100 100",
+      "circle": {"cx": 50, "cy": 50, "r": 38, "strokeWidth": 14},
+      "use": "Favicon, avatar, status mark, section bullet, watermark, or cropped background geometry"
+    },
+    "imagery": ["Editorial crops", "Moody architecture and crafted objects", "Real work over generic stock", "Controlled grain or halftone", "Warm cream or near-black scrims"]
+  },
+  "logo": {
+    "primaryOnDark": "brand/logo/swiftloop-wordmark-primary.svg",
+    "primaryOnLight": "brand/logo/swiftloop-wordmark-on-light.svg",
+    "monoBone": "brand/logo/swiftloop-wordmark-mono-bone.svg",
+    "monoInk": "brand/logo/swiftloop-wordmark-mono-ink.svg",
+    "ring": "brand/logo/swiftloop-ring.svg",
+    "stackedOnDark": "brand/logo/swiftloop-stacked-primary.svg",
+    "stackedOnLight": "brand/logo/swiftloop-stacked-on-light.svg",
+    "minimum": {"wordmarkDigital": "90px", "wordmarkPrint": "24mm", "ringDigital": "16px", "ringPrint": "5mm"},
+    "clearSpace": "At least the cap-height of the S on every side",
+    "rules": ["Use supplied SVG assets rather than resetting the wordmark", "Never remove the terminal orange period", "Never stretch, rotate, recolor, shadow, or outline the logo", "Use a calm solid field or a strong scrim behind the logo"]
+  },
+  "voice": {
+    "principles": ["Lead with the outcome, then name the mechanism", "Prefer short declarative sentences", "Use real numbers when available", "Write like an engineer who designs", "Use em dashes and full stops, not exclamation marks"],
+    "preferredPhrases": ["Websites that win clients. AI that runs the rest.", "Designed by hand. Run by machine.", "Ship in weeks, not quarters.", "Map. Design. Automate. Iterate."],
+    "bannedPatterns": ["cheap", "budget", "basic", "cutting-edge synergies", "generic AI buzzword stacks", "unverified performance claims"]
+  },
+  "contact": {
+    "website": "https://swiftloop.tech",
+    "email": "info@swiftloop.tech",
+    "whatsapp": "+971 50 972 5199",
+    "location": "Dubai, United Arab Emirates",
+    "timezone": "GMT+4"
+  }
+}

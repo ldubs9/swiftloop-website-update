@@ -5,15 +5,11 @@
       "name": "swiftloop",
       "runtimeExecutable": "python3",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8743",
-        "--bind",
-        "127.0.0.1",
-        "--directory",
-        "/Users/Luca_1/Repositories/Websites/Repositories Local/swiftloop-website-3js"
+        "scripts/dev-server.py",
+        "8751"
       ],
-      "port": 8743
+      "port": 8751,
+      "cwd": "/Users/Luca_1/Repositories/Websites/Repositories Local/swiftloop-website-3js"
     }
   ]
 }
