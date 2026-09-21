@@ -287,25 +287,25 @@ let sm = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://swiftloop.tech/</loc>
+    <loc>https://www.swiftloop.tech/</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://swiftloop.tech/portfolio</loc>
+    <loc>https://www.swiftloop.tech/portfolio</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://swiftloop.tech/systems</loc>
+    <loc>https://www.swiftloop.tech/systems</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://swiftloop.tech/journal</loc>
+    <loc>https://www.swiftloop.tech/journal</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -313,7 +313,7 @@ let sm = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 for (const r of live) {
   sm += `  <url>
-    <loc>https://swiftloop.tech/journal/${r.slug}</loc>
+    <loc>https://www.swiftloop.tech/journal/${r.slug}</loc>
     <lastmod>${r.ymd}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>${

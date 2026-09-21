@@ -16,7 +16,7 @@
 - Based in Dubai, United Arab Emirates. Serves Dubai, UAE and remote clients worldwide.
 - WhatsApp: +971 50 972 5199
 - Email: info@swiftloop.tech
-- Website: https://swiftloop.tech
+- Website: https://www.swiftloop.tech
 
 ## Pricing (typical)
 - One-time website builds typically range AED 4,000–7,000 depending on scope.
@@ -45,6 +45,6 @@
 - Much of this bespoke systems work is delivered privately, so it is not always represented as a public case study; the systems page describes the capabilities without exposing client data, credentials or engagement details.
 
 ## Key pages
-- Home: https://swiftloop.tech/
-- Portfolio: https://swiftloop.tech/portfolio
-- Systems & AI Advisory: https://swiftloop.tech/systems
+- Home: https://www.swiftloop.tech/
+- Portfolio: https://www.swiftloop.tech/portfolio
+- Systems & AI Advisory: https://www.swiftloop.tech/systems

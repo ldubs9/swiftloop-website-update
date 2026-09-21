@@ -1,10 +1,18 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "swiftloop.tech" }],
+      "destination": "https://www.swiftloop.tech/:path*",
+      "permanent": true
+    },
+    { "source": "/blog", "destination": "/journal", "permanent": true },
+    { "source": "/blog.html", "destination": "/journal", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/journal", "destination": "/blog.html" },
-    { "source": "/journal/", "destination": "/blog.html" },
     { "source": "/journal/:slug", "destination": "/article.html" }
   ]
 }

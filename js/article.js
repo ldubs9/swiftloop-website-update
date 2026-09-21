@@ -6,7 +6,7 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (hasGSAP && typeof ScrollTrigger !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
-  var ORIGIN = "https://swiftloop.tech";
+  var ORIGIN = "https://www.swiftloop.tech";
 
   /* ---------- slug ---------- */
   function getSlug() {

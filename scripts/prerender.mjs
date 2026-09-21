@@ -25,7 +25,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const ARTICLES_DIR = join(ROOT, "content", "articles");
 const OUT_DIR = join(ROOT, "journal");
-const ORIGIN = "https://swiftloop.tech";
+const ORIGIN = "https://www.swiftloop.tech";
 const TODAY = process.env.PRERENDER_TODAY || "2026-06-22";
 
 // ---- frontmatter ----
