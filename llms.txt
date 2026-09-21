@@ -9,7 +9,7 @@
 - **AI agents & assistants:** RAG chat, support and voice agents trained on a client's knowledge base.
 - **Custom business software:** private dashboards, portals, data models and role-aware workflows built around how a company actually operates.
 - **AI advisory & adoption:** workflow audits, use-case prioritization, build/buy decisions, pilots, governance and team enablement for companies moving from experimentation to dependable systems.
-- **Dealer OS:** a reusable Telegram-first, Supabase and n8n operations layer for high-touch retail, adapted across MainspringDXB and ESM EYWR and being productized for additional businesses.
+- **Dealer OS:** a reusable Telegram-first, Supabase and n8n operations layer for high-touch retail, designed to adapt across watches, eyewear, jewellery and other inventory-led businesses.
 - **Brand, motion & 3D:** identity systems and interactive Three.js / GSAP experiences.
 
 ## Location & contact
@@ -37,9 +37,11 @@
 - BRRN BARRE — website + booking, Dubai
 - Creative Finishings — website, Dubai
 
-## Private and ongoing systems
-- **Falcon Dealer Platform:** private dealer-management software for catalogue and inventory operations, website publishing, suppliers, expenses, invoices and reporting.
-- **IMFR:** private operations platform for a talent and creative management business, covering people, relationships, deals, campaigns, tasks, deliverables, meetings, revenue and client workspaces.
+## Bespoke systems and software
+- **Dealer OS:** reusable high-touch retail operations layer with Telegram-first intake, schema-adaptable Supabase data, n8n workflows, AI-assisted product capture, inventory, listings and customer intelligence.
+- **Dealer CRM Platform:** bespoke dealer CRM and operations platform with catalogue/inventory lifecycle, bidirectional website publishing, supplier and purchase records, expenses, recurring costs, invoice/PDF and reporting surfaces.
+- **Talent Agency Management Software:** bespoke agency platform designed to cover talent, contacts, deals, campaigns, deliverables, meetings, revenue and secure client workspaces, with a planned custom AI agent system for platform guidance, next actions, workflow intake and bounded automation when complete.
+- **Admin panels:** protected catalogue control rooms for configurable eyewear and watch-dealer operations, including product editing, image ordering, thumbnail selection, availability/sold transitions, sales views and supporting brand utilities.
 - Much of this bespoke systems work is delivered privately, so it is not always represented as a public case study; the systems page describes the capabilities without exposing client data, credentials or engagement details.
 
 ## Key pages
