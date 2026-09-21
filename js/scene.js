@@ -99,7 +99,7 @@ function initScene() {
   // FRACTION of the gap to the rim that each particle closes: at 1.0 everything
   // inside the radius lands exactly on the rim. TRACK is how tightly the hole
   // follows the pointer, deliberately faster than the parallax drift.
-  const REPEL_DIAMETER = 10;
+  const REPEL_DIAMETER = 25; // 150% larger than the original 10px diameter
   const REPEL_PUSH = 0.85;
   const REPEL_TRACK = 0.2;
   const REPEL_FADE = 0.07; // ramp in/out when the pointer enters or leaves
