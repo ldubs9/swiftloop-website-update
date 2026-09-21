@@ -4,7 +4,7 @@
 //   node scripts/prerender.mjs
 //
 // Builds a fully static, on-brand page per LIVE article at
-//   journal/<slug>/index.html
+//   journal/<slug>/
 // so JS-free AI crawlers (and humans) get the full content with
 // zero JavaScript. Scheduled (future-dated) articles are skipped;
 // the JS article.html keeps serving them until a later prerender.
@@ -106,9 +106,9 @@ const NAV = `
   <header class="nav" id="nav">
     <a href="/" class="nav-logo" aria-label="SwiftLoop — home">Swift<em>Loop</em><em>.</em></a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="/index.html#services">Services</a>
-      <a href="/index.html#process">Process</a>
-      <a href="/portfolio.html">Portfolio</a>
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/portfolio">Portfolio</a>
       <a href="/journal" class="is-active">Journal</a>
     </nav>
     <div class="nav-tail">
@@ -122,11 +122,11 @@ const NAV = `
   </header>
   <div class="menu" id="menu" aria-hidden="true">
     <nav class="menu-links" aria-label="Mobile">
-      <a href="/index.html#services"><i>01</i>Services</a>
-      <a href="/index.html#process"><i>02</i>Process</a>
-      <a href="/portfolio.html"><i>03</i>Portfolio</a>
+      <a href="/#services"><i>01</i>Services</a>
+      <a href="/#process"><i>02</i>Process</a>
+      <a href="/portfolio"><i>03</i>Portfolio</a>
       <a href="/journal"><i>04</i>Journal</a>
-      <a href="/index.html#contact"><i>05</i>Contact</a>
+      <a href="/#contact"><i>05</i>Contact</a>
     </nav>
     <div class="menu-foot mono">
       <a href="https://wa.me/971509725199" target="_blank" rel="noopener">WA +971 50 972 5199</a>
@@ -141,7 +141,7 @@ const FOOTER = `
         <span class="nav-logo">Swift<em>Loop</em><em>.</em></span>
         <p>A web-design and AI-automation studio. Designed by hand, run by machine.</p>
       </div>
-      <div class="footer-col"><h4 class="mono">Studio</h4><a href="/index.html#services">Services</a><a href="/index.html#process">Process</a><a href="/portfolio.html">Portfolio</a><a href="/journal">Journal</a></div>
+      <div class="footer-col"><h4 class="mono">Studio</h4><a href="/#services">Services</a><a href="/#process">Process</a><a href="/portfolio">Portfolio</a><a href="/journal">Journal</a></div>
       <div class="footer-col"><h4 class="mono">Social</h4><a href="https://www.linkedin.com/company/135106065/" target="_blank" rel="noopener">LinkedIn</a><span class="footer-soon">X / Twitter <i>Soon</i></span></div>
       <div class="footer-col"><h4 class="mono">Contact</h4><a href="https://wa.me/971509725199" target="_blank" rel="noopener">WhatsApp +971 50 972 5199</a><a href="mailto:info@swiftloop.tech">info@swiftloop.tech</a></div>
     </div>
@@ -298,5 +298,5 @@ for (const a of live) {
   written++;
 }
 
-console.log(`Prerendered ${written} live articles -> journal/<slug>/index.html`);
+console.log(`Prerendered ${written} live articles -> journal/<slug>/`);
 console.log(`Skipped ${all.length - live.length} scheduled (date > ${TODAY}); JS article.html serves those until next prerender.`);

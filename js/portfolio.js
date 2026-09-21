@@ -292,7 +292,7 @@
     else if (!overlay.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
   });
 
-  /* deep links: portfolio.html#ferra opens the case */
+  /* deep links: /portfolio#ferra opens the case */
   var hash = location.hash.replace("#", "");
   if (hash && CASES[hash]) {
     var target = document.getElementById(hash);

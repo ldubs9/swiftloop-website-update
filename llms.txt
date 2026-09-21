@@ -46,5 +46,5 @@
 
 ## Key pages
 - Home: https://swiftloop.tech/
-- Portfolio: https://swiftloop.tech/portfolio.html
-- Systems & AI Advisory: https://swiftloop.tech/systems.html
+- Portfolio: https://swiftloop.tech/portfolio
+- Systems & AI Advisory: https://swiftloop.tech/systems

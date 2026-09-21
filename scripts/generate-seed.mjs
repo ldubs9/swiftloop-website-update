@@ -293,7 +293,13 @@ let sm = `<?xml version="1.0" encoding="UTF-8"?>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://swiftloop.tech/portfolio.html</loc>
+    <loc>https://swiftloop.tech/portfolio</loc>
+    <lastmod>${TODAY}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://swiftloop.tech/systems</loc>
     <lastmod>${TODAY}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -326,6 +332,6 @@ sm += `</urlset>\n`;
 writeFileSync(join(ROOT, "sitemap.xml"), sm, "utf8");
 
 console.log(`\nWrote supabase/seed.sql (${rows.length} rows: ${total - SCHEDULED} live, ${SCHEDULED} scheduled).`);
-console.log(`Wrote sitemap.xml (${live.length + 3} urls — scheduled entries excluded until live).`);
+console.log(`Wrote sitemap.xml (${live.length + 4} urls — scheduled entries excluded until live).`);
 console.log(`\nScheduled (future Friday) uploads:`);
 rows.filter((r) => r.scheduled).forEach((r) => console.log(`  ${r.ymd}  ${r.slug}`));

@@ -52,9 +52,23 @@ function redirect(url, to, cookie) {
   return new Response(null, { status: 303, headers });
 }
 
+function redirectToCleanUrl(url) {
+  const clean = new URL(url);
+  clean.pathname = clean.pathname.slice(0, -'.html'.length) || '/';
+  return new Response(null, {
+    status: 308,
+    headers: { Location: clean.toString() },
+  });
+}
+
 export default async function middleware(request) {
   const url = new URL(request.url);
   const pathname = url.pathname;
+
+  // Keep protected legacy file URLs canonical too. Vercel's cleanUrls setting
+  // handles public static files; middleware must redirect before it serves a
+  // protected .html page itself.
+  if (pathname.endsWith('.html')) return redirectToCleanUrl(url);
 
   // Not a protected path — let it through untouched.
   if (!isProtected(pathname)) return;
