@@ -1,12 +1,15 @@
 # SwiftLoop
 
-> SwiftLoop is a web design, web development and AI workflow automation studio based in Dubai, UAE. We build award-calibre, conversion-focused websites — including luxury and jewelry e-commerce — and connect them to AI systems and automations that run the business behind the scenes.
+> SwiftLoop is a web design, custom software and AI systems studio based in Dubai, UAE. We build conversion-focused websites, private operational platforms and reusable automations — and advise companies on adopting new technology without losing control of the work.
 
 ## What SwiftLoop does
 - **Web design & development (Dubai):** custom marketing sites, e-commerce, and product UI built with Next.js, WebGL and headless CMS, engineered for speed and Core Web Vitals.
 - **Luxury & jewelry website creation:** bilingual (English/Arabic) luxury e-commerce for jewelry, watches and premium brands, with AI-assisted inventory.
 - **AI workflow automation:** replacing repetitive operations (leads, invoices, reports, follow-ups) with self-running pipelines.
 - **AI agents & assistants:** RAG chat, support and voice agents trained on a client's knowledge base.
+- **Custom business software:** private dashboards, portals, data models and role-aware workflows built around how a company actually operates.
+- **AI advisory & adoption:** workflow audits, use-case prioritization, build/buy decisions, pilots, governance and team enablement for companies moving from experimentation to dependable systems.
+- **Dealer OS:** a reusable Telegram-first, Supabase and n8n operations layer for high-touch retail, adapted across MainspringDXB and ESM EYWR and being productized for additional businesses.
 - **Brand, motion & 3D:** identity systems and interactive Three.js / GSAP experiences.
 
 ## Location & contact
@@ -34,6 +37,12 @@
 - BRRN BARRE — website + booking, Dubai
 - Creative Finishings — website, Dubai
 
+## Private and ongoing systems
+- **Falcon Dealer Platform:** private dealer-management software for catalogue and inventory operations, website publishing, suppliers, expenses, invoices and reporting.
+- **IMFR:** private operations platform for a talent and creative management business, covering people, relationships, deals, campaigns, tasks, deliverables, meetings, revenue and client workspaces.
+- These are not public case studies yet; the systems page describes the capabilities without exposing client data, credentials or unreleased interfaces.
+
 ## Key pages
 - Home: https://swiftloop.tech/
 - Portfolio: https://swiftloop.tech/portfolio.html
+- Systems & AI Advisory: https://swiftloop.tech/systems.html
