@@ -41,7 +41,7 @@
 - **Dealer OS:** reusable high-touch retail operations layer with Telegram-first intake, schema-adaptable Supabase data, n8n workflows, AI-assisted product capture, inventory, listings and customer intelligence.
 - **Dealer CRM Platform:** bespoke dealer CRM and operations platform with catalogue/inventory lifecycle, bidirectional website publishing, supplier and purchase records, expenses, recurring costs, invoice/PDF and reporting surfaces.
 - **Talent Agency Management Software:** bespoke agency platform designed to cover talent, contacts, deals, campaigns, deliverables, meetings, revenue and secure client workspaces, with a planned custom AI agent system for platform guidance, next actions, workflow intake and bounded automation when complete.
-- **Admin panels:** protected catalogue control rooms for configurable eyewear and watch-dealer operations, including product editing, image ordering, thumbnail selection, availability/sold transitions, sales views and supporting brand utilities.
+- **Admin panels:** protected back-office environments for product and operations teams, with product editing, image ordering, permissions, availability and status controls, reporting, configuration and supporting workflow utilities.
 - Much of this bespoke systems work is delivered privately, so it is not always represented as a public case study; the systems page describes the capabilities without exposing client data, credentials or engagement details.
 
 ## Key pages
