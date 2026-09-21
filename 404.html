@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Loop Interrupted | SwiftLoop</title>
+  <meta name="description" content="This SwiftLoop route is not connected. Return to the loop or explore the studio's work." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <script>
+    (function () {
+      var t = "light";
+      try { if (localStorage.getItem("sl-theme") === "dark") t = "dark"; } catch (e) {}
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+</head>
+<body class="error-page">
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="/" class="nav-logo" aria-label="SwiftLoop — home">Swift<em>Loop</em><em>.</em></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/portfolio.html">Portfolio</a>
+      <a href="/systems.html">Systems</a>
+      <a href="/journal">Journal</a>
+    </nav>
+    <div class="nav-tail">
+      <a href="/" class="btn btn--small nav-cta">Back to base</a>
+      <button class="theme-toggle" id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1Z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.3M12 19.3v2.3M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.4 12h2.3M19.3 12h2.3M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
+      </button>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu-links" aria-label="Mobile">
+      <a href="/#services"><i>01</i>Services</a>
+      <a href="/#process"><i>02</i>Process</a>
+      <a href="/portfolio.html"><i>03</i>Portfolio</a>
+      <a href="/systems.html"><i>04</i>Systems</a>
+      <a href="/journal"><i>05</i>Journal</a>
+      <a href="/#contact"><i>06</i>Contact</a>
+    </nav>
+    <div class="menu-foot mono">
+      <a href="https://wa.me/971509725199" target="_blank" rel="noopener">WA +971 50 972 5199</a>
+      <a href="mailto:info@swiftloop.tech">info@swiftloop.tech</a>
+    </div>
+  </div>
+
+  <main class="error-main" id="top" tabindex="-1">
+    <section class="error-copy" aria-labelledby="errorTitle">
+      <div class="error-kicker mono"><i aria-hidden="true"></i>Route / 404 / Loop interrupted</div>
+      <h1 class="error-title" id="errorTitle"><span>4</span><b>0</b><span>4</span><em>.</em></h1>
+      <h2>Signal lost.<br /><span class="outline">Loop intact.</span></h2>
+      <p class="error-lede">That address is not connected to anything in the system. The rest of the loop is running normally.</p>
+      <div class="error-route mono"><span>Requested</span><code id="missingPath">/unknown-route</code></div>
+      <div class="error-actions">
+        <button class="btn" id="reroute" type="button">Return to the loop <span class="arrow">→</span></button>
+        <a class="btn btn--ghost" href="/portfolio.html">See the work</a>
+        <button class="error-copy mono" id="copyPath" type="button">Copy route</button>
+      </div>
+      <p class="error-status mono" id="errorStatus" role="status" aria-live="polite">Status / waiting for input</p>
+    </section>
+
+    <section class="error-visual" id="errorVisual" aria-label="Interactive route recovery visual">
+      <div class="error-grid" aria-hidden="true"></div>
+      <div class="error-orbit error-orbit--outer" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="error-orbit error-orbit--inner" aria-hidden="true"><i></i><i></i></div>
+      <div class="error-signal" aria-hidden="true"></div>
+      <div class="error-core" aria-hidden="true">
+        <span class="mono">Node</span>
+        <strong>404</strong>
+        <span class="mono">No route</span>
+      </div>
+      <div class="error-telemetry mono" aria-hidden="true">
+        <span>Loop ID <b>SL-404</b></span>
+        <span>Recovery <b class="accent">Ready</b></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="error-footer mono">
+    <span>Designed by hand / run by machine</span>
+    <span>SwiftLoop / Dubai / GMT+4</span>
+  </footer>
+
+  <script src="/js/main.js" defer></script>
+  <script src="/js/404.js" defer></script>
+</body>
+</html>

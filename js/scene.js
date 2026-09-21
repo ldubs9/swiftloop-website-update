@@ -94,14 +94,12 @@ function initScene() {
   // the framing moves — the knot can grow without the dots turning to gravel.
   const DOT = 3.6;
 
-  // Cursor repulsion. R is the radius of the hole in normalised device units,
-  // where 1.0 is half the hero's height. PUSH is the FRACTION of the gap to the
-  // rim that each particle closes: at 1.0 everything inside R lands exactly on
-  // R and the hole is bare, below that the disc compresses into an annulus and
-  // keeps some grain in it. TRACK is how tightly the hole follows the pointer,
-  // deliberately much faster than the 0.04 the parallax uses — the drift of the
-  // whole knot should lag behind the cursor, the hole under it should not.
-  const REPEL_R = 0.34;
+  // Cursor repulsion. The radius is derived from a CSS-pixel diameter so the
+  // hover circle stays small and consistent across viewport sizes. PUSH is the
+  // FRACTION of the gap to the rim that each particle closes: at 1.0 everything
+  // inside the radius lands exactly on the rim. TRACK is how tightly the hole
+  // follows the pointer, deliberately faster than the parallax drift.
+  const REPEL_DIAMETER = 10;
   const REPEL_PUSH = 0.85;
   const REPEL_TRACK = 0.2;
   const REPEL_FADE = 0.07; // ramp in/out when the pointer enters or leaves
@@ -124,6 +122,9 @@ function initScene() {
     ring.position.y = lift;
     mat.uniforms.uSize.value = dotSize();
     mat.uniforms.uAspect.value = camera.aspect;
+    // NDC spans two units over the canvas height, so diameter / height is the
+    // equivalent radius used by the shader's screen-space distance.
+    mat.uniforms.uRepelR.value = REPEL_DIAMETER / Math.max(1, h);
     // the depth fade is expressed around wherever the camera ended up
     mat.uniforms.uNear.value = baseZ - KNOT_R;
     mat.uniforms.uFar.value = baseZ + KNOT_R;
@@ -188,7 +189,7 @@ function initScene() {
       uCursor: { value: new THREE.Vector2(0, 0) },
       uCursorAmp: { value: 0 },
       uAspect: { value: w / h },
-      uRepelR: { value: REPEL_R },
+      uRepelR: { value: REPEL_DIAMETER / Math.max(1, h) },
       uRepelPush: { value: REPEL_PUSH },
       uHot: { value: new THREE.Color(THEMES[currentTheme()].hot) },
     },
