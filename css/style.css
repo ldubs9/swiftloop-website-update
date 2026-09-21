@@ -1091,6 +1091,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   margin: clamp(3rem, 6vw, 5rem) 0 1rem;
 }
 
+.systems-section .system-card h2 { margin-top: 0; }
+
 .system-card p { color: var(--fg-dim); max-width: 58ch; }
 
 .system-list {
@@ -1133,7 +1135,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-weight: 600;
   font-size: clamp(1.35rem, 2.2vw, 1.9rem);
   line-height: 1.05;
-  margin: 2.6rem 0 0.7rem;
+  margin: 0 0 0.7rem;
 }
 
 .advisory-step p { color: var(--fg-dim); font-size: 0.9rem; }
