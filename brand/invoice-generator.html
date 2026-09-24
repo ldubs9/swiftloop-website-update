@@ -381,10 +381,9 @@
     }
 
     /* ====================== PRINT ====================== */
-    /* Keep a compact safety edge on continuation pages so text never lands
-       directly on a physical page cut. Page 1 keeps its full-bleed header. */
-    @page { size: A4; margin: 8mm 0; background: #f4f1ea; }
-    @page :first { margin: 0 0 8mm; }
+    /* Keep page margins at zero so the first-page header remains full bleed.
+       Continuation spacing is cloned from .doc in the final print override. */
+    @page { size: A4; margin: 0; background: #f4f1ea; }
     @media print {
       html, body, .app, .stage { background: var(--paper); }
       .panel, .toast, .screen-only { display: none !important; }
@@ -641,7 +640,16 @@
       /* This final override must follow the V2 screen rules above. Without it,
          the preview-stage padding becomes an unintended top/left PDF margin. */
       .stage { padding: 0 !important; }
-      .doc { width: 210mm; box-shadow: none; }
+      .doc {
+        width: 210mm;
+        padding-top: 8mm;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        box-shadow: none;
+      }
+      /* Cancel the cloned inset once, where the first-page header begins. Each
+         continuation fragment keeps the 8mm inset as an automatic page gap. */
+      .doc-head { margin-top: -8mm; }
     }
   </style>
 </head>
