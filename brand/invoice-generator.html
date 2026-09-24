@@ -638,7 +638,10 @@
       body::before,
       .stage::before { display: none !important; }
       html, body, .app, .stage { background: var(--paper) !important; background-image: none !important; }
-      .doc { box-shadow: none; }
+      /* This final override must follow the V2 screen rules above. Without it,
+         the preview-stage padding becomes an unintended top/left PDF margin. */
+      .stage { padding: 0 !important; }
+      .doc { width: 210mm; box-shadow: none; }
     }
   </style>
 </head>
