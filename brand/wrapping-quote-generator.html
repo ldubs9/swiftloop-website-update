@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>SwiftLoop — Wrapping &amp; Fitout Quote</title>
+  <link rel="preload" href="../fonts/mirava-regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/oxanium-variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/doto-variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="logo/swiftloop-ring.svg" />
+  <style>
+    @font-face {
+      font-family: "SwiftLoop Display";
+      src: url("../fonts/mirava-regular.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SwiftLoop Body";
+      src: url("../fonts/oxanium-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "SwiftLoop Label";
+      src: url("../fonts/doto-variable.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #14131a;
+      --ink-deep: #0a0a0c;
+      --bone: #ece8df;
+      --surface: #efeeeb;
+      --paper: #ffffff;
+      --muted: #6f6e6b;
+      --line: #cfcfcd;
+      --line-dark: #1d1d1d;
+      --accent: #ff4d1f;
+      --accent-text: #b6330e;
+      --font-display: "SwiftLoop Display", Arial, sans-serif;
+      --font-body: "SwiftLoop Body", Arial, Helvetica, sans-serif;
+      --font-label: "SwiftLoop Label", Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--ink-deep); }
+    body {
+      min-height: 100vh;
+      background: var(--ink-deep);
+      color: var(--bone);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: var(--accent); color: var(--ink-deep); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .mono {
+      font-family: var(--font-label);
+      font-size: 0.68rem;
+      font-weight: 650;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .screen-only { display: initial; }
+    .print-only { display: none; }
+
+    /* ------------------------------------------------ app shell */
+    .app { display: grid; grid-template-columns: 320px minmax(0, 1fr); min-height: 100vh; }
+    .panel {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 1.5rem 1.35rem 3rem;
+      background: #101014;
+      border-right: 1px solid rgba(236, 232, 223, 0.13);
+      scrollbar-color: #77736a transparent;
+    }
+    .panel-logo {
+      width: 8rem;
+      aspect-ratio: 5228 / 1000;
+      background: url("logo/swiftloop-wordmark-primary.svg") center / contain no-repeat;
+      overflow: hidden;
+      text-indent: -9999px;
+    }
+    .panel-sub { margin-top: 0.55rem; color: #aaa69e; line-height: 1.45; }
+    .panel h2 {
+      margin: 1.65rem 0 0.75rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid rgba(236, 232, 223, 0.12);
+      color: var(--accent);
+    }
+    .panel label { display: block; margin: 0.85rem 0 0.35rem; color: #aaa69e; }
+    .panel select,
+    .panel input[type="text"] {
+      width: 100%;
+      padding: 0.64rem 0.7rem;
+      border: 1px solid rgba(236, 232, 223, 0.15);
+      border-radius: 2px;
+      outline: none;
+      background: transparent;
+      color: var(--bone);
+      font-size: 0.86rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .panel select:hover,
+    .panel input[type="text"]:hover { background: #17171d; }
+    .panel select:focus,
+    .panel input:focus { border-color: var(--accent); background: #17171d; }
+    .panel select { color-scheme: dark; }
+    .panel-hint { margin-top: 0.55rem; color: #77736a; font-size: 0.76rem; line-height: 1.5; }
+    .pbtn {
+      display: block;
+      width: 100%;
+      margin-top: 0.6rem;
+      padding: 0.72rem 0.9rem;
+      border: 1px solid rgba(236, 232, 223, 0.18);
+      border-radius: 99px;
+      background: transparent;
+      color: var(--bone);
+      font-family: var(--font-label);
+      font-size: 0.66rem;
+      font-weight: 650;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .pbtn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .pbtn--primary { border-color: var(--accent); background: var(--accent); color: var(--ink-deep); }
+    .pbtn--primary:hover { border-color: var(--bone); background: var(--bone); color: var(--ink-deep); }
+    .saved-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid rgba(236, 232, 223, 0.14);
+      border-radius: 2px;
+      font-size: 0.78rem;
+    }
+    .saved-item .meta { min-width: 0; flex: 1; cursor: pointer; }
+    .saved-item b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+    .saved-item span { display: block; margin-top: 0.18rem; color: #858178; font-family: var(--font-label); font-size: 0.59rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .saved-item button { border: 0; background: none; color: #858178; }
+    .saved-item button:hover { color: var(--accent); }
+    .saved-empty { margin-top: 0.55rem; color: #77736a; font-size: 0.78rem; }
+    .toast {
+      position: fixed;
+      z-index: 20;
+      bottom: 1.4rem;
+      left: 50%;
+      padding: 0.7rem 1.1rem;
+      border-radius: 99px;
+      background: var(--bone);
+      color: var(--ink-deep);
+      font-family: var(--font-label);
+      font-size: 0.66rem;
+      font-weight: 650;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      transform: translate(-50%, 80px);
+      transition: transform 0.3s ease;
+    }
+    .toast.is-on { transform: translate(-50%, 0); }
+
+    /* ------------------------------------------------ preview stage */
+    .stage {
+      min-width: 0;
+      padding: clamp(2rem, 4vw, 4rem) clamp(1rem, 3vw, 3.2rem) 6rem;
+      background-color: #e4e3df;
+      background-image:
+        linear-gradient(rgba(20, 19, 26, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 19, 26, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .stage::before {
+      content: "WRAPPING / FITOUT / LIVE PREVIEW";
+      display: block;
+      margin: -1rem 0 1rem auto;
+      color: #6b6963;
+      font-family: var(--font-label);
+      font-size: 0.64rem;
+      font-weight: 650;
+      letter-spacing: 0.13em;
+      text-align: right;
+    }
+    .document {
+      width: 210mm;
+      max-width: none;
+      margin: 0 auto;
+      color: var(--ink);
+    }
+    .quote-page {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 16mm 17mm 13mm;
+      background: var(--paper);
+      box-shadow: 0 22px 60px rgba(20, 19, 26, 0.19), 0 0 0 1px rgba(20, 19, 26, 0.08);
+      break-after: page;
+      page-break-after: always;
+    }
+    .quote-page + .quote-page { margin-top: 2rem; }
+    .quote-page:last-child { break-after: auto; page-break-after: auto; }
+
+    /* ------------------------------------------------ document primitives */
+    .doc-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-bottom: 9mm;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .doc-brand { display: flex; align-items: center; gap: 0.8rem; }
+    .doc-brand .ring { width: 10mm; height: 10mm; flex: 0 0 auto; }
+    .doc-brand .wordmark { width: 39mm; height: auto; }
+    .doc-title { min-width: 57mm; text-align: right; }
+    .doc-title h1 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 650;
+      letter-spacing: -0.035em;
+      line-height: 0.96;
+    }
+    .doc-title input {
+      display: block;
+      width: 100%;
+      margin-top: 2.2mm;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-align: right;
+    }
+    .doc-title input:hover,
+    .doc-title input:focus { border-bottom: 1px dashed var(--accent); }
+    .eyebrow {
+      color: #70706d;
+      font-family: var(--font-label);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .doc-meta {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(62mm, 0.8fr);
+      gap: 10mm;
+      margin-top: 8mm;
+    }
+    .prepared h2 { margin-top: 5mm; font-size: 1.15rem; font-weight: 650; }
+    .prepared input {
+      display: block;
+      width: 100%;
+      margin-top: 5mm;
+      border: 0;
+      border-bottom: 1px dashed transparent;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 1.12rem;
+      font-weight: 650;
+    }
+    .prepared input::placeholder { color: #969590; font-weight: 500; }
+    .prepared input:hover,
+    .prepared input:focus { border-bottom-color: var(--accent); }
+    .details-grid { display: grid; grid-template-columns: 1fr auto; gap: 1.6mm 6mm; align-content: start; }
+    .details-grid label { color: var(--muted); font-size: 0.78rem; }
+    .details-grid input,
+    .details-grid select {
+      min-width: 33mm;
+      border: 0;
+      border-bottom: 1px dashed transparent;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 650;
+      text-align: right;
+    }
+    .details-grid input:hover,
+    .details-grid input:focus,
+    .details-grid select:hover,
+    .details-grid select:focus { border-bottom-color: var(--accent); }
+    .details-grid select { appearance: none; cursor: pointer; }
+    .scope-box {
+      min-height: 16mm;
+      margin-top: 8mm;
+      padding: 3.5mm 4.5mm;
+      border-left: 1.1mm solid var(--accent);
+      background: #f4f3f1;
+    }
+    .scope-box textarea {
+      display: block;
+      width: 100%;
+      min-height: 9mm;
+      resize: none;
+      overflow: hidden;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+    .scope-box textarea::placeholder { color: #77756f; }
+    .scope-box textarea:hover,
+    .scope-box textarea:focus { outline: 1px dashed rgba(255, 77, 31, 0.6); outline-offset: 2px; }
+
+    .items-wrap { margin-top: 5mm; }
+    .items-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 34mm;
+      gap: 5mm;
+      padding: 3mm 3mm;
+      background: #171717;
+      color: #fff;
+      font-family: var(--font-label);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .items-head span:last-child { text-align: right; }
+    table.items { width: 100%; border-collapse: collapse; }
+    table.items td {
+      padding: 3mm 3mm 2.8mm;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    table.items td:last-child { width: 34mm; }
+    .line-description,
+    .line-detail,
+    .line-amount {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px dashed transparent;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+    }
+    .line-description { font-size: 0.86rem; }
+    .line-detail {
+      min-height: 5mm;
+      margin-top: 1.1mm;
+      resize: none;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.45;
+    }
+    .line-amount { font-size: 0.84rem; text-align: right; font-variant-numeric: tabular-nums; }
+    .line-amount-print { font-size: 0.84rem; text-align: right; font-variant-numeric: tabular-nums; }
+    .line-description::placeholder,
+    .line-detail::placeholder,
+    .line-amount::placeholder { color: #97958f; }
+    .line-description:hover,
+    .line-description:focus,
+    .line-detail:hover,
+    .line-detail:focus,
+    .line-amount:hover,
+    .line-amount:focus { border-bottom-color: var(--accent); }
+    .row-x {
+      border: 0;
+      background: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .row-x:hover { color: var(--accent); }
+    .add-row {
+      margin-top: 2.5mm;
+      padding: 1.8mm 4mm;
+      border: 1px dashed var(--line);
+      border-radius: 99px;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font-label);
+      font-size: 0.59rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .add-row:hover { border-color: var(--accent); color: var(--accent-text); }
+    .line-row.is-empty { display: none; }
+
+    .summary-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 7mm;
+    }
+    .summary { width: 68mm; }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 4mm;
+      padding: 1.8mm 0;
+      font-size: 0.82rem;
+    }
+    .summary-row span:first-child { color: #3f3f3c; }
+    .summary-value { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+    .summary-value input {
+      width: 25mm;
+      border: 0;
+      border-bottom: 1px dashed transparent;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.82rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .summary-value input:hover,
+    .summary-value input:focus { border-bottom-color: var(--accent); }
+    .total-row {
+      align-items: baseline;
+      margin-top: 2mm;
+      padding-top: 4mm;
+      border-top: 1px solid var(--ink);
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+    }
+    .total-row .summary-value { font-family: var(--font-body); font-size: 1.45rem; font-weight: 500; }
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10mm;
+      margin-top: 13mm;
+    }
+    .payment-block {
+      min-height: 27mm;
+      padding-top: 3.5mm;
+      border-top: 1px solid var(--ink);
+    }
+    .payment-block h3 {
+      margin-bottom: 4mm;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .payment-block textarea {
+      display: block;
+      width: 100%;
+      min-height: 15mm;
+      resize: none;
+      overflow: hidden;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.76rem;
+      line-height: 1.55;
+    }
+    .payment-block textarea:hover,
+    .payment-block textarea:focus { outline: 1px dashed rgba(255, 77, 31, 0.6); outline-offset: 2px; }
+    .schedule-display { font-size: 0.76rem; line-height: 1.65; }
+    .schedule-display b { font-weight: 700; }
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: auto;
+      padding-top: 5mm;
+      border-top: 1px solid var(--line);
+      color: #70706d;
+      font-size: 0.63rem;
+    }
+    .page-footer strong { font-weight: 700; }
+
+    /* ------------------------------------------------ terms page */
+    .terms-page .doc-header { padding-bottom: 8mm; }
+    .terms-title h1 { font-size: 2.15rem; }
+    .terms-number { display: block; margin-top: 2.2mm; color: var(--muted); font-size: 0.76rem; text-align: right; }
+    .terms-heading {
+      margin-top: 7mm;
+      color: #676662;
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .terms-list {
+      margin: 5mm 0 0;
+      padding-left: 7mm;
+      color: var(--ink);
+    }
+    .terms-list li {
+      margin-bottom: 3.1mm;
+      padding-left: 1.8mm;
+      font-size: 0.76rem;
+      line-height: 1.45;
+    }
+    .terms-list li::marker { font-variant-numeric: tabular-nums; }
+    .terms-list [contenteditable] { outline: none; border-bottom: 1px dashed transparent; }
+    .terms-list [contenteditable]:hover,
+    .terms-list [contenteditable]:focus { border-bottom-color: var(--accent); }
+    .terms-list b { font-weight: 700; }
+    .term-x {
+      margin-left: 2mm;
+      border: 0;
+      background: none;
+      color: #96948e;
+      font-size: 0.7rem;
+    }
+    .term-x:hover { color: var(--accent); }
+    .bank-block {
+      margin-top: 8mm;
+      padding-top: 3.5mm;
+      border-top: 1px solid var(--ink);
+    }
+    .bank-block h2 {
+      margin-bottom: 4mm;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .bank-block textarea {
+      display: block;
+      width: 100%;
+      min-height: 27mm;
+      resize: none;
+      overflow: hidden;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.75rem;
+      line-height: 1.65;
+    }
+    .bank-block textarea:hover,
+    .bank-block textarea:focus { outline: 1px dashed rgba(255, 77, 31, 0.6); outline-offset: 2px; }
+
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 1fr; }
+      .panel { position: static; height: auto; border-right: 0; border-bottom: 1px solid rgba(236, 232, 223, 0.13); }
+      .stage { overflow-x: auto; padding-top: 3.5rem; }
+      .document { margin-left: 0; }
+    }
+
+    /* ------------------------------------------------ print */
+    @page { size: A4; margin: 0; }
+    @media print {
+      html, body { background: #fff; }
+      .panel, .toast, .screen-only, .stage::before { display: none !important; }
+      .print-only { display: initial !important; }
+      .app { display: block; }
+      .stage { padding: 0; background: #fff; }
+      .document { width: 210mm; margin: 0; }
+      .quote-page,
+      .quote-page + .quote-page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        break-after: page;
+        page-break-after: always;
+      }
+      .quote-page:last-child { break-after: auto; page-break-after: auto; }
+      .quote-page input,
+      .quote-page textarea,
+      .quote-page select { border-color: transparent !important; }
+      .quote-page input::placeholder,
+      .quote-page textarea::placeholder { color: transparent !important; }
+      .line-row.is-empty { display: none !important; }
+      .row-x { display: none !important; }
+      .terms-list li { break-inside: avoid; page-break-inside: avoid; }
+      .payment-grid,
+      .summary-wrap,
+      .bank-block { break-inside: avoid; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel">
+      <div class="panel-logo">SwiftLoop.</div>
+      <p class="panel-sub mono">Wrapping &amp; fitout quotes — UAE</p>
+
+      <h2 class="mono">Quote settings</h2>
+      <label class="mono" for="setSubtitle">Quote category</label>
+      <select id="setSubtitle">
+        <option value="Interior wrapping only" selected>Interior wrapping only</option>
+        <option value="Interior wrapping and painting">Interior wrapping and painting</option>
+        <option value="Fitout / renovation works">Fitout / renovation works</option>
+        <option value="Custom wrapping / fitout">Custom wrapping / fitout</option>
+      </select>
+      <label class="mono" for="setValidity">Quote validity</label>
+      <select id="setValidity">
+        <option value="7">7 days</option>
+        <option value="14">14 days</option>
+        <option value="30" selected>30 days</option>
+      </select>
+      <label class="mono" for="setCurrency">Currency</label>
+      <select id="setCurrency">
+        <option value="AED" selected>AED — UAE Dirham</option>
+        <option value="USD">USD — US Dollar</option>
+        <option value="EUR">EUR — Euro</option>
+        <option value="GBP">GBP — British Pound</option>
+      </select>
+      <label class="mono" for="setSplit">Payment schedule</label>
+      <select id="setSplit">
+        <option value="60" selected>60% upfront / 40% on completion</option>
+        <option value="50">50% upfront / 50% on completion</option>
+        <option value="80">80% upfront / 20% on completion</option>
+        <option value="100">100% upfront / 0% on completion</option>
+      </select>
+      <p class="panel-hint">The client, project scope and line items are intentionally blank. Edit them directly in the live document preview.</p>
+
+      <h2 class="mono">Line items</h2>
+      <button class="pbtn" id="addLineBtn" type="button">+ Add line item</button>
+
+      <h2 class="mono">Saved quotes</h2>
+      <input type="text" id="saveName" placeholder="Label (defaults to client + quote no.)" />
+      <button class="pbtn" id="saveBtn" type="button">Save current quote</button>
+      <div id="savedList"></div>
+
+      <h2 class="mono">Export</h2>
+      <button class="pbtn pbtn--primary" id="printBtn" type="button">Save as PDF / Print</button>
+      <button class="pbtn" id="resetBtn" type="button">New blank quote</button>
+    </aside>
+
+    <main class="stage">
+      <article class="document" id="document">
+        <section class="quote-page" id="pageOne">
+          <header class="doc-header">
+            <div class="doc-brand">
+              <img class="ring" src="logo/swiftloop-ring.svg" alt="" />
+              <img class="wordmark" src="logo/swiftloop-wordmark-on-light.svg" alt="SwiftLoop" />
+            </div>
+            <div class="doc-title">
+              <h1>QUOTE</h1>
+              <input id="fSubtitle" data-field="subtitle" value="Interior wrapping only" aria-label="Quote category" />
+            </div>
+          </header>
+
+          <div class="doc-meta">
+            <div class="prepared">
+              <div class="eyebrow">Prepared for</div>
+              <input id="fPreparedFor" data-field="preparedFor" value="" placeholder="Client / company name" aria-label="Prepared for" />
+            </div>
+            <div class="details-grid">
+              <label for="fNumber">Quote no.</label>
+              <input id="fNumber" data-field="number" aria-label="Quote number" />
+              <label for="fIssueDate">Issue date</label>
+              <input id="fIssueDate" data-field="issueDate" aria-label="Issue date" />
+              <label for="fValidUntil">Valid until</label>
+              <input id="fValidUntil" data-field="validUntil" aria-label="Valid until" readonly />
+              <label for="fCurrency">Currency</label>
+              <select id="fCurrency" data-field="currency" aria-label="Currency">
+                <option value="AED">AED</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="scope-box">
+            <textarea id="fScope" data-field="scope" rows="2" placeholder="Scope: describe the installation, surfaces, supplied materials, finishes, colours, site conditions and any exclusions."></textarea>
+          </div>
+
+          <div class="items-wrap">
+            <div class="items-head"><span>Description</span><span id="amountHeader">Amount (AED)</span></div>
+            <table class="items">
+              <tbody id="lineRows"></tbody>
+            </table>
+            <button class="add-row screen-only" id="addRowBtn" type="button">+ Add line item</button>
+          </div>
+
+          <div class="summary-wrap">
+            <div class="summary">
+              <div class="summary-row"><span>Subtotal</span><span class="summary-value" id="tSubtotal">AED 0.00</span></div>
+              <div class="summary-row"><span>Discount</span><span class="summary-value"><span class="print-only" id="tDiscount">—</span><input class="screen-only" id="fDiscount" data-field="discount" inputmode="decimal" placeholder="0.00" aria-label="Discount" /></span></div>
+              <div class="summary-row total-row"><span>Total</span><span class="summary-value" id="tGrand">AED 0.00</span></div>
+            </div>
+          </div>
+
+          <div class="payment-grid">
+            <section class="payment-block">
+              <h3>Payment schedule</h3>
+              <div class="schedule-display" id="paySchedule"></div>
+            </section>
+            <section class="payment-block">
+              <h3>Payment methods</h3>
+              <textarea id="fPaymentMethods" data-field="paymentMethods" rows="3">Cash or bank transfer. Please include the quote number in the payment reference.</textarea>
+            </section>
+          </div>
+
+          <footer class="page-footer">
+            <span><strong>SwiftLoop FZ-LLC</strong> (trading as SwiftLoop)</span>
+            <span>info@swiftloop.tech · +971 50 972 5199 · Dubai, UAE</span>
+          </footer>
+        </section>
+
+        <section class="quote-page terms-page" id="pageTwo">
+          <header class="doc-header">
+            <div class="doc-brand">
+              <img class="ring" src="logo/swiftloop-ring.svg" alt="" />
+              <img class="wordmark" src="logo/swiftloop-wordmark-on-light.svg" alt="SwiftLoop" />
+            </div>
+            <div class="doc-title terms-title">
+              <h1>TERMS</h1>
+              <span class="terms-number" id="termsNumber">SL-Q-00000000-01</span>
+            </div>
+          </header>
+
+          <h2 class="terms-heading">Terms &amp; conditions</h2>
+          <ol class="terms-list" id="termsList"></ol>
+
+          <section class="bank-block">
+            <h2>Bank transfer details</h2>
+            <textarea id="bankDetails" data-field="bankDetails" rows="6">Account holder: SwiftLoop FZ-LLC
+Bank: Wio Bank PJSC
+IBAN: AE52 0860 0000 0980 1385 280
+BIC/SWIFT: WIOBAEADXXX
+Bank address: Etihad Airways Centre 5th Floor, Abu Dhabi, UAE</textarea>
+          </section>
+
+          <footer class="page-footer">
+            <span><strong>SwiftLoop FZ-LLC</strong> (trading as SwiftLoop)</span>
+            <span>info@swiftloop.tech · +971 50 972 5199 · swiftloop.tech</span>
+          </footer>
+        </section>
+      </article>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var STORAGE_KEY = "swiftloop-wrapping-quotes-v1";
+    var currentCurrency = "AED";
+    var docType = "QUOTE";
+    var SPLITS = {
+      "60": { upfront: 60, completion: 40 },
+      "50": { upfront: 50, completion: 50 },
+      "80": { upfront: 80, completion: 20 },
+      "100": { upfront: 100, completion: 0 }
+    };
+    var DEFAULT_PAYMENT_METHODS = "Cash or bank transfer. Please include the quote number in the payment reference.";
+    var DEFAULT_BANK_DETAILS = "Account holder: SwiftLoop FZ-LLC\nBank: Wio Bank PJSC\nIBAN: AE52 0860 0000 0980 1385 280\nBIC/SWIFT: WIOBAEADXXX\nBank address: Etihad Airways Centre 5th Floor, Abu Dhabi, UAE";
+    var DEFAULT_TERMS = [
+      { key: "payment", html: "<b>Payment.</b> A 60% upfront payment is required to confirm the project and schedule installation. The remaining 40% is payable upon completion." },
+      { key: "methods", html: "<b>Payment methods.</b> Payment may be made by cash or bank transfer. The quote number must be included in the payment reference." },
+      { key: "validity", html: "<b>Validity.</b> This quote is valid for <b>30 days</b> from the issue date. Pricing and availability may be subject to change after the validity period." },
+      { key: "scope", html: "<b>Scope and materials.</b> Pricing covers the surfaces and material categories itemised in this quote. Final colours, textures, quantities and substrate condition are subject to confirmation before installation. Any additional work or material outside the stated scope will be quoted separately." },
+      { key: "readiness", html: "<b>Site readiness and cleaning.</b> The work areas must be clear, accessible, clean and ready before the installation team arrives. A charge of AED 500 per affected area may apply if deep cleaning is required before work can begin." },
+      { key: "rescheduling", html: "<b>Rescheduling.</b> A request to reschedule the project start date must be made at least 7 days before the confirmed installation date. Later rescheduling may incur a charge equal to 25% of the project value." },
+      { key: "delays", html: "<b>Delays.</b> If work is delayed because the site is inaccessible or not ready when the installation team arrives, the project will be treated as rescheduled and the applicable rescheduling charge may apply." },
+      { key: "warranty", html: "<b>Warranty.</b> The completed vinyl-wrapping work is covered by a three-year warranty from the date of completion against naturally occurring damage, including peeling, bubbling and discoloration caused by sun exposure." },
+      { key: "acceptance", html: "<b>Acceptance.</b> Payment of any amount due under this quote, or written confirmation by email, WhatsApp or another agreed written channel, confirms acceptance of the scope, price, payment schedule and these terms." }
+    ];
+
+    function $(selector, context) { return (context || document).querySelector(selector); }
+    function $all(selector, context) { return Array.prototype.slice.call((context || document).querySelectorAll(selector)); }
+    function fmt(value) {
+      return (isFinite(value) ? value : 0).toLocaleString("en-AE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function num(value) {
+      var parsed = parseFloat(String(value || "").replace(/[^0-9.\-]/g, ""));
+      return isFinite(parsed) ? parsed : 0;
+    }
+    function pad2(value) { return value < 10 ? "0" + value : String(value); }
+    function fmtDate(date) {
+      return date.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+    }
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    function toast(message) {
+      var element = $("#toast");
+      element.textContent = message;
+      element.classList.add("is-on");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(function () { element.classList.remove("is-on"); }, 1800);
+    }
+    function autosize(element) {
+      if (!element) return;
+      element.style.height = "auto";
+      element.style.height = element.scrollHeight + "px";
+    }
+    function autosizeAll() {
+      $all("textarea").forEach(autosize);
+    }
+    function dateStamp(date) {
+      return String(date.getFullYear()) + pad2(date.getMonth() + 1) + pad2(date.getDate());
+    }
+    function refreshNumber() {
+      var current = $("#fNumber").value;
+      if (!current || current.indexOf("SL-Q-") !== 0) {
+        $("#fNumber").value = "SL-Q-" + dateStamp(new Date()) + "-01";
+      }
+      $("#termsNumber").textContent = $("#fNumber").value;
+    }
+    function refreshDates(resetIssueDate) {
+      var issueDate = resetIssueDate ? new Date() : new Date();
+      var validity = num($("#setValidity").value) || 30;
+      $("#fIssueDate").value = fmtDate(issueDate);
+      var validUntil = new Date(issueDate.getTime() + validity * 86400000);
+      $("#fValidUntil").value = fmtDate(validUntil);
+    }
+    function setSubtitle(value) {
+      $("#setSubtitle").value = value;
+      $("#fSubtitle").value = value;
+    }
+    function setCurrencyDisplay(code) {
+      currentCurrency = code || "AED";
+      $("#setCurrency").value = currentCurrency;
+      $("#fCurrency").value = currentCurrency;
+      $("#amountHeader").textContent = "Amount (" + currentCurrency + ")";
+      recalc();
+    }
+    function splitConfig() {
+      return SPLITS[$("#setSplit").value] || SPLITS["60"];
+    }
+    function paymentTermHtml() {
+      var split = splitConfig();
+      return "<b>Payment.</b> A " + split.upfront + "% upfront payment is required to confirm the project and schedule installation. The remaining " + split.completion + "% is payable upon completion.";
+    }
+    function validityTermHtml() {
+      var validity = num($("#setValidity").value) || 30;
+      return "<b>Validity.</b> This quote is valid for <b>" + validity + " days</b> from the issue date. Pricing and availability may be subject to change after the validity period.";
+    }
+    function warrantyTermHtml() {
+      var subtitle = $("#fSubtitle").value || "";
+      return /wrap/i.test(subtitle)
+        ? "<b>Warranty.</b> The completed vinyl-wrapping work is covered by a three-year warranty from the date of completion against naturally occurring damage, including peeling, bubbling and discoloration caused by sun exposure."
+        : "<b>Warranty.</b> The completed works are covered by a three-year warranty from the date of completion against naturally occurring defects in workmanship. Client-supplied materials and pre-existing substrate conditions are excluded from this warranty.";
+    }
+    function setTermHtml(key, html) {
+      var element = $("#termsList li[data-term-key='" + key + "'] [contenteditable]");
+      if (element) element.innerHTML = html;
+    }
+    function syncDynamicTerms() {
+      setTermHtml("payment", paymentTermHtml());
+      setTermHtml("validity", validityTermHtml());
+      setTermHtml("warranty", warrantyTermHtml());
+    }
+    function renderTerms(terms) {
+      var list = $("#termsList");
+      list.innerHTML = "";
+      (terms || DEFAULT_TERMS).forEach(function (term, index) {
+        var item = typeof term === "string" ? { key: "term-" + index, html: term } : term;
+        var li = document.createElement("li");
+        li.dataset.termKey = item.key || "term-" + index;
+        li.innerHTML = '<div contenteditable="true"></div><button class="term-x screen-only" type="button" title="Remove clause">✕</button>';
+        $("[contenteditable]", li).innerHTML = item.html || "";
+        $(".term-x", li).addEventListener("click", function () { li.remove(); });
+        list.appendChild(li);
+      });
+      syncDynamicTerms();
+    }
+    function addLine(item) {
+      item = item || {};
+      var row = document.createElement("tr");
+      row.className = "line-row";
+      row.innerHTML =
+        '<td>' +
+          '<input class="line-description" type="text" placeholder="Description" />' +
+          '<textarea class="line-detail" rows="1" placeholder="Details, finish, colour, quantity or installation note (optional)"></textarea>' +
+        '</td>' +
+        '<td><input class="screen-only line-amount" type="text" inputmode="decimal" placeholder="0.00" aria-label="Line amount" /><span class="line-amount-print print-only"></span></td>' +
+        '<td class="screen-only"><button class="row-x" type="button" title="Remove line">✕</button></td>';
+      $("#lineRows").appendChild(row);
+      $(".line-description", row).value = item.description || "";
+      $(".line-detail", row).value = item.detail || "";
+      $(".line-amount", row).value = item.amount === undefined || item.amount === null ? "" : item.amount;
+      $(".line-amount", row).addEventListener("input", recalc);
+      $(".line-description", row).addEventListener("input", recalc);
+      $(".line-detail", row).addEventListener("input", function () { autosize($(".line-detail", row)); recalc(); });
+      $(".row-x", row).addEventListener("click", function () { row.remove(); recalc(); });
+      autosize($(".line-detail", row));
+      recalc();
+      return row;
+    }
+    function renderLines(items) {
+      $("#lineRows").innerHTML = "";
+      var rows = Array.isArray(items) && items.length ? items : [{}];
+      rows.forEach(addLine);
+      recalc();
+    }
+    function renderPaymentSchedule(total) {
+      var split = splitConfig();
+      var upfront = total * split.upfront / 100;
+      var completion = Math.max(0, total - upfront);
+      $("#paySchedule").innerHTML =
+        '<div><b>' + split.upfront + '% upfront:</b> ' + currentCurrency + " " + fmt(upfront) + '</div>' +
+        '<div><b>' + split.completion + '% upon completion:</b> ' + currentCurrency + " " + fmt(completion) + '</div>';
+    }
+    function recalc() {
+      var subtotal = 0;
+      $all("#lineRows tr").forEach(function (row) {
+        var description = $(".line-description", row).value.trim();
+        var detail = $(".line-detail", row).value.trim();
+        var amountInput = $(".line-amount", row);
+        var amount = num(amountInput.value);
+        subtotal += amount;
+        $(".line-amount-print", row).textContent = String(amountInput.value || "").trim() ? fmt(amount) : "";
+        row.classList.toggle("is-empty", !description && !detail && !String(amountInput.value || "").trim());
+      });
+      var discount = Math.max(0, num($("#fDiscount").value));
+      var total = Math.max(0, subtotal - discount);
+      $("#tSubtotal").textContent = currentCurrency + " " + fmt(subtotal);
+      $("#tDiscount").textContent = discount ? "- " + currentCurrency + " " + fmt(discount) : "—";
+      $("#tGrand").textContent = currentCurrency + " " + fmt(total);
+      renderPaymentSchedule(total);
+    }
+    function getQuotes() {
+      try {
+        var saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        return Array.isArray(saved) ? saved : [];
+      } catch (error) { return []; }
+    }
+    function setQuotes(quotes) { localStorage.setItem(STORAGE_KEY, JSON.stringify(quotes)); }
+    function snapshot() {
+      var fields = {};
+      $all("[data-field]").forEach(function (element) { fields[element.dataset.field] = element.value; });
+      return {
+        v: 1,
+        settings: {
+          subtitle: $("#setSubtitle").value,
+          validity: $("#setValidity").value,
+          currency: currentCurrency,
+          split: $("#setSplit").value
+        },
+        fields: fields,
+        items: $all("#lineRows tr").map(function (row) {
+          return {
+            description: $(".line-description", row).value,
+            detail: $(".line-detail", row).value,
+            amount: $(".line-amount", row).value
+          };
+        }),
+        terms: $all("#termsList li").map(function (li) {
+          return { key: li.dataset.termKey, html: $("[contenteditable]", li).innerHTML };
+        }),
+        savedAt: new Date().toISOString()
+      };
+    }
+    function restore(state) {
+      state = state && state.state ? state.state : (state || {});
+      var settings = state.settings || {};
+      setSubtitle(settings.subtitle || "Interior wrapping only");
+      $("#setValidity").value = settings.validity || "30";
+      $("#setSplit").value = settings.split || "60";
+      setCurrencyDisplay(settings.currency || "AED");
+      Object.keys(state.fields || {}).forEach(function (key) {
+        var element = $("[data-field='" + key + "']");
+        if (element && state.fields[key] !== undefined && state.fields[key] !== null) element.value = state.fields[key];
+      });
+      renderLines(state.items);
+      renderTerms(state.terms && state.terms.length ? state.terms : DEFAULT_TERMS);
+      $("#termsNumber").textContent = $("#fNumber").value;
+      autosizeAll();
+      recalc();
+    }
+    function renderSavedList() {
+      var list = $("#savedList");
+      var quotes = getQuotes();
+      list.innerHTML = "";
+      if (!quotes.length) {
+        list.innerHTML = '<p class="saved-empty">No saved wrapping quotes yet.</p>';
+        return;
+      }
+      quotes.slice().reverse().forEach(function (quote) {
+        var state = quote.state || quote;
+        var item = document.createElement("div");
+        item.className = "saved-item";
+        item.innerHTML = '<div class="meta"><b></b><span>' + (state.fields && state.fields.number || "QUOTE") + " · " + (quote.total || "—") + '</span></div><button type="button" title="Delete">✕</button>';
+        $("b", item).textContent = quote.name || "Untitled quote";
+        $(".meta", item).addEventListener("click", function () { restore(state); toast("Loaded: " + (quote.name || "quote")); });
+        $("button", item).addEventListener("click", function () {
+          setQuotes(getQuotes().filter(function (saved) { return saved.id !== quote.id; }));
+          renderSavedList();
+        });
+        list.appendChild(item);
+      });
+    }
+    function init(blank) {
+      $("#setSubtitle").value = "Interior wrapping only";
+      $("#setValidity").value = "30";
+      $("#setSplit").value = "60";
+      setCurrencyDisplay("AED");
+      $("#fPreparedFor").value = "";
+      $("#fScope").value = "";
+      $("#fPaymentMethods").value = DEFAULT_PAYMENT_METHODS;
+      $("#bankDetails").value = DEFAULT_BANK_DETAILS;
+      $("#fDiscount").value = "";
+      setSubtitle("Interior wrapping only");
+      refreshNumber();
+      refreshDates(true);
+      renderLines(blank ? [{}] : [{}]);
+      renderTerms(DEFAULT_TERMS);
+      autosizeAll();
+      recalc();
+    }
+
+    $("#setSubtitle").addEventListener("change", function () { setSubtitle(this.value); syncDynamicTerms(); });
+    $("#fSubtitle").addEventListener("input", syncDynamicTerms);
+    $("#setValidity").addEventListener("change", function () { refreshDates(false); syncDynamicTerms(); recalc(); });
+    $("#setCurrency").addEventListener("change", function () { setCurrencyDisplay(this.value); });
+    $("#fCurrency").addEventListener("change", function () { setCurrencyDisplay(this.value); });
+    $("#setSplit").addEventListener("change", function () { syncDynamicTerms(); recalc(); });
+    $("#fNumber").addEventListener("input", function () { $("#termsNumber").textContent = this.value; });
+    $("#fDiscount").addEventListener("input", recalc);
+    $("#addLineBtn").addEventListener("click", function () { addLine({}); });
+    $("#addRowBtn").addEventListener("click", function () { addLine({}); });
+    $("#saveBtn").addEventListener("click", function () {
+      var state = snapshot();
+      var name = $("#saveName").value.trim() || ((state.fields.preparedFor || "Untitled client") + " — " + state.fields.number);
+      var quotes = getQuotes();
+      quotes.push({ id: Date.now(), name: name, total: $("#tGrand").textContent, state: state });
+      setQuotes(quotes);
+      $("#saveName").value = "";
+      renderSavedList();
+      toast("Saved: " + name);
+    });
+    $("#printBtn").addEventListener("click", function () {
+      var oldTitle = document.title;
+      document.title = $("#fNumber").value + " — SwiftLoop Wrapping Quote";
+      window.print();
+      document.title = oldTitle;
+    });
+    $("#resetBtn").addEventListener("click", function () {
+      if (!confirm("Start a new blank wrapping quote? Unsaved changes will be lost.")) return;
+      init(true);
+    });
+
+    init(true);
+    renderSavedList();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(autosizeAll);
+  })();
+  </script>
+</body>
+</html>

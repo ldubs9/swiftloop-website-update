@@ -934,7 +934,6 @@ Monthly retainer · Billed in advance each month.</textarea>
 
   var currentCurrency = "AED";
 
-  var RATE_OPTIONS = [750, 1000, 1500, 2000, 2500, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 8500, 10000];
   var QTY_OPTIONS = [
     { v: 1, l: "1 × project" }, { v: 1, l: "1 × per month" }, { v: 3, l: "3 months" },
     { v: 6, l: "6 months" }, { v: 12, l: "12 months" }
@@ -960,8 +959,8 @@ Monthly retainer · Billed in advance each month.</textarea>
     "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
     "<b>Payment.</b> All amounts are in AED and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1% per month</b> on the outstanding balance, plus recovery costs, as permitted under UAE law.",
     "<b>VAT.</b> VAT will not be charged to the client on this quote.",
-    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
-    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Scope, revisions & feedback.</b> The price covers the deliverables described above with two structured revision rounds. The client may provide feedback for each reviewable delivery for a maximum of <b>7 working days</b>. If feedback is not received within that period, the relevant work will be considered accepted. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> If a monthly retainer is selected and itemised on this quote or invoice, monthly billing begins as soon as the project is published — meaning the website is published and live to the public on its domain, or the project, app, or software is live and usable by its users. It is billed in advance each month. Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
     "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
     "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop FZ-LLC (trading as SwiftLoop). SwiftLoop FZ-LLC retains the right to showcase the work in its portfolio and to place a small <b>\"Site by SwiftLoop\"</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
     "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
@@ -975,8 +974,8 @@ Monthly retainer · Billed in advance each month.</textarea>
     "<b>Validity.</b> Quoted pricing is valid for <b>14 days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.",
     "<b>Payment.</b> All amounts are in the currency stated on this document and payable per the schedule stated. Invoices unpaid <b>7 days</b> past their due date accrue a late charge of <b>1.5% per month</b> (or the maximum rate permitted by applicable law, whichever is lower) on the outstanding balance, plus reasonable recovery costs.",
     "<b>Taxes.</b> All prices are exclusive of applicable sales tax, VAT, GST, withholding tax, or similar levies. The client is responsible for any taxes imposed in their jurisdiction. Where SwiftLoop is required by law to collect such taxes, they will be added to the invoice and itemised separately.",
-    "<b>Scope & revisions.</b> The price covers the deliverables described above with two structured revision rounds. Material changes in scope are quoted separately before any additional work begins.",
-    "<b>Retainer.</b> Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
+    "<b>Scope, revisions & feedback.</b> The price covers the deliverables described above with two structured revision rounds. The client may provide feedback for each reviewable delivery for a maximum of <b>7 working days</b>. If feedback is not received within that period, the relevant work will be considered accepted. Material changes in scope are quoted separately before any additional work begins.",
+    "<b>Retainer.</b> If a monthly retainer is selected and itemised on this quote or invoice, monthly billing begins as soon as the project is published — meaning the website is published and live to the public on its domain, or the project, app, or software is live and usable by its users. It is billed in advance each month. Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.",
     "<b>Referral programme.</b> One full month of your retainer is credited <b>free of charge</b> for every introduction you make that closes into a signed engagement. Unlimited, stackable, applied to the month following signature.",
     "<b>Intellectual property.</b> All IP in the deliverables transfers to the client upon receipt of full payment. Until then, all materials remain the property of SwiftLoop FZ-LLC (trading as SwiftLoop). SwiftLoop FZ-LLC retains the right to showcase the work in its portfolio and to place a small <b>“Site by SwiftLoop”</b> credit, linking to swiftloop.tech, in the footer of all pages of the delivered website, unless agreed otherwise in writing.",
     "<b>Third parties.</b> Domains, hosting, paid plugins, ad spend and other third-party fees are billed at cost and are not included unless itemised above.",
@@ -1191,14 +1190,16 @@ Monthly retainer · Billed in advance each month.</textarea>
         var description = pdfLinePart(line, 0, page.width * 0.47);
         var quantity = pdfLinePart(line, page.width * 0.47, page.width * 0.67);
         var rate = pdfLinePart(line, page.width * 0.67, page.width * 0.84);
-        if (/^\s*-?\d+(?:\.\d+)?\s*(?:×|x)(?:\s|$)/i.test(quantity) || /per month/i.test(quantity)) {
+        var standardQuantity = /^\s*-?\d+(?:\.\d+)?\s*(?:×|x)\s*(?:project|per month)\s*$/i.test(quantity) || /^\s*-?\d+(?:\.\d+)?\s+months?\s*$/i.test(quantity);
+        if (/^\s*-?\d+(?:\.\d+)?\b/i.test(quantity) || /per month/i.test(quantity)) {
           finishRow();
           current = {
             d: description,
             s: "",
             qty: num(quantity) || 1,
-            unit: mode,
+            unit: /month|monthly|per month/i.test(quantity) ? "months" : mode,
             rate: num(rate),
+            qtyLabel: standardQuantity ? "" : quantity.trim(),
             details: []
           };
         } else if (current && description) {
@@ -1366,21 +1367,14 @@ Monthly retainer · Billed in advance each month.</textarea>
     updateSectionStates();
   }
 
-  function rateOptionsHtml(selected) {
-    var html = "";
-    var found = false;
-    RATE_OPTIONS.forEach(function (r) {
-      if (r === selected) found = true;
-      html += '<option value="' + r + '"' + (r === selected ? " selected" : "") + ">" + r.toLocaleString("en-AE") + "</option>";
-    });
-    if (!found) html = '<option value="' + selected + '" selected>' + selected.toLocaleString("en-AE") + "</option>" + html;
-    html += '<option value="__custom">Custom…</option>';
-    return html;
-  }
-
-  function qtyOptionsHtml(qty, unit) {
+  function qtyOptionsHtml(qty, unit, customLabel) {
     var label = unit === "months" ? (qty === 1 ? "1 × per month" : qty + " months") : qty + " × " + (unit || "project");
     var html = "", found = false;
+    if (customLabel) {
+      var safeLabel = String(customLabel).trim();
+      html += '<option value="' + qty + '" data-unit="' + (unit || "project") + '" data-custom-label="' + escapeHtml(safeLabel) + '" selected>' + escapeHtml(safeLabel) + "</option>";
+      found = true;
+    }
     QTY_OPTIONS.forEach(function (o) {
       var sel = !found && o.v === qty && ((unit === "months") === / month/.test(o.l));
       if (sel) found = true;
@@ -1400,7 +1394,7 @@ Monthly retainer · Billed in advance each month.</textarea>
         '<textarea class="i-desc-sub" rows="2" placeholder="Details (optional)"></textarea>' +
       '</td>' +
       '<td><select class="i-qty"></select></td>' +
-      '<td class="r"><select class="i-rate"></select></td>' +
+      '<td class="r"><input class="i-rate" type="text" inputmode="decimal" placeholder="0.00" aria-label="Unit price" /></td>' +
       '<td class="r"><span class="i-amount">0.00</span></td>' +
       '<td class="screen-only"><button class="row-x" title="Remove line" type="button">✕</button></td>';
     (target || (item.unit === "months" ? recurringRowsEl : oneTimeRowsEl)).appendChild(tr);
@@ -1409,29 +1403,56 @@ Monthly retainer · Billed in advance each month.</textarea>
     var sub = $(".i-desc-sub", tr);
     sub.value = item.s;
     autosize(sub);
-    $(".i-qty", tr).innerHTML = qtyOptionsHtml(item.qty, item.unit);
-    $(".i-rate", tr).innerHTML = rateOptionsHtml(num(item.rate));
+    var qtyEl = $(".i-qty", tr);
+    qtyEl.innerHTML = qtyOptionsHtml(item.qty, item.unit, item.qtyLabel);
+    qtyEl.dataset.previousIndex = qtyEl.selectedIndex;
+    qtyEl.dataset.previousUnit = (qtyEl.options[qtyEl.selectedIndex] && qtyEl.options[qtyEl.selectedIndex].getAttribute("data-unit")) || item.unit || "project";
+    var rateEl = $(".i-rate", tr);
+    rateEl.value = item.rate === undefined || item.rate === null ? "" : item.rate;
 
-    $(".i-qty", tr).addEventListener("change", function () { customCombo(this, "Quantity (number):"); moveRowForBilling(tr); recalc(); });
-    $(".i-rate", tr).addEventListener("change", function () { customCombo(this, "Unit price in AED:"); recalc(); });
-    $(".row-x", tr).addEventListener("click", function () { tr.remove(); updateSectionStates(); recalc(); });
+    qtyEl.addEventListener("change", function () {
+      var previousIndex = parseInt(qtyEl.dataset.previousIndex, 10);
+      var fallbackUnit = qtyEl.dataset.previousUnit || (isRecurringRow(tr) ? "months" : "project");
+      if (qtyEl.value === "__custom" && !customCombo(qtyEl, "Quantity or duration (e.g. 2 months):", fallbackUnit)) {
+        if (isFinite(previousIndex)) qtyEl.selectedIndex = previousIndex;
+        return;
+      }
+      qtyEl.dataset.previousIndex = qtyEl.selectedIndex;
+      qtyEl.dataset.previousUnit = (qtyEl.options[qtyEl.selectedIndex] && qtyEl.options[qtyEl.selectedIndex].getAttribute("data-unit")) || fallbackUnit;
+      moveRowForBilling(tr);
+      syncRetainerTerm();
+      recalc();
+    });
+    rateEl.addEventListener("input", recalc);
+    $(".row-x", tr).addEventListener("click", function () { tr.remove(); updateSectionStates(); syncRetainerTerm(); recalc(); });
     sub.addEventListener("input", function () { autosize(sub); });
     updateSectionStates();
+    syncRetainerTerm();
     recalc();
     return tr;
   }
 
-  function customCombo(sel, promptText) {
-    if (sel.value !== "__custom") return;
-    var v = prompt(promptText, "");
-    var n = num(v);
-    if (v === null || !isFinite(n)) { sel.selectedIndex = 0; return; }
+  function customCombo(sel, promptText, fallbackUnit) {
+    if (sel.value !== "__custom") return true;
+    var raw = prompt(promptText, "");
+    if (raw === null) return false;
+    raw = String(raw).trim();
+    var numberMatch = raw.match(/-?(?:\d+(?:\.\d*)?|\.\d+)/);
+    var n = numberMatch ? num(numberMatch[0]) : NaN;
+    if (!raw || !isFinite(n)) {
+      toast("Enter a quantity or duration with a number");
+      return false;
+    }
+    var unit = /month|monthly|per month/i.test(raw) ? "months" : (fallbackUnit || "project");
+    $all("option[data-custom-label]", sel).forEach(function (option) { option.remove(); });
     var opt = document.createElement("option");
-    opt.value = n;
-    opt.textContent = sel.classList.contains("i-rate") ? n.toLocaleString("en-AE") : (n + " ×");
-    if (sel.classList.contains("i-qty")) opt.setAttribute("data-unit", "project");
+    opt.value = String(n);
+    opt.textContent = raw;
+    opt.setAttribute("data-unit", unit);
+    opt.setAttribute("data-custom-label", raw);
     sel.insertBefore(opt, sel.firstChild);
     sel.value = String(n);
+    return true;
   }
 
   function autosize(el) {
@@ -1481,8 +1502,28 @@ Monthly retainer · Billed in advance each month.</textarea>
     });
   }
 
+  function retainerTermHtml() {
+    var retainerSelected = recurringRowsEl && recurringRowsEl.children.length > 0;
+    var retainerStart = retainerSelected
+      ? "The monthly retainer selected and itemised on this quote or invoice begins as soon as the project is published"
+      : "If a monthly retainer is selected and itemised on this quote or invoice, monthly billing begins as soon as the project is published";
+    return "<b>Retainer.</b> " + retainerStart + " — meaning the website is published and live to the public on its domain, or the project, app, or software is live and usable by its users. It is billed in advance each month. Every build includes a Loop retainer by default — it is how results compound after launch. Removing the retainer is a downgrade of the engagement, not a discount, and voids post-launch support beyond a 14-day defect-fix window.";
+  }
+
+  function syncRetainerTerm() {
+    var term = $("#termsList li:nth-child(6) div");
+    if (term) term.innerHTML = retainerTermHtml();
+  }
+
   function updateTerms() {
     var terms = currentMarket === "UAE" ? DEFAULT_TERMS.slice() : DEFAULT_TERMS_INTL.slice();
+
+    // Keep the validity clause aligned with the left-hand quote setting.
+    var validityDays = num($("#setValidity").value) || 14;
+    terms[1] = "<b>Validity.</b> Quoted pricing is valid for <b>" + validityDays + " days</b> from the date of issue. After expiry, pricing and availability are subject to re-confirmation.";
+
+    // Make the launch trigger explicit when a retainer is actually included.
+    terms[5] = retainerTermHtml();
 
     // Update term 2 (Payment) with current due days
     var dueDays = num($("#setDue").value);
@@ -1574,7 +1615,8 @@ Monthly retainer · Billed in advance each month.</textarea>
       s: item.s || item.details || "",
       qty: num(savedQty),
       unit: isMonthly ? "months" : "project",
-      rate: num(savedRate)
+      rate: num(savedRate),
+      qtyLabel: item.qtyLabel || item.quantityLabel || item.qtyText || ""
     };
   }
 
@@ -1592,7 +1634,8 @@ Monthly retainer · Billed in advance each month.</textarea>
         s: $(".i-desc-sub", tr).value,
         qty: num(qtyEl.value),
         unit: sel ? (sel.getAttribute("data-unit") || "project") : "project",
-        rate: num($(".i-rate", tr).value)
+        rate: num($(".i-rate", tr).value),
+        qtyLabel: sel ? (sel.getAttribute("data-custom-label") || "") : ""
       };
     });
     var terms = $all("#termsList li div").map(function (d) { return d.innerHTML; });
@@ -1726,7 +1769,10 @@ Monthly retainer · Billed in advance each month.</textarea>
     refreshDates();
     updateTerms();
   });
-  $("#setValidity").addEventListener("change", refreshDates);
+  $("#setValidity").addEventListener("change", function () {
+    refreshDates();
+    updateTerms();
+  });
   $("#setVat").addEventListener("change", function () {
     recalc();
     updateTerms();
