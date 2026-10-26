@@ -1383,9 +1383,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .folio-card .work-media { aspect-ratio: 16 / 10; }
 
-.folio-card:nth-child(4n + 2),
-.folio-card:nth-child(4n + 3) { transform: translateY(clamp(0px, 4vw, 56px)); }
-
 /* case overlay */
 .case {
   position: fixed;
