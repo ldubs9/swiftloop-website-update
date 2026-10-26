@@ -89,7 +89,7 @@
       url: "https://creativefinishings.swiftloop.tech",
     },
     mhe: {
-      meta: "Point-of-care diagnostics website — Germany / international",
+      meta: "Point-of-care diagnostics — Germany / EU",
       title: "MHE Diagnostics",
       tags: ["Web design", "Point-of-care diagnostics", "Healthcare", "Product systems"],
       brief: "MHE Diagnostics needed a clear digital home for point-of-care testing systems, their product range and the workflows behind faster decisions in laboratories and healthcare settings.",
